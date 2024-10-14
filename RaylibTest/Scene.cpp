@@ -99,6 +99,17 @@ Sprite& Scene::GetSpriteComponent(int entityId)
 
 /*
 =================================================
+ Has Component
+=================================================
+*/
+
+bool Scene::HasComponent(int entityId, ComponentType componentType)
+{
+	return (entities[entityId].componentMask & static_cast<int>(componentType)) != 0;
+}
+
+/*
+=================================================
  Remove Component
 =================================================
 */
@@ -108,7 +119,7 @@ bool Scene::RemoveComponent(int entityId, ComponentType componentType)
 	int componentId = static_cast<int>(componentType);
 	
 	// entity does not have component of type componentType
-	if ((entities[entityId].componentMask & componentId) == 0)
+	if (!HasComponent(entityId, componentType))
 		return false;
 
 	entities[entityId].componentMask &= ~componentId;
@@ -133,7 +144,7 @@ bool Scene::AddComponent(int entityId, ComponentType componentType, std::vector<
 	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
 
 	// entity already component of type componentType
-	if ((entities[entityId].componentMask & componentId) != 0)
+	if (HasComponent(entityId, componentType))
 		return false;
 
 	entities[entityId].componentMask |= componentId;
@@ -141,8 +152,6 @@ bool Scene::AddComponent(int entityId, ComponentType componentType, std::vector<
 	components[entityId * componentCount + ComponentIdOffset(componentType)] = static_cast<int>(componentList.size());
 	return true;
 }
-
-
 int Scene::ComponentIdOffset(ComponentType componentType)
 {
 	int componentId = static_cast<int>(componentType);

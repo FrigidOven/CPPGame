@@ -135,6 +135,8 @@ public:
 	Spatial& GetSpatialComponent(int entityId);
 	Sprite& GetSpriteComponent(int entityId);
 
+	bool HasComponent(int entityId, ComponentType componentType);
+
 	bool RemoveComponent(int entityId, ComponentType componentType);
 };
 class SpriteRendererSystem

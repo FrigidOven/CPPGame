@@ -2,8 +2,6 @@
 #include <raylib.h>
 #include "ECS.h"
 
-using namespace std;
-
 int main()
 {
     const int screenWidth = 800;
