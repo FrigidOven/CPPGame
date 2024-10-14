@@ -29,9 +29,10 @@ struct Entity
 
 enum class ComponentType
 {
-	NUMBER_OF_COMPONENTS = 2,
+	NUMBER_OF_COMPONENTS = 3,
 	Spatial = 1,
-	Sprite = 2
+	Sprite = 2,
+	Velocity = 4
 };
 
 /*
@@ -95,6 +96,20 @@ struct Sprite
 	}
 };
 
+struct Velocity
+{
+	int entity;
+	Vector2 velocity;
+	float angularVelocity;
+
+	Velocity(int entityId, Vector2 velocity, float angularVelocity)
+		: entity(entityId)
+		, velocity(velocity)
+		, angularVelocity(angularVelocity)
+	{
+	}
+};
+
 /*
 ===================================================================================================
  Systems
@@ -102,6 +117,7 @@ struct Sprite
 */
 class Scene;
 class SpriteRendererSystem;
+class VelocitySystem;
 
 
 class Scene
@@ -111,13 +127,13 @@ private:
 	std::vector<int> components; // holds indecies into component lists for each entity
 
 	SpriteRendererSystem* spriteRendererSystem;
+	VelocitySystem* velocitySystem;
 
 	std::vector<Entity> entities;
 
 	std::vector<Spatial> spatialComponents;
 	std::vector<Sprite> spriteComponents;
-
-	int nextEntityId;
+	std::vector<Velocity> velocityComponents;
 
 	int ComponentIdOffset(ComponentType componentType);
 
@@ -131,25 +147,38 @@ public:
 
 	bool AddSpatialComponent(int entityId, Vector2 position, float rotation);
 	bool AddSpriteComponent(int entityId, Texture2D* texture, Rectangle sourceRect, float width, float height, int frameCount, float fps);
+	bool AddVelocityComponent(int entityId, Vector2 velocity, float angularVelocity);
 
 	bool RemoveSpatialComponent(int entityId);
 	bool RemoveSpriteComponent(int entityId);
+	bool RemoveVelocityComponent(int entityId);
 
 	Spatial& GetSpatialComponent(int entityId);
 	Sprite& GetSpriteComponent(int entityId);
+	Velocity& GetVelocityComponent(int entityId);
 
 	bool HasComponent(int entityId, ComponentType componentType);
 };
 class SpriteRendererSystem
 {
 private:
-	Scene& gameSystem;
+	Scene& scene;
 	std::vector<Sprite>& spriteComponents;
 
 	void UpdateSprite(Sprite& sprite);
 
 public:
-	SpriteRendererSystem(Scene& gameSystem, std::vector<Sprite>& spriteComponents);
+	SpriteRendererSystem(Scene& scene, std::vector<Sprite>& spriteComponents);
 	void Draw();
+};
+class VelocitySystem
+{
+private:
+	Scene& scene;
+	std::vector<Velocity>& velocityComponents;
+
+public:
+	VelocitySystem(Scene& scene, std::vector<Velocity>& velocityComponents);
+	void Update();
 };
 #endif

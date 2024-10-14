@@ -6,8 +6,8 @@
  Public Functions
 ===================================================================================================
 */
-SpriteRendererSystem::SpriteRendererSystem(Scene& gameSystem, std::vector<Sprite>& spriteComponents)
-	: gameSystem(gameSystem), spriteComponents(spriteComponents)
+SpriteRendererSystem::SpriteRendererSystem(Scene& scene, std::vector<Sprite>& spriteComponents)
+	: scene(scene), spriteComponents(spriteComponents)
 {
 }
 void SpriteRendererSystem::Draw()
@@ -24,8 +24,8 @@ void SpriteRendererSystem::Draw()
 	{
 		Sprite& sprite = spriteComponents[i];
 
-		Vector2 position = gameSystem.GetSpatialComponent(sprite.entity).position;
-		float rotation = gameSystem.GetSpatialComponent(sprite.entity).rotation;
+		Vector2 position = scene.GetSpatialComponent(sprite.entity).position;
+		float rotation = scene.GetSpatialComponent(sprite.entity).rotation;
 		
 		dest.x = position.x;
 		dest.y = position.y;

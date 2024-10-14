@@ -12,7 +12,8 @@
 =================================================
 */
 Scene::Scene()
-	:nextEntityId(0), spriteRendererSystem(new SpriteRendererSystem(*this, spriteComponents))
+	: spriteRendererSystem(new SpriteRendererSystem(*this, spriteComponents))
+	, velocitySystem(new VelocitySystem(*this, velocityComponents))
 {
 }
 int Scene::CreateEntity()
@@ -32,6 +33,7 @@ int Scene::CreateEntity()
 void Scene::Update()
 {
 	spriteRendererSystem->Draw();
+	velocitySystem->Update();
 }
 /*
 =================================================
@@ -43,7 +45,7 @@ bool Scene::AddSpatialComponent(int entityId, Vector2 position, float rotation)
 	bool successful = AddComponent<Spatial>(entityId, ComponentType::Spatial, spatialComponents);
 
 	if (!successful)
-		return !successful;
+		return successful;
 
 	spatialComponents.emplace_back
 	(
@@ -59,7 +61,7 @@ bool Scene::AddSpriteComponent(int entityId, Texture2D* texture, Rectangle sourc
 	bool successful = AddComponent<Sprite>(entityId, ComponentType::Sprite, spriteComponents);
 
 	if (!successful)
-		return !successful;
+		return successful;
 
 	spriteComponents.emplace_back
 	(
@@ -75,7 +77,22 @@ bool Scene::AddSpriteComponent(int entityId, Texture2D* texture, Rectangle sourc
 
 	return successful;
 }
+bool Scene::AddVelocityComponent(int entityId, Vector2 velocity, float angularVelocity)
+{
+	bool successful = AddComponent<Velocity>(entityId, ComponentType::Velocity, velocityComponents);
 
+	if (!successful)
+		return successful;
+
+	velocityComponents.emplace_back
+	(
+		entityId,
+		velocity,
+		angularVelocity
+	);
+
+	return successful;
+}
 /*
 =================================================
  Remove Components
@@ -91,6 +108,7 @@ bool Scene::RemoveSpatialComponent(int entityId)
 	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
 	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Spatial)];
 
+	// swap and pop approach to keep vectors tightly packed
 	if (index < spatialComponents.size())
 	{
 		Spatial toRemove = spatialComponents[index];
@@ -119,6 +137,7 @@ bool Scene::RemoveSpriteComponent(int entityId)
 	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
 	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Sprite)];
 
+	// swap and pop approach to keep vectors tightly packed
 	if (index < spriteComponents.size())
 	{
 		Sprite toRemove = spriteComponents[index];
@@ -138,7 +157,35 @@ bool Scene::RemoveSpriteComponent(int entityId)
 
 	return true;
 }
+bool Scene::RemoveVelocityComponent(int entityId)
+{
+	// entity does not have component of type componentType
+	if (!HasComponent(entityId, ComponentType::Velocity))
+		return false;
 
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Velocity)];
+
+	// swap and pop approach to keep vectors tightly packed
+	if (index < velocityComponents.size())
+	{
+		Velocity toRemove = velocityComponents[index];
+		Velocity back = velocityComponents.back();
+
+		velocityComponents[velocityComponents.size() - 1] = toRemove;
+		velocityComponents[index] = back;
+
+		components[back.entity * componentCount + ComponentIdOffset(ComponentType::Velocity)] = index;
+	}
+
+	components[entityId * componentCount + ComponentIdOffset(ComponentType::Velocity)] = -1;
+	velocityComponents.pop_back();
+
+	int componentId = static_cast<int>(ComponentType::Velocity);
+	entities[entityId].componentMask &= ~componentId;
+
+	return true;
+}
 /*
 =================================================
  Get Components
@@ -159,7 +206,13 @@ Sprite& Scene::GetSpriteComponent(int entityId)
 
 	return spriteComponents[index];
 }
+Velocity& Scene::GetVelocityComponent(int entityId)
+{
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Velocity)];
 
+	return velocityComponents[index];
+}
 /*
 =================================================
  Has Component
