@@ -40,7 +40,7 @@ void Scene::Update()
 */
 bool Scene::AddSpatialComponent(int entityId, Vector2 position, float rotation)
 {
-	bool successful = AddComponent<Spatial>(entityId, ComponentType::Position, spatialComponents);
+	bool successful = AddComponent<Spatial>(entityId, ComponentType::Spatial, spatialComponents);
 
 	if (!successful)
 		return !successful;
@@ -78,6 +78,69 @@ bool Scene::AddSpriteComponent(int entityId, Texture2D* texture, Rectangle sourc
 
 /*
 =================================================
+ Remove Components
+=================================================
+*/
+
+bool Scene::RemoveSpatialComponent(int entityId)
+{
+	// entity does not have component of type componentType
+	if (!HasComponent(entityId, ComponentType::Spatial))
+		return false;
+
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Spatial)];
+
+	if (index < spatialComponents.size())
+	{
+		Spatial toRemove = spatialComponents[index];
+		Spatial back = spatialComponents.back();
+
+		spatialComponents[spatialComponents.size() - 1] = toRemove;
+		spatialComponents[index] = back;
+
+		components[back.entity * componentCount + ComponentIdOffset(ComponentType::Spatial)] = index;
+	}
+
+	components[entityId * componentCount + ComponentIdOffset(ComponentType::Spatial)] = -1;
+	spatialComponents.pop_back();
+
+	int componentId = static_cast<int>(ComponentType::Spatial);
+	entities[entityId].componentMask &= ~componentId;
+
+	return true;
+}
+bool Scene::RemoveSpriteComponent(int entityId)
+{
+	// entity does not have component of type componentType
+	if (!HasComponent(entityId, ComponentType::Sprite))
+		return false;
+
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Sprite)];
+
+	if (index < spriteComponents.size())
+	{
+		Sprite toRemove = spriteComponents[index];
+		Sprite back = spriteComponents.back();
+
+		spriteComponents[spriteComponents.size() - 1] = toRemove;
+		spriteComponents[index] = back;
+
+		components[back.entity * componentCount + ComponentIdOffset(ComponentType::Sprite)] = index;
+	}
+
+	components[entityId * componentCount + ComponentIdOffset(ComponentType::Sprite)] = -1;
+	spriteComponents.pop_back();
+
+	int componentId = static_cast<int>(ComponentType::Sprite);
+	entities[entityId].componentMask &= ~componentId;
+
+	return true;
+}
+
+/*
+=================================================
  Get Components
 =================================================
 */
@@ -85,7 +148,7 @@ bool Scene::AddSpriteComponent(int entityId, Texture2D* texture, Rectangle sourc
 Spatial& Scene::GetSpatialComponent(int entityId)
 {
 	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
-	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Position)];
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Spatial)];
 
 	return spatialComponents[index];
 }
@@ -109,29 +172,6 @@ bool Scene::HasComponent(int entityId, ComponentType componentType)
 }
 
 /*
-=================================================
- Remove Component
-=================================================
-*/
-
-bool Scene::RemoveComponent(int entityId, ComponentType componentType)
-{
-	int componentId = static_cast<int>(componentType);
-	
-	// entity does not have component of type componentType
-	if (!HasComponent(entityId, componentType))
-		return false;
-
-	entities[entityId].componentMask &= ~componentId;
-
-	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
-	int index = components[entityId * componentCount + ComponentIdOffset(componentType)];
-
-	// TODO: Implment a freelist or some way of not moving indecies when component is removed.
-	return true;
-}
-
-/*
 ===================================================================================================
  Private Functions
 ===================================================================================================
@@ -140,12 +180,12 @@ bool Scene::RemoveComponent(int entityId, ComponentType componentType)
 template<typename T>
 bool Scene::AddComponent(int entityId, ComponentType componentType, std::vector<T>& componentList)
 {
-	int componentId = static_cast<int>(componentType);
-	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
-
 	// entity already component of type componentType
 	if (HasComponent(entityId, componentType))
 		return false;
+
+	int componentId = static_cast<int>(componentType);
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
 
 	entities[entityId].componentMask |= componentId;
 

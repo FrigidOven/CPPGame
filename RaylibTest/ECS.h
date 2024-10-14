@@ -30,7 +30,7 @@ struct Entity
 enum class ComponentType
 {
 	NUMBER_OF_COMPONENTS = 2,
-	Position = 1,
+	Spatial = 1,
 	Sprite = 2
 };
 
@@ -132,12 +132,13 @@ public:
 	bool AddSpatialComponent(int entityId, Vector2 position, float rotation);
 	bool AddSpriteComponent(int entityId, Texture2D* texture, Rectangle sourceRect, float width, float height, int frameCount, float fps);
 
+	bool RemoveSpatialComponent(int entityId);
+	bool RemoveSpriteComponent(int entityId);
+
 	Spatial& GetSpatialComponent(int entityId);
 	Sprite& GetSpriteComponent(int entityId);
 
 	bool HasComponent(int entityId, ComponentType componentType);
-
-	bool RemoveComponent(int entityId, ComponentType componentType);
 };
 class SpriteRendererSystem
 {

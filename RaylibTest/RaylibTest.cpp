@@ -6,7 +6,7 @@ int main()
 {
     const int screenWidth = 800;
     const int screenHeight = 800;
-
+    
     InitWindow(screenWidth, screenHeight, "RaylibTest");
     SetTargetFPS(60);
 
@@ -62,6 +62,13 @@ int main()
         (
             { (screenWidth / 2) + ((screenWidth / 2) * sinf(GetTime())), (screenHeight / 2) + ((screenHeight / 2) * cosf(GetTime())) }
         );
+
+        if (GetTime() > 5)
+        {
+            scene->RemoveSpriteComponent(testEntity1);
+        }
+
+
         scene->Update();
     }
 
