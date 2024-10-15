@@ -134,11 +134,15 @@ struct SpeedLimiter
 	int entity;
 	float maxVelocity;
 	float maxAngularVelocity;
+	bool atMaxVelocity;
+	bool atMaxAngularVelocity;
 
 	SpeedLimiter(int entityId, float maxVelocity, float maxAngularVelocity)
 		: entity(entityId)
 		, maxVelocity(maxVelocity)
 		, maxAngularVelocity(maxAngularVelocity)
+		, atMaxVelocity(false)
+		, atMaxAngularVelocity(false)
 	{
 	}
 };

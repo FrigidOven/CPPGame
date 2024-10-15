@@ -21,14 +21,24 @@ void ForceSystem::Update()
 
 		RigidBody& rigidBody = scene.GetRigidBodyComponent(forceComponents[i].entity);
 
-		// f = ma so a = f/m
-		Vector2 deltaAcceleration = { deltaTime * forceComponents[i].force.x / rigidBody.mass, deltaTime * forceComponents[i].entity / rigidBody.mass };
 
-		rigidBody.acceleration.x += deltaAcceleration.x;
-		rigidBody.acceleration.y += deltaAcceleration.y;
+		// compromise here, we don't want to keep applying a force if the speed is capped so we check for a SpeedLimiter component.
 
-		float deltaAngularAcceleration = deltaTime * forceComponents[i].angularForce;
+		bool hasSpeedLimiter = scene.HasComponent(forceComponents[i].entity, ComponentType::SpeedLimiter);
 
-		rigidBody.angularAcceleration += deltaAngularAcceleration;
+		if (!hasSpeedLimiter || !scene.GetSpeedLimiterComponent(forceComponents[i].entity).atMaxVelocity)
+		{
+			// f = ma so a = f/m
+			Vector2 deltaAcceleration = { deltaTime * forceComponents[i].force.x / rigidBody.mass, deltaTime * forceComponents[i].entity / rigidBody.mass };
+
+			rigidBody.acceleration.x += deltaAcceleration.x;
+			rigidBody.acceleration.y += deltaAcceleration.y;
+		}
+		if (!hasSpeedLimiter || !scene.GetSpeedLimiterComponent(forceComponents[i].entity).atMaxAngularVelocity)
+		{
+			float deltaAngularAcceleration = deltaTime * forceComponents[i].angularForce;
+
+			rigidBody.angularAcceleration += deltaAngularAcceleration;
+		}
 	}
 }

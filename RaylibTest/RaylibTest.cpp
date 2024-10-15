@@ -51,11 +51,20 @@ int main()
     (
         testEntity1,
         50,
-        15
+        3
     );
 
+    bool flippedDirection = false;
     while (WindowShouldClose() == false)
     {
+        if (GetTime() > 5 && !flippedDirection)
+        {
+            scene->RemoveForceComponent(testEntity1);
+            scene->AddForceComponent(testEntity1, Vector2{ -10, 0 }, -1);
+
+            flippedDirection == true;
+        }
+
         scene->Update();
     }
     
