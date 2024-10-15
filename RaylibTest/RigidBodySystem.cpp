@@ -13,9 +13,9 @@ RigidBodySystem::RigidBodySystem(Scene& scene, std::vector<RigidBody>& rigidBody
 }
 void RigidBodySystem::Update()
 {
-	int velocityCount = static_cast<int>(rigidBodyComponents.size());
+	int rigidBodyCount = static_cast<int>(rigidBodyComponents.size());
 
-	for (int i = 0; i < velocityCount; i++)
+	for (int i = 0; i < rigidBodyCount; i++)
 	{
 		float deltaTime = GetFrameTime();
 

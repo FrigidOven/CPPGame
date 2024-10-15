@@ -41,6 +41,12 @@ int main()
         Vector2{ 0, 0 },
         1
     );
+    scene->AddForceComponent
+    (
+        testEntity1,
+        Vector2{ 10, 0 },
+        5
+    );
 
     while (WindowShouldClose() == false)
     {

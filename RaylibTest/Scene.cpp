@@ -14,6 +14,7 @@
 Scene::Scene()
 	: spriteRendererSystem(new SpriteRendererSystem(*this, spriteComponents))
 	, rigidBodySystem(new RigidBodySystem(*this, rigidBodyComponents))
+	, forceSystem(new ForceSystem(*this, forceComponents))
 {
 }
 int Scene::CreateEntity()
@@ -34,6 +35,7 @@ void Scene::Update()
 {
 	spriteRendererSystem->Draw();
 	rigidBodySystem->Update();
+	forceSystem->Update();
 }
 /*
 =================================================
@@ -92,6 +94,22 @@ bool Scene::AddRigidBodyComponent(int entityId, float mass, Vector2 velocity, fl
 		angularVelocity,
 		acceleration,
 		angularAcceleration
+	);
+
+	return successful;
+}
+bool Scene::AddForceComponent(int entityId, Vector2 force, float angularForce)
+{
+	bool successful = AddComponent<Force>(entityId, ComponentType::Force, forceComponents);
+
+	if (!successful)
+		return successful;
+
+	forceComponents.emplace_back
+	(
+		entityId,
+		force,
+		angularForce
 	);
 
 	return successful;
@@ -190,6 +208,35 @@ bool Scene::RemoveRigidBodyComponent(int entityId)
 
 	return true;
 }
+bool Scene::RemoveForceComponent(int entityId)
+{
+	// entity does not have component of type componentType
+	if (!HasComponent(entityId, ComponentType::Force))
+		return false;
+
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Force)];
+
+	// swap and pop approach to keep vectors tightly packed
+	if (index < forceComponents.size())
+	{
+		Force toRemove = forceComponents[index];
+		Force back = forceComponents.back();
+
+		forceComponents[forceComponents.size() - 1] = toRemove;
+		forceComponents[index] = back;
+
+		components[back.entity * componentCount + ComponentIdOffset(ComponentType::Force)] = index;
+	}
+
+	components[entityId * componentCount + ComponentIdOffset(ComponentType::Force)] = -1;
+	forceComponents.pop_back();
+
+	int componentId = static_cast<int>(ComponentType::Force);
+	entities[entityId].componentMask &= ~componentId;
+
+	return true;
+}
 /*
 =================================================
  Get Components
@@ -217,6 +264,14 @@ RigidBody& Scene::GetRigidBodyComponent(int entityId)
 
 	return rigidBodyComponents[index];
 }
+Force& Scene::GetForceComponent(int entityId)
+{
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Force)];
+
+	return forceComponents[index];
+}
+
 /*
 =================================================
  Has Component
