@@ -39,13 +39,19 @@ int main()
         Vector2{ 0, 0 },
         0,
         Vector2{ 0, 0 },
-        1
+        0
     );
     scene->AddForceComponent
     (
         testEntity1,
         Vector2{ 10, 0 },
-        5
+        0
+    );
+    scene->AddSpeedLimiterComponent
+    (
+        testEntity1,
+        50,
+        15
     );
 
     while (WindowShouldClose() == false)

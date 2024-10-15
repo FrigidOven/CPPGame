@@ -15,6 +15,7 @@ Scene::Scene()
 	: spriteRendererSystem(new SpriteRendererSystem(*this, spriteComponents))
 	, rigidBodySystem(new RigidBodySystem(*this, rigidBodyComponents))
 	, forceSystem(new ForceSystem(*this, forceComponents))
+	, speedLimiterSystem(new SpeedLimiterSystem(*this, speedLimiterComponents))
 {
 }
 int Scene::CreateEntity()
@@ -34,6 +35,7 @@ int Scene::CreateEntity()
 void Scene::Update()
 {
 	spriteRendererSystem->Draw();
+	speedLimiterSystem->Update();
 	rigidBodySystem->Update();
 	forceSystem->Update();
 }
@@ -110,6 +112,22 @@ bool Scene::AddForceComponent(int entityId, Vector2 force, float angularForce)
 		entityId,
 		force,
 		angularForce
+	);
+
+	return successful;
+}
+bool Scene::AddSpeedLimiterComponent(int entityId, float maxVelocity, float maxAngularVelocity)
+{
+	bool successful = AddComponent<SpeedLimiter>(entityId, ComponentType::SpeedLimiter, speedLimiterComponents);
+
+	if (!successful)
+		return successful;
+
+	speedLimiterComponents.emplace_back
+	(
+		entityId,
+		maxVelocity,
+		maxAngularVelocity
 	);
 
 	return successful;
@@ -237,6 +255,35 @@ bool Scene::RemoveForceComponent(int entityId)
 
 	return true;
 }
+bool Scene::RemoveSpeedLimiterComponent(int entityId)
+{
+	// entity does not have component of type componentType
+	if (!HasComponent(entityId, ComponentType::SpeedLimiter))
+		return false;
+
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::SpeedLimiter)];
+
+	// swap and pop approach to keep vectors tightly packed
+	if (index < speedLimiterComponents.size())
+	{
+		SpeedLimiter toRemove = speedLimiterComponents[index];
+		SpeedLimiter back = speedLimiterComponents.back();
+
+		speedLimiterComponents[speedLimiterComponents.size() - 1] = toRemove;
+		speedLimiterComponents[index] = back;
+
+		components[back.entity * componentCount + ComponentIdOffset(ComponentType::SpeedLimiter)] = index;
+	}
+
+	components[entityId * componentCount + ComponentIdOffset(ComponentType::SpeedLimiter)] = -1;
+	speedLimiterComponents.pop_back();
+
+	int componentId = static_cast<int>(ComponentType::SpeedLimiter);
+	entities[entityId].componentMask &= ~componentId;
+
+	return true;
+}
 /*
 =================================================
  Get Components
@@ -270,6 +317,13 @@ Force& Scene::GetForceComponent(int entityId)
 	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Force)];
 
 	return forceComponents[index];
+}
+SpeedLimiter& Scene::GetSpeedLimiterComponent(int entityId)
+{
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::SpeedLimiter)];
+
+	return speedLimiterComponents[index];
 }
 
 /*
