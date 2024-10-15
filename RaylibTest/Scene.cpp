@@ -13,7 +13,7 @@
 */
 Scene::Scene()
 	: spriteRendererSystem(new SpriteRendererSystem(*this, spriteComponents))
-	, velocitySystem(new VelocitySystem(*this, velocityComponents))
+	, rigidBodySystem(new RigidBodySystem(*this, rigidBodyComponents))
 {
 }
 int Scene::CreateEntity()
@@ -33,7 +33,7 @@ int Scene::CreateEntity()
 void Scene::Update()
 {
 	spriteRendererSystem->Draw();
-	velocitySystem->Update();
+	rigidBodySystem->Update();
 }
 /*
 =================================================
@@ -77,22 +77,26 @@ bool Scene::AddSpriteComponent(int entityId, Texture2D* texture, Rectangle sourc
 
 	return successful;
 }
-bool Scene::AddVelocityComponent(int entityId, Vector2 velocity, float angularVelocity)
+bool Scene::AddRigidBodyComponent(int entityId, float mass, Vector2 velocity, float angularVelocity, Vector2 acceleration, float angularAcceleration)
 {
-	bool successful = AddComponent<Velocity>(entityId, ComponentType::Velocity, velocityComponents);
+	bool successful = AddComponent<RigidBody>(entityId, ComponentType::RigidBody, rigidBodyComponents);
 
 	if (!successful)
 		return successful;
 
-	velocityComponents.emplace_back
+	rigidBodyComponents.emplace_back
 	(
 		entityId,
+		mass,
 		velocity,
-		angularVelocity
+		angularVelocity,
+		acceleration,
+		angularAcceleration
 	);
 
 	return successful;
 }
+
 /*
 =================================================
  Remove Components
@@ -157,31 +161,31 @@ bool Scene::RemoveSpriteComponent(int entityId)
 
 	return true;
 }
-bool Scene::RemoveVelocityComponent(int entityId)
+bool Scene::RemoveRigidBodyComponent(int entityId)
 {
 	// entity does not have component of type componentType
-	if (!HasComponent(entityId, ComponentType::Velocity))
+	if (!HasComponent(entityId, ComponentType::RigidBody))
 		return false;
 
 	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
-	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Velocity)];
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::RigidBody)];
 
 	// swap and pop approach to keep vectors tightly packed
-	if (index < velocityComponents.size())
+	if (index < rigidBodyComponents.size())
 	{
-		Velocity toRemove = velocityComponents[index];
-		Velocity back = velocityComponents.back();
+		RigidBody toRemove = rigidBodyComponents[index];
+		RigidBody back = rigidBodyComponents.back();
 
-		velocityComponents[velocityComponents.size() - 1] = toRemove;
-		velocityComponents[index] = back;
+		rigidBodyComponents[rigidBodyComponents.size() - 1] = toRemove;
+		rigidBodyComponents[index] = back;
 
-		components[back.entity * componentCount + ComponentIdOffset(ComponentType::Velocity)] = index;
+		components[back.entity * componentCount + ComponentIdOffset(ComponentType::RigidBody)] = index;
 	}
 
-	components[entityId * componentCount + ComponentIdOffset(ComponentType::Velocity)] = -1;
-	velocityComponents.pop_back();
+	components[entityId * componentCount + ComponentIdOffset(ComponentType::RigidBody)] = -1;
+	rigidBodyComponents.pop_back();
 
-	int componentId = static_cast<int>(ComponentType::Velocity);
+	int componentId = static_cast<int>(ComponentType::RigidBody);
 	entities[entityId].componentMask &= ~componentId;
 
 	return true;
@@ -206,12 +210,12 @@ Sprite& Scene::GetSpriteComponent(int entityId)
 
 	return spriteComponents[index];
 }
-Velocity& Scene::GetVelocityComponent(int entityId)
+RigidBody& Scene::GetRigidBodyComponent(int entityId)
 {
 	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
-	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::Velocity)];
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::RigidBody)];
 
-	return velocityComponents[index];
+	return rigidBodyComponents[index];
 }
 /*
 =================================================

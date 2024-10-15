@@ -29,10 +29,11 @@ struct Entity
 
 enum class ComponentType
 {
-	NUMBER_OF_COMPONENTS = 3,
+	NUMBER_OF_COMPONENTS = 4,
 	Spatial = 1,
 	Sprite = 2,
-	Velocity = 4
+	RigidBody = 4,
+	Force = 8,
 };
 
 /*
@@ -95,19 +96,35 @@ struct Sprite
 	{
 	}
 };
-
-struct Velocity
+struct RigidBody
 {
 	int entity;
+	float mass;
 	Vector2 velocity;
 	float angularVelocity;
+	Vector2 acceleration;
+	float angularAcceleration;
 
-	Velocity(int entityId, Vector2 velocity, float angularVelocity)
+	RigidBody(int entityId, float mass, Vector2 velocity, float angularVelocity, Vector2 acceleration, float angularAcceleration)
 		: entity(entityId)
+		, mass(mass)
 		, velocity(velocity)
 		, angularVelocity(angularVelocity)
+		, acceleration(acceleration)
+		, angularAcceleration(angularAcceleration)
 	{
 	}
+};
+struct Force
+{
+	int entity;
+	Vector2 force;
+};
+
+struct PlayerMovementController
+{
+	int entity;
+
 };
 
 /*
@@ -117,7 +134,7 @@ struct Velocity
 */
 class Scene;
 class SpriteRendererSystem;
-class VelocitySystem;
+class RigidBodySystem;
 
 
 class Scene
@@ -127,13 +144,13 @@ private:
 	std::vector<int> components; // holds indecies into component lists for each entity
 
 	SpriteRendererSystem* spriteRendererSystem;
-	VelocitySystem* velocitySystem;
+	RigidBodySystem* rigidBodySystem;
 
 	std::vector<Entity> entities;
 
 	std::vector<Spatial> spatialComponents;
 	std::vector<Sprite> spriteComponents;
-	std::vector<Velocity> velocityComponents;
+	std::vector<RigidBody> rigidBodyComponents;
 
 	int ComponentIdOffset(ComponentType componentType);
 
@@ -147,15 +164,15 @@ public:
 
 	bool AddSpatialComponent(int entityId, Vector2 position, float rotation);
 	bool AddSpriteComponent(int entityId, Texture2D* texture, Rectangle sourceRect, float width, float height, int frameCount, float fps);
-	bool AddVelocityComponent(int entityId, Vector2 velocity, float angularVelocity);
+	bool AddRigidBodyComponent(int entityId, float mass, Vector2 velocity, float angularVelocity, Vector2 acceleration, float angularAcceleration);
 
 	bool RemoveSpatialComponent(int entityId);
 	bool RemoveSpriteComponent(int entityId);
-	bool RemoveVelocityComponent(int entityId);
+	bool RemoveRigidBodyComponent(int entityId);
 
 	Spatial& GetSpatialComponent(int entityId);
 	Sprite& GetSpriteComponent(int entityId);
-	Velocity& GetVelocityComponent(int entityId);
+	RigidBody& GetRigidBodyComponent(int entityId);
 
 	bool HasComponent(int entityId, ComponentType componentType);
 };
@@ -171,14 +188,14 @@ public:
 	SpriteRendererSystem(Scene& scene, std::vector<Sprite>& spriteComponents);
 	void Draw();
 };
-class VelocitySystem
+class RigidBodySystem
 {
 private:
 	Scene& scene;
-	std::vector<Velocity>& velocityComponents;
+	std::vector<RigidBody>& rigidBodyComponents;
 
 public:
-	VelocitySystem(Scene& scene, std::vector<Velocity>& velocityComponents);
+	RigidBodySystem(Scene& scene, std::vector<RigidBody>& rigidBodyComponents);
 	void Update();
 };
 #endif

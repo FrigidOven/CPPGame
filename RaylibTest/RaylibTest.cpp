@@ -32,11 +32,14 @@ int main()
         1,
         1
     );
-    scene->AddVelocityComponent
+    scene->AddRigidBodyComponent
     (
         testEntity1,
-        Vector2{ 10, 0},
-        5
+        1,
+        Vector2{ 0, 0 },
+        0,
+        Vector2{ 0, 0 },
+        1
     );
 
     while (WindowShouldClose() == false)
