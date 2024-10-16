@@ -7,18 +7,13 @@
  Public Functions
 ===================================================================================================
 */
-SpeedLimiterSystem::SpeedLimiterSystem(Scene& scene, std::vector<SpeedLimiter>& speedLimiterComponents)
-	: scene(scene)
-	, speedLimiterComponents(speedLimiterComponents)
-{
-}
-void SpeedLimiterSystem::Update()
+void SpeedLimiterSystem::Update(Scene* scene, std::vector<SpeedLimiter>& speedLimiterComponents)
 {
 	int speedLimiterCount = static_cast<int>(speedLimiterComponents.size());
 
 	for (int i = 0; i < speedLimiterCount; i++)
 	{
-		RigidBody& rigidBody = scene.GetRigidBodyComponent(speedLimiterComponents[i].entity);
+		RigidBody& rigidBody = scene->GetRigidBodyComponent(speedLimiterComponents[i].entity);
 		
 		float speed = sqrtf(rigidBody.velocity.x * rigidBody.velocity.x + rigidBody.velocity.y * rigidBody.velocity.y);
 

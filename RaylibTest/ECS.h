@@ -30,11 +30,11 @@ struct Entity
 enum class ComponentType
 {
 	NUMBER_OF_COMPONENTS = 5,
-	Spatial = 1,				// 0b0000_0000_0000_0000_0000_0000_0000_0001
-	Sprite = 2,					// 0b0000_0000_0000_0000_0000_0000_0000_0010
-	RigidBody = 4,				// 0b0000_0000_0000_0000_0000_0000_0000_0100
-	Force = 8,					// 0b0000_0000_0000_0000_0000_0000_0000_1000
-	SpeedLimiter = 16			// 0b0000_0000_0000_0000_0000_0000_0001_0000
+	Spatial = 1,								// 0b0000_0000_0000_0000_0000_0000_0000_0001
+	Sprite = 2,								// 0b0000_0000_0000_0000_0000_0000_0000_0010
+	RigidBody = 4,							// 0b0000_0000_0000_0000_0000_0000_0000_0100
+	Force = 8,								// 0b0000_0000_0000_0000_0000_0000_0000_1000
+	SpeedLimiter = 16					// 0b0000_0000_0000_0000_0000_0000_0001_0000
 };
 
 /*
@@ -159,23 +159,39 @@ struct PlayerMovementController
 ===================================================================================================
 */
 class Scene;
-class SpriteRendererSystem;
-class RigidBodySystem;
-class ForceSystem;
-class SpeedLimiterSystem;
+
+class SpriteRendererSystem
+{
+private:
+	void UpdateSprite(Sprite& sprite);
+
+public:
+	void Draw(Scene* scene, std::vector<Sprite>& spriteComponents);
+};
+
+class RigidBodySystem
+{
+public:
+	void Update(Scene* scene, std::vector<RigidBody>& rigidBodyComponents);
+};
+
+class ForceSystem
+{
+public:
+	void Update(Scene* scene, std::vector<Force>& forceComponents);
+};
+class SpeedLimiterSystem
+{
+public:
+	void Update(Scene* scene, std::vector<SpeedLimiter>& speedLimiterComponents);
+};
 
 class Scene
 {
 private:
 
-	std::vector<int> components; // holds indecies into component lists for each entity
-
-	SpriteRendererSystem* spriteRendererSystem;
-	RigidBodySystem* rigidBodySystem;
-	ForceSystem* forceSystem;
-	SpeedLimiterSystem* speedLimiterSystem;
-
 	std::vector<Entity> entities;
+	std::vector<int> components; // holds indecies into component lists for each entity
 
 	std::vector<Spatial> spatialComponents;
 	std::vector<Sprite> spriteComponents;
@@ -183,13 +199,18 @@ private:
 	std::vector<Force> forceComponents;
 	std::vector<SpeedLimiter> speedLimiterComponents;
 
+	SpriteRendererSystem& spriteRendererSystem;
+	RigidBodySystem& rigidBodySystem;
+	ForceSystem& forceSystem;
+	SpeedLimiterSystem& speedLimiterSystem;
+
 	int ComponentIdOffset(ComponentType componentType);
 
 	template<typename T>
 	bool AddComponent(int entityId, ComponentType componentType, std::vector<T>& componentList);
 
 public:
-	Scene();
+	Scene(SpriteRendererSystem& spriteRendererSystem, RigidBodySystem& rigidBodySystem, ForceSystem& forceSystem, SpeedLimiterSystem& speedLimiterSystem);
 	int CreateEntity();
 	void Update();
 
@@ -212,49 +233,5 @@ public:
 	SpeedLimiter& GetSpeedLimiterComponent(int entityId);
 
 	bool HasComponent(int entityId, ComponentType componentType);
-};
-
-class SpriteRendererSystem
-{
-private:
-	Scene& scene;
-	std::vector<Sprite>& spriteComponents;
-	void UpdateSprite(Sprite& sprite);
-
-public:
-	SpriteRendererSystem(Scene& scene, std::vector<Sprite>& spriteComponents);
-	void Draw();
-};
-
-class RigidBodySystem
-{
-private:
-	Scene& scene;
-	std::vector<RigidBody>& rigidBodyComponents;
-
-public:
-	RigidBodySystem(Scene& scene, std::vector<RigidBody>& rigidBodyComponents);
-	void Update();
-};
-
-class ForceSystem
-{
-private:
-	Scene& scene;
-	std::vector<Force>& forceComponents;
-
-public:
-	ForceSystem(Scene& scene, std::vector<Force>& forceComponents);
-	void Update();
-};
-class SpeedLimiterSystem
-{
-private:
-	Scene& scene;
-	std::vector<SpeedLimiter>& speedLimiterComponents;
-
-public:
-	SpeedLimiterSystem(Scene& scene, std::vector<SpeedLimiter>& speedLimiterComponents);
-	void Update();
 };
 #endif

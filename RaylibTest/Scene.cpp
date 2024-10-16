@@ -11,11 +11,11 @@
  General
 =================================================
 */
-Scene::Scene()
-	: spriteRendererSystem(new SpriteRendererSystem(*this, spriteComponents))
-	, rigidBodySystem(new RigidBodySystem(*this, rigidBodyComponents))
-	, forceSystem(new ForceSystem(*this, forceComponents))
-	, speedLimiterSystem(new SpeedLimiterSystem(*this, speedLimiterComponents))
+Scene::Scene(SpriteRendererSystem& spriteRendererSystem, RigidBodySystem& rigidBodySystem, ForceSystem& forceSystem, SpeedLimiterSystem& speedLimiterSystem)
+	: spriteRendererSystem(spriteRendererSystem)
+	, rigidBodySystem(rigidBodySystem)
+	, forceSystem(forceSystem)
+	, speedLimiterSystem(speedLimiterSystem)
 {
 }
 int Scene::CreateEntity()
@@ -34,10 +34,10 @@ int Scene::CreateEntity()
 }
 void Scene::Update()
 {
-	spriteRendererSystem->Draw();
-	speedLimiterSystem->Update();
-	rigidBodySystem->Update();
-	forceSystem->Update();
+	spriteRendererSystem.Draw(this, spriteComponents);
+	speedLimiterSystem.Update(this, speedLimiterComponents);
+	rigidBodySystem.Update(this, rigidBodyComponents);
+	forceSystem.Update(this, forceComponents);
 }
 /*
 =================================================

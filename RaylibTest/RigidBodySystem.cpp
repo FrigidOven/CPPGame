@@ -6,12 +6,7 @@
  Public Functions
 ===================================================================================================
 */
-RigidBodySystem::RigidBodySystem(Scene& scene, std::vector<RigidBody>& rigidBodyComponents)
-	: scene(scene)
-	, rigidBodyComponents(rigidBodyComponents)
-{
-}
-void RigidBodySystem::Update()
+void RigidBodySystem::Update(Scene* scene, std::vector<RigidBody>& rigidBodyComponents)
 {
 	int rigidBodyCount = static_cast<int>(rigidBodyComponents.size());
 
@@ -22,7 +17,7 @@ void RigidBodySystem::Update()
 		Vector2 displacement = { deltaTime * rigidBodyComponents[i].velocity.x, deltaTime * rigidBodyComponents[i].velocity.y };
 		float angularDisplacement = deltaTime * rigidBodyComponents[i].angularVelocity;
 
-		Spatial& spatial = scene.GetSpatialComponent(rigidBodyComponents[i].entity);
+		Spatial& spatial = scene->GetSpatialComponent(rigidBodyComponents[i].entity);
 		
 		spatial.position.x += displacement.x;
 		spatial.position.y += displacement.y;

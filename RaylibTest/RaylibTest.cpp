@@ -10,19 +10,24 @@ int main()
     InitWindow(screenWidth, screenHeight, "RaylibTest");
     SetTargetFPS(60);
 
-    Scene* scene = new Scene();
+    SpriteRendererSystem spriteRenderSystem;
+    RigidBodySystem rigidBodySystem;
+    ForceSystem forceSystem;
+    SpeedLimiterSystem speedLimiterSystem;
+
+    Scene scene (spriteRenderSystem, rigidBodySystem, forceSystem, speedLimiterSystem);
 
     Texture2D texture = LoadTexture("Textures/Background.png");
 
-    int testEntity1 = scene->CreateEntity();
+    int testEntity1 = scene.CreateEntity();
 
-    scene->AddSpatialComponent
+    scene.AddSpatialComponent
     (
         testEntity1,
         Vector2{ screenWidth / 2, screenHeight / 2 },
         0
     );
-    scene->AddSpriteComponent
+    scene.AddSpriteComponent
     (
         testEntity1,
         &texture,
@@ -32,7 +37,7 @@ int main()
         1,
         1
     );
-    scene->AddRigidBodyComponent
+    scene.AddRigidBodyComponent
     (
         testEntity1,
         1,
@@ -41,13 +46,13 @@ int main()
         Vector2{ 0, 0 },
         0
     );
-    scene->AddForceComponent
+    scene.AddForceComponent
     (
         testEntity1,
         Vector2{ 10, 0 },
         0
     );
-    scene->AddSpeedLimiterComponent
+    scene.AddSpeedLimiterComponent
     (
         testEntity1,
         50,
@@ -59,13 +64,13 @@ int main()
     {
         if (GetTime() > 5 && !flippedDirection)
         {
-            scene->RemoveForceComponent(testEntity1);
-            scene->AddForceComponent(testEntity1, Vector2{ -10, 0 }, -1);
+            scene.RemoveForceComponent(testEntity1);
+            scene.AddForceComponent(testEntity1, Vector2{ -10, 0 }, -1);
 
             flippedDirection == true;
         }
 
-        scene->Update();
+        scene.Update();
     }
     
     CloseWindow();
