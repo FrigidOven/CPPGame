@@ -48,41 +48,29 @@ enum InputMode
  Components
 ===================================================================================================
 */
-
-struct Spatial
+struct Component
 {
+	virtual int Id() = 0;
 	int entity;
+};
+struct Spatial : Component
+{
+	int Id() override { return 1;  }
+
 	Vector2 position;
 	float rotation;
 
-	Spatial(int entityId, Vector2 position, int rotation)
-		: entity(entityId)
-		, position(position)
+	Spatial(int entityId, Vector2 position, float rotation)
+		: position(position)
 		, rotation(rotation)
 	{
-	}
-	void SetPosition(Vector2 newPosition)
-	{
-		position = newPosition;
-	}
-	void Move(Vector2 distance)
-	{
-		position.x += distance.x;
-		position.y += distance.y;
-	}
-	void SetRotation(float newRotation)
-	{
-		rotation = newRotation;
-	}
-	void Rotate(float angle)
-	{
-		rotation += angle;
+		entity = entityId;
 	}
 };
-
-struct Sprite
+struct Sprite : Component
 {
-	int entity;
+	int Id() override { return 2; }
+
 	Texture2D* source;
 	Rectangle sourceRect;
 	float width;
@@ -92,20 +80,21 @@ struct Sprite
 	float fps;
 
 	Sprite(int entityId, Texture2D* source, Rectangle sourceRect, float width, float height, int frameCount, float timer, float fps)
-		: entity(entityId)
-		, source(source)
+		: source(source)
 		, sourceRect(sourceRect)
-		, width(width)
-		, height(height)
+		, width(width), height(height)
 		, frameCount(frameCount)
 		, timer(timer)
 		, fps(fps)
 	{
+		entity = entityId;
 	}
 };
-struct RigidBody
+
+struct RigidBody : Component
 {
-	int entity;
+	int Id() override { return 4; }
+
 	float mass;
 	Vector2 velocity;
 	float angularVelocity;
@@ -113,49 +102,52 @@ struct RigidBody
 	float angularAcceleration;
 
 	RigidBody(int entityId, float mass, Vector2 velocity, float angularVelocity, Vector2 acceleration, float angularAcceleration)
-		: entity(entityId)
-		, mass(mass)
+		: mass(mass)
 		, velocity(velocity)
 		, angularVelocity(angularVelocity)
 		, acceleration(acceleration)
 		, angularAcceleration(angularAcceleration)
 	{
+		entity = entityId;
 	}
 };
-struct Force
+
+struct Force : Component
 {
-	int entity;
+	int Id() override { return 8; }
+
 	Vector2 force;
 	float angularForce;
 
 	Force(int entityId, Vector2 force, float angularForce)
-		: entity(entityId)
-		, force(force)
+		: force(force)
 		, angularForce(angularForce)
-	{
+	{ 
+		entity = entityId; 
 	}
 };
-struct SpeedLimiter
+struct SpeedLimiter : Component
 {
-	int entity;
+	int Id() override { return 16; }
+
 	float maxVelocity;
 	float maxAngularVelocity;
 	bool atMaxVelocity;
 	bool atMaxAngularVelocity;
 
 	SpeedLimiter(int entityId, float maxVelocity, float maxAngularVelocity)
-		: entity(entityId)
-		, maxVelocity(maxVelocity)
+		: maxVelocity(maxVelocity)
 		, maxAngularVelocity(maxAngularVelocity)
 		, atMaxVelocity(false)
 		, atMaxAngularVelocity(false)
 	{
+		entity = entityId;
 	}
 };
 
-struct PlayerInputListener
+struct PlayerInputListener : Component
 {
-	int entity;
+	int Id() override { return 32; }
 
 	KeyboardKey upKey;
 	KeyboardKey downKey;
@@ -168,8 +160,7 @@ struct PlayerInputListener
 	bool rightIsDown;
 
 	PlayerInputListener(int entityId, KeyboardKey upKey, KeyboardKey downKey, KeyboardKey leftKey, KeyboardKey rightKey)
-		: entity(entityId)
-		, upKey(upKey)
+		: upKey(upKey)
 		, downKey(downKey)
 		, leftKey(leftKey)
 		, rightKey(rightKey)
@@ -178,8 +169,10 @@ struct PlayerInputListener
 		, leftIsDown(false)
 		, rightIsDown(false)
 	{
+		entity = entityId;
 	}
 };
+
 
 /*
 ===================================================================================================
