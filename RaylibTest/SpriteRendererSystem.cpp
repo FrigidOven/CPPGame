@@ -20,8 +20,8 @@ void SpriteRendererSystem::Draw(Scene* scene, std::vector<Sprite>& spriteCompone
 	{
 		Sprite& sprite = spriteComponents[i];
 
-		Vector2 position = scene->GetSpatialComponent(sprite.entity).position;
-		float rotation = scene->GetSpatialComponent(sprite.entity).rotation;
+		Vector2 position = scene->GetComponent<Spatial>(sprite.entity).position;
+		float rotation = scene->GetComponent<Spatial>(sprite.entity).rotation;
 		
 		dest.x = position.x;
 		dest.y = position.y;

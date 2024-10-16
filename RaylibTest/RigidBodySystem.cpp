@@ -17,7 +17,7 @@ void RigidBodySystem::Update(Scene* scene, std::vector<RigidBody>& rigidBodyComp
 		Vector2 displacement = { deltaTime * rigidBodyComponents[i].velocity.x, deltaTime * rigidBodyComponents[i].velocity.y };
 		float angularDisplacement = deltaTime * rigidBodyComponents[i].angularVelocity;
 
-		Spatial& spatial = scene->GetSpatialComponent(rigidBodyComponents[i].entity);
+		Spatial& spatial = scene->GetComponent<Spatial>(rigidBodyComponents[i].entity);
 		
 		spatial.position.x += displacement.x;
 		spatial.position.y += displacement.y;

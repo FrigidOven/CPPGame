@@ -13,7 +13,7 @@ void SpeedLimiterSystem::Update(Scene* scene, std::vector<SpeedLimiter>& speedLi
 
 	for (int i = 0; i < speedLimiterCount; i++)
 	{
-		RigidBody& rigidBody = scene->GetRigidBodyComponent(speedLimiterComponents[i].entity);
+		RigidBody& rigidBody = scene->GetComponent<RigidBody>(speedLimiterComponents[i].entity);
 		
 		float speed = sqrtf(rigidBody.velocity.x * rigidBody.velocity.x + rigidBody.velocity.y * rigidBody.velocity.y);
 

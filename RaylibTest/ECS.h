@@ -3,6 +3,7 @@
 
 #include <raylib.h>
 #include <vector>
+#include <unordered_map>
 
 /*
 ===================================================================================================
@@ -27,17 +28,6 @@ struct Entity
 ===================================================================================================
 */
 
-enum class  ComponentType
-{
-	NUMBER_OF_COMPONENTS = 6,
-	Spatial = 1,								// 0b0000_0000_0000_0000_0000_0000_0000_0001
-	Sprite = 2,								// 0b0000_0000_0000_0000_0000_0000_0000_0010
-	RigidBody = 4,							// 0b0000_0000_0000_0000_0000_0000_0000_0100
-	Force = 8,								// 0b0000_0000_0000_0000_0000_0000_0000_1000
-	SpeedLimiter = 16,					// 0b0000_0000_0000_0000_0000_0000_0001_0000
-	PlayerInputListener = 32	// 0b0000_0000_0000_0000_0000_0000_0010_0000
-};
-
 enum InputMode
 {
 	Default = 0
@@ -50,12 +40,12 @@ enum InputMode
 */
 struct Component
 {
-	virtual int Id() = 0;
+	static const int COMPONENT_COUNT = 6;
 	int entity;
 };
 struct Spatial : Component
 {
-	int Id() override { return 1;  }
+	static const int ID = 1; // 0b0000_0000_0000_0000_0000_0000_0000_0001
 
 	Vector2 position;
 	float rotation;
@@ -69,7 +59,7 @@ struct Spatial : Component
 };
 struct Sprite : Component
 {
-	int Id() override { return 2; }
+	static const int ID = 2; // 0b0000_0000_0000_0000_0000_0000_0000_0010
 
 	Texture2D* source;
 	Rectangle sourceRect;
@@ -93,7 +83,7 @@ struct Sprite : Component
 
 struct RigidBody : Component
 {
-	int Id() override { return 4; }
+	static const int ID = 4; // 0b0000_0000_0000_0000_0000_0000_0000_0100
 
 	float mass;
 	Vector2 velocity;
@@ -114,7 +104,7 @@ struct RigidBody : Component
 
 struct Force : Component
 {
-	int Id() override { return 8; }
+	static const int ID = 8; // 0b0000_0000_0000_0000_0000_0000_0000_1000
 
 	Vector2 force;
 	float angularForce;
@@ -128,7 +118,7 @@ struct Force : Component
 };
 struct SpeedLimiter : Component
 {
-	int Id() override { return 16; }
+	static const int ID = 16; // 0b0000_0000_0000_0000_0000_0000_0001_0000
 
 	float maxVelocity;
 	float maxAngularVelocity;
@@ -147,7 +137,7 @@ struct SpeedLimiter : Component
 
 struct PlayerInputListener : Component
 {
-	int Id() override { return 32; }
+	static const int ID = 32; // 0b0000_0000_0000_0000_0000_0000_0010_0000
 
 	KeyboardKey upKey;
 	KeyboardKey downKey;
@@ -233,12 +223,8 @@ private:
 	std::vector<Entity> entities;
 	std::vector<int> components; // holds indecies into component lists for each entity
 
-	std::vector<Spatial> spatialComponents;
-	std::vector<Sprite> spriteComponents;
-	std::vector<RigidBody> rigidBodyComponents;
-	std::vector<Force> forceComponents;
-	std::vector<SpeedLimiter> speedLimiterComponents;
-	std::vector<PlayerInputListener> playerInputListenerComponents;
+	// key = component id, value = vector<component>
+	std::unordered_map<int, void*> componentTable;
 
 	SpriteRendererSystem& spriteRendererSystem;
 	RigidBodySystem& rigidBodySystem;
@@ -246,10 +232,7 @@ private:
 	SpeedLimiterSystem& speedLimiterSystem;
 	InputSystem& inputSystem;
 
-	int ComponentIdOffset(ComponentType componentType);
-
-	template<typename T>
-	bool AddComponent(int entityId, ComponentType componentType, std::vector<T>& componentList);
+	int ComponentIdOffset(int componentId);
 
 public:
 	Scene(SpriteRendererSystem& spriteRendererSystem,
@@ -261,27 +244,89 @@ public:
 	int CreateEntity();
 	void Update();
 
-	bool AddSpatialComponent(int entityId, Vector2 position, float rotation);
-	bool AddSpriteComponent(int entityId, Texture2D* texture, Rectangle sourceRect, float width, float height, int frameCount, float fps);
-	bool AddRigidBodyComponent(int entityId, float mass, Vector2 velocity, float angularVelocity, Vector2 acceleration, float angularAcceleration);
-	bool AddForceComponent(int entityId, Vector2 force, float angularForce);
-	bool AddSpeedLimiterComponent(int entityId, float maxVelocity, float maxAngularVelocity);
-	bool AddPlayerInputListenerComponent(int entityId, KeyboardKey upKey, KeyboardKey downKey, KeyboardKey leftKey, KeyboardKey rightKey);
+	template<typename T, typename... Args>
+	bool AddComponent(int entityId, Args... args);
 
-	bool RemoveSpatialComponent(int entityId);
-	bool RemoveSpriteComponent(int entityId);
-	bool RemoveRigidBodyComponent(int entityId);
-	bool RemoveForceComponent(int entityId);
-	bool RemoveSpeedLimiterComponent(int entityId);
-	bool RemovePlayerInputListenerComponent(int entityId);
+	template<typename T>
+	bool RemoveComponent(int entityId);
 
-	Spatial& GetSpatialComponent(int entityId);
-	Sprite& GetSpriteComponent(int entityId);
-	RigidBody& GetRigidBodyComponent(int entityId);
-	Force& GetForceComponent(int entityId);
-	SpeedLimiter& GetSpeedLimiterComponent(int entityId);
-	PlayerInputListener& GetPlayerInputListenerComponent(int entityId);
+	template<typename T>
+	T& GetComponent(int entityId);
 
-	bool HasComponent(int entityId, ComponentType componentType);
+	template<typename T>
+	bool HasComponent(int entityId);
 };
+
+template<typename T, typename... Args>
+bool Scene::AddComponent(int entityId, Args... args)
+{
+	bool successful = !HasComponent<T>(entityId);
+
+	if (successful)
+	{
+		entities[entityId].componentMask |= T::ID;
+		std::vector<T>* componentList;
+		if (componentTable.find(T::ID) != componentTable.end())
+			componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
+		else
+		{
+			componentList = new std::vector<T>;
+			componentTable[T::ID] = static_cast<void*>(componentList);
+		}
+		componentList->emplace_back(entityId, args...);
+		components[entityId * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)] = static_cast<int>(componentList->size()) - 1;
+	}
+
+	return successful;
+}
+
+template<typename T>
+bool Scene::RemoveComponent(int entityId)
+{
+	bool successful = HasComponent<T>(entityId);
+
+	if (successful)
+	{
+		int index = components[entityId * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)];
+		std::vector<T>* componentList;
+		componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
+
+		// swap and pop approach to keep vectors tightly packed
+		if (index < componentList->size())
+		{
+			T toRemove = (*componentList)[index];
+			T back = componentList->back();
+
+			(*componentList)[componentList->size() - 1] = toRemove;
+			(*componentList)[index] = back;
+
+			components[back.entity * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)] = index;
+		}
+
+		components[entityId * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)] = -1;
+		componentList->pop_back();
+
+		entities[entityId].componentMask &= ~T::ID;
+	}
+
+	return successful;
+}
+
+template<typename T>
+T& Scene::GetComponent(int entityId)
+{
+	int index = components[entityId * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)];
+
+	std::vector<T>* componentList;
+	componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
+
+	return (*componentList)[index];
+}
+
+template<typename T>
+bool Scene::HasComponent(int entityId)
+{
+	return  (entities[entityId].componentMask & T::ID) != 0;
+}
+
 #endif

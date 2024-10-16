@@ -22,13 +22,15 @@ int main()
 
     int testEntity1 = scene.CreateEntity();
 
-    scene.AddSpatialComponent
-    (
-        testEntity1,
-        Vector2{ screenWidth / 2, screenHeight / 2 },
-        0
-    );
-    scene.AddSpriteComponent
+    scene.AddComponent<Spatial>
+        (
+            testEntity1, 
+            Vector2{ screenWidth / 2, screenHeight / 2 },
+            0.0f
+        );
+
+
+    scene.AddComponent<Sprite>
     (
         testEntity1,
         &texture,
@@ -36,9 +38,10 @@ int main()
         256 * 3,
         224 * 3,
         1,
+        0,
         1
     );
-    scene.AddRigidBodyComponent
+    scene.AddComponent<RigidBody>
     (
         testEntity1,
         1,
@@ -47,13 +50,13 @@ int main()
         Vector2{ 0, 0 },
         0
     );
-    scene.AddForceComponent
+    scene.AddComponent<Force>
     (
         testEntity1,
         Vector2{ 10, 0 },
         0
     );
-    scene.AddSpeedLimiterComponent
+    scene.AddComponent<SpeedLimiter>
     (
         testEntity1,
         50,
@@ -65,10 +68,10 @@ int main()
     {
         if (GetTime() > 5 && !flippedDirection)
         {
-            scene.RemoveForceComponent(testEntity1);
-            scene.AddForceComponent(testEntity1, Vector2{ -10, 0 }, -1);
+            scene.RemoveComponent<Force>(testEntity1);
+            scene.AddComponent<Force>(testEntity1, Vector2{ -10, 0 }, -1);
 
-            flippedDirection == true;
+            flippedDirection = true;
         }
 
         scene.Update();

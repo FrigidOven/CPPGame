@@ -14,14 +14,14 @@ void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
 	{
 		float deltaTime = GetFrameTime();
 
-		RigidBody& rigidBody = scene->GetRigidBodyComponent(forceComponents[i].entity);
+		RigidBody& rigidBody = scene->GetComponent<RigidBody>(forceComponents[i].entity);
 
 
 		// compromise here, we don't want to keep applying a force if the speed is capped so we check for a SpeedLimiter component.
 
-		bool hasSpeedLimiter = scene->HasComponent(forceComponents[i].entity, ComponentType::SpeedLimiter);
+		bool hasSpeedLimiter = scene->HasComponent<SpeedLimiter>(forceComponents[i].entity);
 
-		if (!hasSpeedLimiter || !scene->GetSpeedLimiterComponent(forceComponents[i].entity).atMaxVelocity)
+		if (!hasSpeedLimiter || !scene->GetComponent<SpeedLimiter>(forceComponents[i].entity).atMaxVelocity)
 		{
 			// f = ma so a = f/m
 			Vector2 deltaAcceleration = { deltaTime * forceComponents[i].force.x / rigidBody.mass, deltaTime * forceComponents[i].entity / rigidBody.mass };
@@ -29,7 +29,7 @@ void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
 			rigidBody.acceleration.x += deltaAcceleration.x;
 			rigidBody.acceleration.y += deltaAcceleration.y;
 		}
-		if (!hasSpeedLimiter || !scene->GetSpeedLimiterComponent(forceComponents[i].entity).atMaxAngularVelocity)
+		if (!hasSpeedLimiter || !scene->GetComponent<SpeedLimiter>(forceComponents[i].entity).atMaxAngularVelocity)
 		{
 			float deltaAngularAcceleration = deltaTime * forceComponents[i].angularForce;
 
