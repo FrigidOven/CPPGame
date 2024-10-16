@@ -39,6 +39,7 @@ int Scene::CreateEntity()
 }
 void Scene::Update()
 {
+	inputSystem.Update(this, playerInputListenerComponents);
 	spriteRendererSystem.Draw(this, spriteComponents);
 	speedLimiterSystem.Update(this, speedLimiterComponents);
 	rigidBodySystem.Update(this, rigidBodyComponents);

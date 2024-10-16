@@ -219,6 +219,7 @@ class InputSystem
 {
 private:
 	InputMode inputMode;
+	KeyboardKey lastPressed;
 
 	void UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener> playerInputListenerComponents);
 
