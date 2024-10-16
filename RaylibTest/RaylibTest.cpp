@@ -14,8 +14,9 @@ int main()
     RigidBodySystem rigidBodySystem;
     ForceSystem forceSystem;
     SpeedLimiterSystem speedLimiterSystem;
+    InputSystem inputSystem;
 
-    Scene scene (spriteRenderSystem, rigidBodySystem, forceSystem, speedLimiterSystem);
+    Scene scene (spriteRenderSystem, rigidBodySystem, forceSystem, speedLimiterSystem, inputSystem);
 
     Texture2D texture = LoadTexture("Textures/Background.png");
 

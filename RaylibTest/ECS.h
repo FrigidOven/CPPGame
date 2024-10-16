@@ -23,18 +23,24 @@ struct Entity
 
 /*
 ===================================================================================================
- Component Types
+ Enums
 ===================================================================================================
 */
 
-enum class ComponentType
+enum class  ComponentType
 {
-	NUMBER_OF_COMPONENTS = 5,
+	NUMBER_OF_COMPONENTS = 6,
 	Spatial = 1,								// 0b0000_0000_0000_0000_0000_0000_0000_0001
 	Sprite = 2,								// 0b0000_0000_0000_0000_0000_0000_0000_0010
 	RigidBody = 4,							// 0b0000_0000_0000_0000_0000_0000_0000_0100
 	Force = 8,								// 0b0000_0000_0000_0000_0000_0000_0000_1000
-	SpeedLimiter = 16					// 0b0000_0000_0000_0000_0000_0000_0001_0000
+	SpeedLimiter = 16,					// 0b0000_0000_0000_0000_0000_0000_0001_0000
+	PlayerInputListener = 32	// 0b0000_0000_0000_0000_0000_0000_0010_0000
+};
+
+enum InputMode
+{
+	Default = 0
 };
 
 /*
@@ -147,10 +153,32 @@ struct SpeedLimiter
 	}
 };
 
-struct PlayerMovementController
+struct PlayerInputListener
 {
 	int entity;
 
+	KeyboardKey upKey;
+	KeyboardKey downKey;
+	KeyboardKey leftKey;
+	KeyboardKey rightKey;
+
+	bool upIsDown;
+	bool downIsDown;
+	bool leftIsDown;
+	bool rightIsDown;
+
+	PlayerInputListener(int entityId, KeyboardKey upKey, KeyboardKey downKey, KeyboardKey leftKey, KeyboardKey rightKey)
+		: entity(entityId)
+		, upKey(upKey)
+		, downKey(downKey)
+		, leftKey(leftKey)
+		, rightKey(rightKey)
+		, upIsDown(false)
+		, downIsDown(false)
+		, leftIsDown(false)
+		, rightIsDown(false)
+	{
+	}
 };
 
 /*
@@ -158,6 +186,7 @@ struct PlayerMovementController
  Systems
 ===================================================================================================
 */
+
 class Scene;
 
 class SpriteRendererSystem
@@ -186,6 +215,23 @@ public:
 	void Update(Scene* scene, std::vector<SpeedLimiter>& speedLimiterComponents);
 };
 
+class InputSystem
+{
+private:
+	InputMode inputMode;
+
+	void UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener> playerInputListenerComponents);
+
+public:
+	void Update(Scene* scene, std::vector<PlayerInputListener> playerInputListenerComponents);
+};
+
+/*
+===================================================================================================
+ Scene
+===================================================================================================
+*/
+
 class Scene
 {
 private:
@@ -198,11 +244,13 @@ private:
 	std::vector<RigidBody> rigidBodyComponents;
 	std::vector<Force> forceComponents;
 	std::vector<SpeedLimiter> speedLimiterComponents;
+	std::vector<PlayerInputListener> playerInputListenerComponents;
 
 	SpriteRendererSystem& spriteRendererSystem;
 	RigidBodySystem& rigidBodySystem;
 	ForceSystem& forceSystem;
 	SpeedLimiterSystem& speedLimiterSystem;
+	InputSystem& inputSystem;
 
 	int ComponentIdOffset(ComponentType componentType);
 
@@ -210,7 +258,12 @@ private:
 	bool AddComponent(int entityId, ComponentType componentType, std::vector<T>& componentList);
 
 public:
-	Scene(SpriteRendererSystem& spriteRendererSystem, RigidBodySystem& rigidBodySystem, ForceSystem& forceSystem, SpeedLimiterSystem& speedLimiterSystem);
+	Scene(SpriteRendererSystem& spriteRendererSystem,
+				RigidBodySystem& rigidBodySystem,
+				ForceSystem& forceSystem,
+				SpeedLimiterSystem& speedLimiterSystem,
+				InputSystem& inputSystem);
+
 	int CreateEntity();
 	void Update();
 
@@ -219,18 +272,21 @@ public:
 	bool AddRigidBodyComponent(int entityId, float mass, Vector2 velocity, float angularVelocity, Vector2 acceleration, float angularAcceleration);
 	bool AddForceComponent(int entityId, Vector2 force, float angularForce);
 	bool AddSpeedLimiterComponent(int entityId, float maxVelocity, float maxAngularVelocity);
+	bool AddPlayerInputListenerComponent(int entityId, KeyboardKey upKey, KeyboardKey downKey, KeyboardKey leftKey, KeyboardKey rightKey);
 
 	bool RemoveSpatialComponent(int entityId);
 	bool RemoveSpriteComponent(int entityId);
 	bool RemoveRigidBodyComponent(int entityId);
 	bool RemoveForceComponent(int entityId);
 	bool RemoveSpeedLimiterComponent(int entityId);
+	bool RemovePlayerInputListenerComponent(int entityId);
 
 	Spatial& GetSpatialComponent(int entityId);
 	Sprite& GetSpriteComponent(int entityId);
 	RigidBody& GetRigidBodyComponent(int entityId);
 	Force& GetForceComponent(int entityId);
 	SpeedLimiter& GetSpeedLimiterComponent(int entityId);
+	PlayerInputListener& GetPlayerInputListenerComponent(int entityId);
 
 	bool HasComponent(int entityId, ComponentType componentType);
 };

@@ -11,11 +11,16 @@
  General
 =================================================
 */
-Scene::Scene(SpriteRendererSystem& spriteRendererSystem, RigidBodySystem& rigidBodySystem, ForceSystem& forceSystem, SpeedLimiterSystem& speedLimiterSystem)
+Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
+	RigidBodySystem& rigidBodySystem,
+	ForceSystem& forceSystem,
+	SpeedLimiterSystem& speedLimiterSystem,
+	InputSystem& inputSystem)
 	: spriteRendererSystem(spriteRendererSystem)
 	, rigidBodySystem(rigidBodySystem)
 	, forceSystem(forceSystem)
 	, speedLimiterSystem(speedLimiterSystem)
+	, inputSystem(inputSystem)
 {
 }
 int Scene::CreateEntity()
@@ -132,7 +137,24 @@ bool Scene::AddSpeedLimiterComponent(int entityId, float maxVelocity, float maxA
 
 	return successful;
 }
+bool Scene::AddPlayerInputListenerComponent(int entityId, KeyboardKey upKey, KeyboardKey downKey, KeyboardKey leftKey, KeyboardKey rightKey)
+{
+	bool successful = AddComponent<PlayerInputListener>(entityId, ComponentType::PlayerInputListener, playerInputListenerComponents);
 
+	if (!successful)
+		return successful;
+
+	playerInputListenerComponents.emplace_back
+	(
+		entityId,
+		upKey,
+		downKey,
+		leftKey,
+		rightKey
+	);
+
+	return successful;
+}
 /*
 =================================================
  Remove Components
@@ -284,6 +306,36 @@ bool Scene::RemoveSpeedLimiterComponent(int entityId)
 
 	return true;
 }
+
+bool Scene::RemovePlayerInputListenerComponent(int entityId)
+{
+	// entity does not have component of type componentType
+	if (!HasComponent(entityId, ComponentType::PlayerInputListener))
+		return false;
+
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::PlayerInputListener)];
+
+	// swap and pop approach to keep vectors tightly packed
+	if (index < playerInputListenerComponents.size())
+	{
+		PlayerInputListener toRemove = playerInputListenerComponents[index];
+		PlayerInputListener back = playerInputListenerComponents.back();
+
+		playerInputListenerComponents[playerInputListenerComponents.size() - 1] = toRemove;
+		playerInputListenerComponents[index] = back;
+
+		components[back.entity * componentCount + ComponentIdOffset(ComponentType::PlayerInputListener)] = index;
+	}
+
+	components[entityId * componentCount + ComponentIdOffset(ComponentType::PlayerInputListener)] = -1;
+	playerInputListenerComponents.pop_back();
+
+	int componentId = static_cast<int>(ComponentType::PlayerInputListener);
+	entities[entityId].componentMask &= ~componentId;
+
+	return true;
+}
 /*
 =================================================
  Get Components
@@ -324,6 +376,13 @@ SpeedLimiter& Scene::GetSpeedLimiterComponent(int entityId)
 	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::SpeedLimiter)];
 
 	return speedLimiterComponents[index];
+}
+PlayerInputListener& Scene::GetPlayerInputListenerComponent(int entityId)
+{
+	int componentCount = static_cast<int>(ComponentType::NUMBER_OF_COMPONENTS);
+	int index = components[entityId * componentCount + ComponentIdOffset(ComponentType::PlayerInputListener)];
+
+	return playerInputListenerComponents[index];
 }
 
 /*
