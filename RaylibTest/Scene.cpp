@@ -62,7 +62,6 @@ void Scene::Update()
 		auto& forceComponents = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
 		forceSystem.Update(this, forceComponents);
 	}
-
 }
 /*
 ===================================================================================================

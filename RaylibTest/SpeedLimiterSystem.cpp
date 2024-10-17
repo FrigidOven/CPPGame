@@ -15,29 +15,7 @@ void SpeedLimiterSystem::Update(Scene* scene, std::vector<SpeedLimiter>& speedLi
 	{
 		RigidBody& rigidBody = scene->GetComponent<RigidBody>(speedLimiterComponents[i].entity);
 		
-		float speed = Vector2Length(rigidBody.velocity);
-
-		if (speed > speedLimiterComponents[i].maxVelocity)
-		{
-			rigidBody.velocity.x *= speedLimiterComponents[i].maxVelocity / speed;
-			rigidBody.velocity.y *= speedLimiterComponents[i].maxVelocity / speed;
-
-			speedLimiterComponents[i].atMaxVelocity = true;
-		}
-		else
-		{
-			speedLimiterComponents[i].atMaxVelocity = false;
-		}
-
-		if (rigidBody.angularVelocity < -speedLimiterComponents[i].maxAngularVelocity ||
-			speedLimiterComponents[i].maxAngularVelocity < rigidBody.angularVelocity)
-		{
-			rigidBody.angularVelocity = rigidBody.angularVelocity < 0 ? -speedLimiterComponents[i].maxAngularVelocity : speedLimiterComponents[i].maxAngularVelocity;
-			speedLimiterComponents[i].atMaxAngularVelocity = true;
-		}
-		else
-		{
-			speedLimiterComponents[i].atMaxAngularVelocity = false;
-		}
+		Vector2ClampValue(rigidBody.velocity, 0.0f, speedLimiterComponents[i].maxVelocity);
+		rigidBody.angularVelocity = Clamp(rigidBody.angularVelocity, -speedLimiterComponents[i].maxAngularVelocity, speedLimiterComponents[i].maxAngularVelocity);
 	}
 }

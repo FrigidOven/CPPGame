@@ -1,5 +1,6 @@
 #include <vector>
 #include "ECS.h"
+#include<raymath.h>
 
 /*
 ===================================================================================================
@@ -14,22 +15,18 @@ void RigidBodySystem::Update(Scene* scene, std::vector<RigidBody>& rigidBodyComp
 	{
 		float deltaTime = GetFrameTime();
 
-		Vector2 displacement = { deltaTime * rigidBodyComponents[i].velocity.x, deltaTime * rigidBodyComponents[i].velocity.y };
-		float angularDisplacement = deltaTime * rigidBodyComponents[i].angularVelocity;
+		Vector2 displacement = Vector2Scale(rigidBodyComponents[i].velocity, deltaTime);
+		float angularDisplacement =  rigidBodyComponents[i].angularVelocity * deltaTime;
 
 		Spatial& spatial = scene->GetComponent<Spatial>(rigidBodyComponents[i].entity);
 		
-		spatial.position.x += displacement.x;
-		spatial.position.y += displacement.y;
-
+		spatial.position = Vector2Add(spatial.position, displacement);
 		spatial.rotation += angularDisplacement;
 
-		Vector2 deltaVelocity = { deltaTime * rigidBodyComponents[i].acceleration.x, deltaTime * rigidBodyComponents[i].acceleration.y };
-		float deltaAngularVelocity = deltaTime * rigidBodyComponents[i].angularAcceleration;
+		Vector2 deltaVelocity = Vector2Scale(rigidBodyComponents[i].acceleration, deltaTime);
+		float deltaAngularVelocity =  rigidBodyComponents[i].angularAcceleration * deltaTime;
 
-		rigidBodyComponents[i].velocity.x += deltaVelocity.x;
-		rigidBodyComponents[i].velocity.y += deltaVelocity.y;
-
+		rigidBodyComponents[i].velocity = Vector2Add(rigidBodyComponents[i].velocity, deltaVelocity);
 		rigidBodyComponents[i].angularVelocity += deltaAngularVelocity;
 	}
 }

@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include<raymath.h>
 #include "ECS.h"
+#include <iostream>
 
 /*
 ===================================================================================================
@@ -12,53 +13,49 @@ void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
 {
 	int forceCount = static_cast<int>(forceComponents.size());
 
+	const float normalForceMagnitude = 20.0f;
+	const float minVelocity = 0.01f;
+
 	for (int i = 0; i < forceCount; i++)
 	{
-		float deltaTime = GetFrameTime();
-
 		RigidBody& rigidBody = scene->GetComponent<RigidBody>(forceComponents[i].entity);
 
-		// compromise here, we don't want to keep applying a force if the speed is capped so we check for a SpeedLimiter component.
-		bool hasSpeedLimiter = scene->HasComponent<SpeedLimiter>(forceComponents[i].entity);
+		// sum internal and external forces
+		Vector2 totalForce = Vector2Add(forceComponents[i].internalForce, forceComponents[i].externalForce);
+		float totalAngularForce = forceComponents[i].internalAngularForce + forceComponents[i].externalAngularForce;
+
+		Vector2 frictionForce = { 0.0f, 0.0f };
+		float angularFrictionForce = 0.0f;
+
+
+		float velocityMagnitude = Vector2Length(rigidBody.velocity);
+
+		// dont find friction if velocity is roughly 0
+		if (-minVelocity <= velocityMagnitude && velocityMagnitude <= minVelocity)
+		{
+			rigidBody.velocity = Vector2Zero();
+			rigidBody.acceleration = Vector2Zero();
+		}
+		else
+			frictionForce = Vector2Scale(Vector2Normalize(rigidBody.velocity), -rigidBody.frictionCoefficient * normalForceMagnitude);
+
+		// dont find friction if angular velocity is roughly 0
+		if (-minVelocity <= rigidBody.angularVelocity && rigidBody.angularVelocity <= minVelocity)
+			rigidBody.angularVelocity = 0.0f;
+		else
+			angularFrictionForce = Clamp(rigidBody.angularVelocity, -1, 1) * -rigidBody.frictionCoefficient * normalForceMagnitude;
+
+		// add friction
+		totalForce = Vector2Add(totalForce, frictionForce);
+		totalAngularForce += angularFrictionForce;
+
+		std::cout << "Total Force is: <" << totalForce.x << ", " << totalForce.y << ">\n";
+
+		// f = ma so a = f/m
 
 		// linear acceleration
-		// f = ma so a = f/m
-		Vector2 deltaAcceleration = { deltaTime * forceComponents[i].force.x / rigidBody.mass, deltaTime * forceComponents[i].force.y / rigidBody.mass };
-
-		if (hasSpeedLimiter && scene->GetComponent<SpeedLimiter>(rigidBody.entity).atMaxVelocity)
-		{
-			// only apply acceleration if it slows rigid body down
-			if ( rigidBody.acceleration.x >= 0 && deltaAcceleration.x < 0
-			   || rigidBody.acceleration.x <= 0 && deltaAcceleration.x > 0 )
-			{
-				rigidBody.acceleration.x += deltaAcceleration.x;
-			}
-			if (rigidBody.acceleration.y >= 0 && deltaAcceleration.y < 0
-			  || rigidBody.acceleration.y <= 0 && deltaAcceleration.y > 0)
-			{
-				rigidBody.acceleration.y += deltaAcceleration.y;
-			}
-		}
-		else
-		{
-			rigidBody.acceleration = Vector2Add(rigidBody.acceleration, deltaAcceleration);
-		}
-
+		rigidBody.acceleration = Vector2Scale(totalForce, 1.0f / rigidBody.mass);
 		// angular acceleration
-		float deltaAngularAcceleration = deltaTime * forceComponents[i].angularForce / rigidBody.mass;
-
-		if (hasSpeedLimiter && scene->GetComponent<SpeedLimiter>(rigidBody.entity).atMaxAngularVelocity)
-		{
-			// only apply angular acceleration if it slows rigid body down
-			if (rigidBody.angularAcceleration > 0 && deltaAngularAcceleration < 0
-			  || rigidBody.angularAcceleration < 0 && deltaAngularAcceleration > 0)
-			{
-				rigidBody.acceleration.x += deltaAcceleration.x;
-			}
-		}
-		else
-		{
-			rigidBody.angularAcceleration += deltaAngularAcceleration;
-		}
+		rigidBody.angularAcceleration = totalAngularForce / rigidBody.mass;
 	}
 }

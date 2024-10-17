@@ -90,13 +90,15 @@ struct RigidBody : Component
 	float angularVelocity;
 	Vector2 acceleration;
 	float angularAcceleration;
+	float frictionCoefficient;
 
-	RigidBody(int entityId, float mass, Vector2 velocity, float angularVelocity, Vector2 acceleration, float angularAcceleration)
+	RigidBody(int entityId, float mass, Vector2 velocity, float angularVelocity, Vector2 acceleration, float angularAcceleration, float frictionCoefficient)
 		: mass(mass)
 		, velocity(velocity)
 		, angularVelocity(angularVelocity)
 		, acceleration(acceleration)
 		, angularAcceleration(angularAcceleration)
+		, frictionCoefficient(frictionCoefficient)
 	{
 		entity = entityId;
 	}
@@ -106,12 +108,18 @@ struct Force : Component
 {
 	static const int ID = 8; // 0b0000_0000_0000_0000_0000_0000_0000_1000
 
-	Vector2 force;
-	float angularForce;
+	Vector2 externalForce;
+	Vector2 internalForce;
 
-	Force(int entityId, Vector2 force, float angularForce)
-		: force(force)
-		, angularForce(angularForce)
+	float externalAngularForce;
+	float internalAngularForce;
+
+
+	Force(int entityId, Vector2 externalForce, Vector2 internalForce, float externalAngularForce, float internalAngularForce)
+		: externalForce(externalForce)
+		, internalForce(internalForce)
+		, externalAngularForce(externalAngularForce)
+		, internalAngularForce(internalAngularForce)
 	{ 
 		entity = entityId; 
 	}

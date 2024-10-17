@@ -46,21 +46,24 @@ int main()
     (
         testEntity1,
         1,
-        Vector2{ 0, 0 },
+        Vector2{ 0.0f, 0.0f },
         0,
-        Vector2{ 0, 0 },
-        0
+        Vector2{ 0.0f, 0.0f },
+        0.0f,
+        0.99f
     );
     scene.AddComponent<Force>
     (
         testEntity1,
         Vector2{ 0, 0 },
-        0
+        Vector2{ 0, 0 },
+        0.0f,
+        0.0f
     );
     scene.AddComponent<SpeedLimiter>
     (
         testEntity1,
-        50,
+        10,
         3
     );
     scene.AddComponent<PlayerInputListener>
