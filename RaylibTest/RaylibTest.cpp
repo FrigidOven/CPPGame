@@ -14,9 +14,10 @@ int main()
     RigidBodySystem rigidBodySystem;
     ForceSystem forceSystem;
     SpeedLimiterSystem speedLimiterSystem;
-    InputSystem inputSystem;
+    InputSystem inputSystem(InputMode::Default);
+    PlayerActionSystem playerActionSystem;
 
-    Scene scene (spriteRenderSystem, rigidBodySystem, forceSystem, speedLimiterSystem, inputSystem);
+    Scene scene (spriteRenderSystem, rigidBodySystem, forceSystem, speedLimiterSystem, inputSystem, playerActionSystem);
 
     Texture2D texture = LoadTexture("Textures/Background.png");
 
@@ -53,7 +54,7 @@ int main()
     scene.AddComponent<Force>
     (
         testEntity1,
-        Vector2{ 10, 0 },
+        Vector2{ 0, 0 },
         0
     );
     scene.AddComponent<SpeedLimiter>
@@ -62,18 +63,17 @@ int main()
         50,
         3
     );
+    scene.AddComponent<PlayerInputListener>
+        (
+            testEntity1,
+            KEY_W,
+            KEY_A,
+            KEY_S,
+            KEY_D
+        );
 
-    bool flippedDirection = false;
     while (WindowShouldClose() == false)
     {
-        if (GetTime() > 5 && !flippedDirection)
-        {
-            scene.RemoveComponent<Force>(testEntity1);
-            scene.AddComponent<Force>(testEntity1, Vector2{ -10, 0 }, -1);
-
-            flippedDirection = true;
-        }
-
         scene.Update();
     }
     

@@ -131,6 +131,7 @@
     <ClCompile Include="ECS.h" />
     <ClCompile Include="ForceSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="PlayerActionSystem.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="RaylibTest.cpp" />
     <ClCompile Include="SpeedLimiterSystem.cpp" />

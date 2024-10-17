@@ -10,12 +10,14 @@ Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
 	RigidBodySystem& rigidBodySystem,
 	ForceSystem& forceSystem,
 	SpeedLimiterSystem& speedLimiterSystem,
-	InputSystem& inputSystem)
+	InputSystem& inputSystem,
+	PlayerActionSystem& playerActionSystem)
 	: spriteRendererSystem(spriteRendererSystem)
 	, rigidBodySystem(rigidBodySystem)
 	, forceSystem(forceSystem)
 	, speedLimiterSystem(speedLimiterSystem)
 	, inputSystem(inputSystem)
+	, playerActionSystem(playerActionSystem)
 {
 }
 int Scene::CreateEntity()
@@ -38,6 +40,7 @@ void Scene::Update()
 	{
 		auto& playerInputListenterComponents = *(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
 		inputSystem.Update(this, playerInputListenterComponents);
+		playerActionSystem.Update(this, playerInputListenterComponents);
 	}
 	if (componentTable.find(Sprite::ID) != componentTable.end())
 	{

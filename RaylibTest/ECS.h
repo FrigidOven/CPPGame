@@ -140,8 +140,8 @@ struct PlayerInputListener : Component
 	static const int ID = 32; // 0b0000_0000_0000_0000_0000_0000_0010_0000
 
 	KeyboardKey upKey;
-	KeyboardKey downKey;
 	KeyboardKey leftKey;
+	KeyboardKey downKey;
 	KeyboardKey rightKey;
 
 	bool upIsDown;
@@ -149,10 +149,10 @@ struct PlayerInputListener : Component
 	bool leftIsDown;
 	bool rightIsDown;
 
-	PlayerInputListener(int entityId, KeyboardKey upKey, KeyboardKey downKey, KeyboardKey leftKey, KeyboardKey rightKey)
+	PlayerInputListener(int entityId, KeyboardKey upKey, KeyboardKey leftKey, KeyboardKey downKey, KeyboardKey rightKey)
 		: upKey(upKey)
-		, downKey(downKey)
 		, leftKey(leftKey)
+		, downKey(downKey)
 		, rightKey(rightKey)
 		, upIsDown(false)
 		, downIsDown(false)
@@ -192,6 +192,7 @@ class ForceSystem
 public:
 	void Update(Scene* scene, std::vector<Force>& forceComponents);
 };
+
 class SpeedLimiterSystem
 {
 public:
@@ -204,12 +205,18 @@ private:
 	InputMode inputMode;
 	KeyboardKey lastPressed;
 
-	void UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener> playerInputListenerComponents);
+	void UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
 
+public:
+	InputSystem(InputMode inputMode);
+	void Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
+};
+
+class PlayerActionSystem
+{
 public:
 	void Update(Scene* scene, std::vector<PlayerInputListener> playerInputListenerComponents);
 };
-
 /*
 ===================================================================================================
  Scene
@@ -231,6 +238,7 @@ private:
 	ForceSystem& forceSystem;
 	SpeedLimiterSystem& speedLimiterSystem;
 	InputSystem& inputSystem;
+	PlayerActionSystem& playerActionSystem;
 
 	int ComponentIdOffset(int componentId);
 
@@ -239,7 +247,8 @@ public:
 				RigidBodySystem& rigidBodySystem,
 				ForceSystem& forceSystem,
 				SpeedLimiterSystem& speedLimiterSystem,
-				InputSystem& inputSystem);
+				InputSystem& inputSystem,
+				PlayerActionSystem& playerActionSystem);
 
 	int CreateEntity();
 	void Update();

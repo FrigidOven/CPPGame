@@ -24,7 +24,7 @@ void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
 		if (!hasSpeedLimiter || !scene->GetComponent<SpeedLimiter>(forceComponents[i].entity).atMaxVelocity)
 		{
 			// f = ma so a = f/m
-			Vector2 deltaAcceleration = { deltaTime * forceComponents[i].force.x / rigidBody.mass, deltaTime * forceComponents[i].entity / rigidBody.mass };
+			Vector2 deltaAcceleration = { deltaTime * forceComponents[i].force.x / rigidBody.mass, deltaTime * forceComponents[i].force.y / rigidBody.mass };
 
 			rigidBody.acceleration.x += deltaAcceleration.x;
 			rigidBody.acceleration.y += deltaAcceleration.y;
