@@ -6,26 +6,34 @@
  Public Functions
 ===================================================================================================
 */
-Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
-	RigidBodySystem& rigidBodySystem,
-	ForceSystem& forceSystem,
-	SpeedLimiterSystem& speedLimiterSystem,
-	InputSystem& inputSystem,
-	PlayerActionSystem& playerActionSystem)
+	Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
+							VelocitySystem& velocitySystem,
+							AccelerationSystem& accelerationSystem,
+							ForceSystem& forceSystem,
+							SpeedLimiterSystem& speedLimiterSystem,
+							InputSystem& inputSystem,
+							PlayerActionSystem& playerActionSystem)
 	: spriteRendererSystem(spriteRendererSystem)
-	, rigidBodySystem(rigidBodySystem)
+	, velocitySystem(velocitySystem)
+	, accelerationSystem(accelerationSystem)
 	, forceSystem(forceSystem)
 	, speedLimiterSystem(speedLimiterSystem)
 	, inputSystem(inputSystem)
 	, playerActionSystem(playerActionSystem)
 {
+		componentTable[Spatial::ID] = static_cast<void*>(new std::vector<Spatial>);
+		componentTable[Sprite::ID] = static_cast<void*>(new std::vector<Sprite>);
+		componentTable[RigidBody::ID] = static_cast<void*>(new std::vector<RigidBody>);
+		componentTable[Force::ID] = static_cast<void*>(new std::vector<Force>);
+		componentTable[SpeedLimiter::ID] = static_cast<void*>(new std::vector<SpeedLimiter>);
+		componentTable[PlayerInputListener::ID] = static_cast<void*>(new std::vector<PlayerInputListener>);
 }
 int Scene::CreateEntity()
 {
 	entities.emplace_back
 	(
 		static_cast<int>(entities.size()),	// id
-		0									// component mask
+		0															// component mask
 	);
 
 	// reserve space for all components even if the entity wont use them all
@@ -36,30 +44,27 @@ int Scene::CreateEntity()
 }
 void Scene::Update()
 {
-	if (componentTable.find(PlayerInputListener::ID) != componentTable.end())
-	{
-		auto& playerInputListenterComponents = *(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
-		inputSystem.Update(this, playerInputListenterComponents);
-		playerActionSystem.Update(this, playerInputListenterComponents);
-	}
-	if (componentTable.find(Sprite::ID) != componentTable.end())
-	{
-		auto& spriteComponents = *(static_cast<std::vector<Sprite>*>(componentTable[Sprite::ID]));
-		spriteRendererSystem.Draw(this, spriteComponents);
-	}
-	if (componentTable.find(SpeedLimiter::ID) != componentTable.end())
-	{
-		auto& speedLimiterComponents = *(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
-		speedLimiterSystem.Update(this, speedLimiterComponents);
-	}
-	if (componentTable.find(RigidBody::ID) != componentTable.end())
-	{
-		auto& rigidBodyComponents = *(static_cast<std::vector<RigidBody>*>(componentTable[RigidBody::ID]));
-		rigidBodySystem.Update(this, rigidBodyComponents);
-	}
-	if (componentTable.find(Force::ID) != componentTable.end())
-	{
-		auto& forceComponents = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
-		forceSystem.Update(this, forceComponents);
-	}
+	// Relevant Component Lists
+	auto& spriteComponents = *(static_cast<std::vector<Sprite>*>(componentTable[Sprite::ID]));
+	auto& rigidBodyComponents = *(static_cast<std::vector<RigidBody>*>(componentTable[RigidBody::ID]));
+	auto& forceComponents = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
+	auto& speedLimiterComponents = *(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
+	auto& playerInputListenterComponents = *(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
+	
+	// Input Routine:
+	// Update order: Input -> PlayerAction
+	inputSystem.Update(this, playerInputListenterComponents);
+	playerActionSystem.Update(this, playerInputListenterComponents);
+
+
+	// Physics Routine:
+	// Update order : Forces -> Acceleration -> SpeedLimiter -> Velocity
+	forceSystem.Update(this, forceComponents);
+	accelerationSystem.Update(this, rigidBodyComponents);
+	speedLimiterSystem.Update(this, speedLimiterComponents);
+	velocitySystem.Update(this, rigidBodyComponents);
+
+	// Rendering Routine:
+	// Update order: Sprite
+	spriteRendererSystem.Draw(this, spriteComponents);
 }

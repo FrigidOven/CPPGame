@@ -11,13 +11,14 @@ int main()
     SetTargetFPS(60);
 
     SpriteRendererSystem spriteRenderSystem;
-    RigidBodySystem rigidBodySystem;
+    VelocitySystem velocitySystem;
+    AccelerationSystem accelerationSystem;
     ForceSystem forceSystem;
     SpeedLimiterSystem speedLimiterSystem;
     InputSystem inputSystem(InputMode::Default);
     PlayerActionSystem playerActionSystem;
 
-    Scene scene (spriteRenderSystem, rigidBodySystem, forceSystem, speedLimiterSystem, inputSystem, playerActionSystem);
+    Scene scene (spriteRenderSystem, velocitySystem, accelerationSystem, forceSystem, speedLimiterSystem, inputSystem, playerActionSystem);
 
     Texture2D texture = LoadTexture("Textures/Background.png");
 
@@ -29,8 +30,6 @@ int main()
             Vector2{ screenWidth / 2, screenHeight / 2 },
             0.0f
         );
-
-
     scene.AddComponent<Sprite>
     (
         testEntity1,
@@ -45,12 +44,12 @@ int main()
     scene.AddComponent<RigidBody>
     (
         testEntity1,
-        100,
+        1,
         Vector2{ 0.0f, 0.0f },
         0,
         Vector2{ 0.0f, 0.0f },
         0.0f,
-        0.99f
+        0.8f
     );
     scene.AddComponent<Force>
     (
@@ -63,17 +62,17 @@ int main()
     scene.AddComponent<SpeedLimiter>
     (
         testEntity1,
-        50,
+        300,
         3
     );
     scene.AddComponent<PlayerInputListener>
-        (
-            testEntity1,
-            KEY_UP,
-            KEY_LEFT,
-            KEY_DOWN,
-            KEY_RIGHT
-        );
+    (
+        testEntity1,
+        KEY_UP,
+        KEY_LEFT,
+        KEY_DOWN,
+        KEY_RIGHT
+    );
 
     while (WindowShouldClose() == false)
     {

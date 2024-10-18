@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AccelerationSystem.cpp" />
     <ClCompile Include="ECS.h" />
     <ClCompile Include="ForceSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
@@ -136,7 +137,7 @@
     <ClCompile Include="RaylibTest.cpp" />
     <ClCompile Include="SpeedLimiterSystem.cpp" />
     <ClCompile Include="SpriteRendererSystem.cpp" />
-    <ClCompile Include="RigidBodySystem.cpp" />
+    <ClCompile Include="VelocitySystem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

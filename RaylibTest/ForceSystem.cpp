@@ -11,6 +11,7 @@
 void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
 {
 	const float gravity = 9.8f;
+	const float frictionCutOffVelocity = 0.1;
 
 	for (auto& force : forceComponents)
 	{
@@ -20,9 +21,15 @@ void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
 		Vector2 totalForce = Vector2Add(force.internalForce, force.externalForce);
 		float totalAngularForce = force.internalAngularForce + force.externalAngularForce;
 
-		// calculate friction
-		Vector2 frictionForce = Vector2Scale(Vector2Normalize(rigidBody.velocity), -rigidBody.frictionCoefficient * gravity * rigidBody.mass);
-		float angularFrictionForce = Clamp(rigidBody.angularVelocity, -1, 1) * -rigidBody.frictionCoefficient * rigidBody.angularVelocity;
+		// initialize friction to zero
+		Vector2 frictionForce = { 0.0f, 0.0f };
+		float angularFrictionForce = 0.0f;
+
+		// only find friction if velocity is above the cut off for friction
+		if (Vector2Length(rigidBody.velocity) >= frictionCutOffVelocity)
+			frictionForce = Vector2Scale(rigidBody.velocity, -rigidBody.frictionCoefficient * gravity * rigidBody.mass);
+		if (rigidBody.angularVelocity >= frictionCutOffVelocity)
+			angularFrictionForce = Clamp(rigidBody.angularVelocity, -1, 1) * -rigidBody.frictionCoefficient * rigidBody.angularVelocity;
 
 		// add friction
 		totalForce = Vector2Add(totalForce, frictionForce);

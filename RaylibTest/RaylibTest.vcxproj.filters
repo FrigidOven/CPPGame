@@ -30,9 +30,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RigidBodySystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="ForceSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
@@ -43,6 +40,12 @@
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
     <ClCompile Include="PlayerActionSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="VelocitySystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="AccelerationSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>

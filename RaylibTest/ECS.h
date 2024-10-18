@@ -189,23 +189,28 @@ public:
 	void Draw(Scene* scene, std::vector<Sprite>& spriteComponents);
 };
 
-class RigidBodySystem
-{
-public:
-	void Update(Scene* scene, std::vector<RigidBody>& rigidBodyComponents);
-};
-
 class ForceSystem
 {
 public:
 	void Update(Scene* scene, std::vector<Force>& forceComponents);
 };
-
+class AccelerationSystem
+{
+public:
+	void Update(Scene* scene, std::vector<RigidBody>& rigidBodyComponents);
+};
 class SpeedLimiterSystem
 {
 public:
 	void Update(Scene* scene, std::vector<SpeedLimiter>& speedLimiterComponents);
 };
+class VelocitySystem
+{
+public:
+	void Update(Scene* scene, std::vector<RigidBody>& rigidBodyComponents);
+};
+
+
 
 class InputSystem
 {
@@ -242,7 +247,8 @@ private:
 	std::unordered_map<int, void*> componentTable;
 
 	SpriteRendererSystem& spriteRendererSystem;
-	RigidBodySystem& rigidBodySystem;
+	VelocitySystem& velocitySystem;
+	AccelerationSystem& accelerationSystem;
 	ForceSystem& forceSystem;
 	SpeedLimiterSystem& speedLimiterSystem;
 	InputSystem& inputSystem;
@@ -250,7 +256,8 @@ private:
 
 public:
 	Scene(SpriteRendererSystem& spriteRendererSystem,
-				RigidBodySystem& rigidBodySystem,
+				VelocitySystem& velocitySystem,
+				AccelerationSystem& accelerationSystem,
 				ForceSystem& forceSystem,
 				SpeedLimiterSystem& speedLimiterSystem,
 				InputSystem& inputSystem,
@@ -280,14 +287,7 @@ bool Scene::AddComponent(int entityId, Args... args)
 	if (successful)
 	{
 		entities[entityId].componentMask |= 1 << T::ID;
-		std::vector<T>* componentList;
-		if (componentTable.find(T::ID) != componentTable.end())
-			componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
-		else
-		{
-			componentList = new std::vector<T>;
-			componentTable[T::ID] = static_cast<void*>(componentList);
-		}
+		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
 		componentList->emplace_back(entityId, args...);
 		components[entityId * Component::COMPONENT_COUNT + T::ID] = static_cast<int>(componentList->size()) - 1;
 	}
