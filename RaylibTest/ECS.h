@@ -130,14 +130,10 @@ struct SpeedLimiter : Component
 
 	float maxVelocity;
 	float maxAngularVelocity;
-	bool atMaxVelocity;
-	bool atMaxAngularVelocity;
 
 	SpeedLimiter(int entityId, float maxVelocity, float maxAngularVelocity)
 		: maxVelocity(maxVelocity)
 		, maxAngularVelocity(maxAngularVelocity)
-		, atMaxVelocity(false)
-		, atMaxAngularVelocity(false)
 	{
 		entity = entityId;
 	}
