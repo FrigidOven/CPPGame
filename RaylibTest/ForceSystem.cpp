@@ -10,7 +10,6 @@
 */
 void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
 {
-	const float minVelocity = 0.1f;
 	const float gravity = 9.8f;
 
 	for (auto& force : forceComponents)
@@ -26,16 +25,11 @@ void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
 		float angularFrictionForce = 0.0f;
 
 		// dont find friction if velocity is roughly 0
-		float velocityMagnitude = Vector2Length(rigidBody.velocity);
-		if (-minVelocity <= velocityMagnitude && velocityMagnitude <= minVelocity)
-			rigidBody.velocity = Vector2Zero();
-		else
+		if (Vector2Length(rigidBody.velocity) != 0)
 			frictionForce = Vector2Scale(Vector2Normalize(rigidBody.velocity), -rigidBody.frictionCoefficient * gravity * rigidBody.mass);
 
 		// dont find angular friction if angular velocity is roughly 0
-		if (-minVelocity <= rigidBody.angularVelocity && rigidBody.angularVelocity <= minVelocity)
-			rigidBody.angularVelocity = 0.0f;
-		else
+		if (rigidBody.angularVelocity != 0)
 			angularFrictionForce = Clamp(rigidBody.angularVelocity, -1, 1) * -rigidBody.frictionCoefficient * rigidBody.angularVelocity;
 
 		// add friction

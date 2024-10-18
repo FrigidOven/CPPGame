@@ -14,22 +14,22 @@ void PlayerActionSystem::Update(Scene* scene, std::vector<PlayerInputListener> p
 		if (playerInputListener.upIsDown)
 		{
 			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
-			force.internalForce = Vector2{ 0, -30 };
+			force.internalForce = Vector2{ 0, -10000 };
 		}
 		else if (playerInputListener.leftIsDown)
 		{
 			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
-			force.internalForce = Vector2{ -30, 0 };
+			force.internalForce = Vector2{ -10000, 0 };
 		}
 		else if (playerInputListener.rightIsDown)
 		{
 			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
-			force.internalForce = Vector2{ 30, 0 };
+			force.internalForce = Vector2{ 10000, 0 };
 		}
 		else if (playerInputListener.downIsDown)
 		{
 			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
-			force.internalForce = Vector2{ 0, 30 };
+			force.internalForce = Vector2{ 0, 10000 };
 		}
 		else
 		{
