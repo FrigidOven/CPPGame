@@ -45,7 +45,7 @@ struct Component
 };
 struct Spatial : Component
 {
-	static const int ID = 0; // 0b0000_0000_0000_0000_0000_0000_0000_0001
+	static const int ID = 0;
 
 	Vector2 position;
 	float rotation;
@@ -59,7 +59,7 @@ struct Spatial : Component
 };
 struct Sprite : Component
 {
-	static const int ID = 1; // 0b0000_0000_0000_0000_0000_0000_0000_0010
+	static const int ID = 1; 
 
 	Texture2D* source;
 	Rectangle sourceRect;
@@ -83,7 +83,7 @@ struct Sprite : Component
 
 struct RigidBody : Component
 {
-	static const int ID = 2; // 0b0000_0000_0000_0000_0000_0000_0000_0100
+	static const int ID = 2;
 
 	float mass;
 	Vector2 velocity;
@@ -106,7 +106,7 @@ struct RigidBody : Component
 
 struct Force : Component
 {
-	static const int ID = 3; // 0b0000_0000_0000_0000_0000_0000_0000_1000
+	static const int ID = 3;
 
 	Vector2 externalForce;
 	Vector2 internalForce;
@@ -126,7 +126,7 @@ struct Force : Component
 };
 struct SpeedLimiter : Component
 {
-	static const int ID = 4; // 0b0000_0000_0000_0000_0000_0000_0001_0000
+	static const int ID = 4;
 
 	float maxVelocity;
 	float maxAngularVelocity;
@@ -145,7 +145,7 @@ struct SpeedLimiter : Component
 
 struct PlayerInputListener : Component
 {
-	static const int ID = 5; // 0b0000_0000_0000_0000_0000_0000_0010_0000
+	static const int ID = 5;
 
 	KeyboardKey upKey;
 	KeyboardKey leftKey;
