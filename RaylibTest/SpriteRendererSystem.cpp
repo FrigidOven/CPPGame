@@ -11,15 +11,11 @@ void SpriteRendererSystem::Draw(Scene* scene, std::vector<Sprite>& spriteCompone
 	ClearBackground(BLACK);
 	BeginDrawing();
 
-	int spriteCount = static_cast<int>(spriteComponents.size());
-
 	Rectangle dest{ 0, 0, 0, 0 };
 	Rectangle source{ 0, 0, 0, 0 };
 
-	for (int i = 0; i < spriteCount; i++)
+	for (auto& sprite : spriteComponents)
 	{
-		Sprite& sprite = spriteComponents[i];
-
 		Vector2 position = scene->GetComponent<Spatial>(sprite.entity).position;
 		float rotation = scene->GetComponent<Spatial>(sprite.entity).rotation;
 		
@@ -46,7 +42,6 @@ void SpriteRendererSystem::Draw(Scene* scene, std::vector<Sprite>& spriteCompone
  Private Functions
 ===================================================================================================
 */
-
 void SpriteRendererSystem::UpdateSprite(Sprite& sprite)
 {
 	sprite.timer += GetFrameTime();

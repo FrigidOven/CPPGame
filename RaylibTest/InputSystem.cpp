@@ -12,13 +12,10 @@ InputSystem::InputSystem(InputMode inputMode)
 	, lastPressed(KEY_NULL)
 {
 }
-
 void InputSystem::Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents)
 {
 	if (!IsKeyDown(lastPressed))
-	{
 		lastPressed = static_cast<KeyboardKey>(GetKeyPressed());
-	}
 
 	switch (inputMode)
 	{
@@ -27,6 +24,7 @@ void InputSystem::Update(Scene* scene, std::vector<PlayerInputListener>& playerI
 		break;
 	}
 }
+
 /*
 ===================================================================================================
  Private Functions
@@ -34,14 +32,11 @@ void InputSystem::Update(Scene* scene, std::vector<PlayerInputListener>& playerI
 */
 void InputSystem::UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents)
 {
-	int playerInputComponentsCount = static_cast<int>(playerInputListenerComponents.size());
-	for (int i = 0; i < playerInputComponentsCount; i++)
+	for (auto& playerInputListener : playerInputListenerComponents)
 	{
-		PlayerInputListener& pil = playerInputListenerComponents[i];
-
-		pil.upIsDown = pil.upKey == lastPressed;
-		pil.downIsDown = pil.downKey == lastPressed;
-		pil.leftIsDown = pil.leftKey == lastPressed;
-		pil.rightIsDown = pil.rightKey == lastPressed;
+		playerInputListener.upIsDown = playerInputListener.upKey == lastPressed;
+		playerInputListener.downIsDown = playerInputListener.downKey == lastPressed;
+		playerInputListener.leftIsDown = playerInputListener.leftKey == lastPressed;
+		playerInputListener.rightIsDown = playerInputListener.rightKey == lastPressed;
 	}
 }

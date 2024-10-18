@@ -9,33 +9,31 @@
 */
 void PlayerActionSystem::Update(Scene* scene, std::vector<PlayerInputListener> playerInputListenerComponents)
 {
-	int playerInputComponentsCount = static_cast<int>(playerInputListenerComponents.size());
-	for (int i = 0; i < playerInputComponentsCount; i++)
+	for (auto& playerInputListener : playerInputListenerComponents)
 	{
-		PlayerInputListener& pil = playerInputListenerComponents[i];
-		if (pil.upIsDown)
+		if (playerInputListener.upIsDown)
 		{
-			Force& force = scene->GetComponent<Force>(pil.entity);
+			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
 			force.internalForce = Vector2{ 0, -30 };
 		}
-		else if (pil.leftIsDown)
+		else if (playerInputListener.leftIsDown)
 		{
-			Force& force = scene->GetComponent<Force>(pil.entity);
+			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
 			force.internalForce = Vector2{ -30, 0 };
 		}
-		else if (pil.rightIsDown)
+		else if (playerInputListener.rightIsDown)
 		{
-			Force& force = scene->GetComponent<Force>(pil.entity);
+			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
 			force.internalForce = Vector2{ 30, 0 };
 		}
-		else if (pil.downIsDown)
+		else if (playerInputListener.downIsDown)
 		{
-			Force& force = scene->GetComponent<Force>(pil.entity);
+			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
 			force.internalForce = Vector2{ 0, 30 };
 		}
 		else
 		{
-			Force& force = scene->GetComponent<Force>(pil.entity);
+			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
 			force.internalForce = Vector2{ 0, 0 };
 		}
 	}

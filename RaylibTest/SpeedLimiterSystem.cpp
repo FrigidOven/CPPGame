@@ -9,13 +9,10 @@
 */
 void SpeedLimiterSystem::Update(Scene* scene, std::vector<SpeedLimiter>& speedLimiterComponents)
 {
-	int speedLimiterCount = static_cast<int>(speedLimiterComponents.size());
-
-	for (int i = 0; i < speedLimiterCount; i++)
+	for (auto& speedLimiter : speedLimiterComponents)
 	{
-		RigidBody& rigidBody = scene->GetComponent<RigidBody>(speedLimiterComponents[i].entity);
-		
-		Vector2ClampValue(rigidBody.velocity, 0.0f, speedLimiterComponents[i].maxVelocity);
-		rigidBody.angularVelocity = Clamp(rigidBody.angularVelocity, -speedLimiterComponents[i].maxAngularVelocity, speedLimiterComponents[i].maxAngularVelocity);
+		RigidBody& rigidBody = scene->GetComponent<RigidBody>(speedLimiter.entity);
+		Vector2ClampValue(rigidBody.velocity, 0.0f, speedLimiter.maxVelocity);
+		rigidBody.angularVelocity = Clamp(rigidBody.angularVelocity, -speedLimiter.maxAngularVelocity, speedLimiter.maxAngularVelocity);
 	}
 }

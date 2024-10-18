@@ -63,17 +63,3 @@ void Scene::Update()
 		forceSystem.Update(this, forceComponents);
 	}
 }
-/*
-===================================================================================================
- Private Functions
-===================================================================================================
-*/
-int Scene::ComponentIdOffset(int componentId)
-{
-	int componentIdOffset = 0;
-	for (componentIdOffset = 0; (componentId & 1) == 0; componentIdOffset++)
-	{
-		componentId >>= 1;
-	}
-	return componentIdOffset;
-}

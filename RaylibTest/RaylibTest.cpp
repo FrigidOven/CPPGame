@@ -63,7 +63,7 @@ int main()
     scene.AddComponent<SpeedLimiter>
     (
         testEntity1,
-        10,
+        50,
         3
     );
     scene.AddComponent<PlayerInputListener>

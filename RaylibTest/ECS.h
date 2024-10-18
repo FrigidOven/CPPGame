@@ -45,7 +45,7 @@ struct Component
 };
 struct Spatial : Component
 {
-	static const int ID = 1; // 0b0000_0000_0000_0000_0000_0000_0000_0001
+	static const int ID = 0; // 0b0000_0000_0000_0000_0000_0000_0000_0001
 
 	Vector2 position;
 	float rotation;
@@ -59,7 +59,7 @@ struct Spatial : Component
 };
 struct Sprite : Component
 {
-	static const int ID = 2; // 0b0000_0000_0000_0000_0000_0000_0000_0010
+	static const int ID = 1; // 0b0000_0000_0000_0000_0000_0000_0000_0010
 
 	Texture2D* source;
 	Rectangle sourceRect;
@@ -83,7 +83,7 @@ struct Sprite : Component
 
 struct RigidBody : Component
 {
-	static const int ID = 4; // 0b0000_0000_0000_0000_0000_0000_0000_0100
+	static const int ID = 2; // 0b0000_0000_0000_0000_0000_0000_0000_0100
 
 	float mass;
 	Vector2 velocity;
@@ -106,7 +106,7 @@ struct RigidBody : Component
 
 struct Force : Component
 {
-	static const int ID = 8; // 0b0000_0000_0000_0000_0000_0000_0000_1000
+	static const int ID = 3; // 0b0000_0000_0000_0000_0000_0000_0000_1000
 
 	Vector2 externalForce;
 	Vector2 internalForce;
@@ -126,7 +126,7 @@ struct Force : Component
 };
 struct SpeedLimiter : Component
 {
-	static const int ID = 16; // 0b0000_0000_0000_0000_0000_0000_0001_0000
+	static const int ID = 4; // 0b0000_0000_0000_0000_0000_0000_0001_0000
 
 	float maxVelocity;
 	float maxAngularVelocity;
@@ -145,7 +145,7 @@ struct SpeedLimiter : Component
 
 struct PlayerInputListener : Component
 {
-	static const int ID = 32; // 0b0000_0000_0000_0000_0000_0000_0010_0000
+	static const int ID = 5; // 0b0000_0000_0000_0000_0000_0000_0010_0000
 
 	KeyboardKey upKey;
 	KeyboardKey leftKey;
@@ -248,8 +248,6 @@ private:
 	InputSystem& inputSystem;
 	PlayerActionSystem& playerActionSystem;
 
-	int ComponentIdOffset(int componentId);
-
 public:
 	Scene(SpriteRendererSystem& spriteRendererSystem,
 				RigidBodySystem& rigidBodySystem,
@@ -281,7 +279,7 @@ bool Scene::AddComponent(int entityId, Args... args)
 
 	if (successful)
 	{
-		entities[entityId].componentMask |= T::ID;
+		entities[entityId].componentMask |= 1 << T::ID;
 		std::vector<T>* componentList;
 		if (componentTable.find(T::ID) != componentTable.end())
 			componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
@@ -291,7 +289,7 @@ bool Scene::AddComponent(int entityId, Args... args)
 			componentTable[T::ID] = static_cast<void*>(componentList);
 		}
 		componentList->emplace_back(entityId, args...);
-		components[entityId * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)] = static_cast<int>(componentList->size()) - 1;
+		components[entityId * Component::COMPONENT_COUNT + T::ID] = static_cast<int>(componentList->size()) - 1;
 	}
 
 	return successful;
@@ -304,7 +302,7 @@ bool Scene::RemoveComponent(int entityId)
 
 	if (successful)
 	{
-		int index = components[entityId * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)];
+		int index = components[entityId * Component::COMPONENT_COUNT + T::ID];
 		std::vector<T>* componentList;
 		componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
 
@@ -317,13 +315,13 @@ bool Scene::RemoveComponent(int entityId)
 			(*componentList)[componentList->size() - 1] = toRemove;
 			(*componentList)[index] = back;
 
-			components[back.entity * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)] = index;
+			components[back.entity * Component::COMPONENT_COUNT + T::ID] = index;
 		}
 
-		components[entityId * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)] = -1;
+		components[entityId * Component::COMPONENT_COUNT + T::ID] = -1;
 		componentList->pop_back();
 
-		entities[entityId].componentMask &= ~T::ID;
+		entities[entityId].componentMask &= ~(1 << T::ID);
 	}
 
 	return successful;
@@ -332,7 +330,7 @@ bool Scene::RemoveComponent(int entityId)
 template<typename T>
 T& Scene::GetComponent(int entityId)
 {
-	int index = components[entityId * Component::COMPONENT_COUNT + ComponentIdOffset(T::ID)];
+	int index = components[entityId * Component::COMPONENT_COUNT + T::ID];
 
 	std::vector<T>* componentList;
 	componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
@@ -343,7 +341,7 @@ T& Scene::GetComponent(int entityId)
 template<typename T>
 bool Scene::HasComponent(int entityId)
 {
-	return  (entities[entityId].componentMask & T::ID) != 0;
+	return  (entities[entityId].componentMask & (1 << T::ID)) != 0;
 }
 
 #endif
