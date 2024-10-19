@@ -5,7 +5,7 @@
  Public Functions
 ===================================================================================================
 */
-	Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
+Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
 							VelocitySystem& velocitySystem,
 							AccelerationSystem& accelerationSystem,
 							ForceSystem& forceSystem,
@@ -27,6 +27,16 @@
 		componentTable[SpeedLimiter::ID] = static_cast<void*>(new std::vector<SpeedLimiter>);
 		componentTable[PlayerInputListener::ID] = static_cast<void*>(new std::vector<PlayerInputListener>);
 }
+Scene::~Scene()
+{
+	free(static_cast<std::vector<Spatial>*>(componentTable[Spatial::ID]));
+	free(static_cast<std::vector<Sprite>*>(componentTable[Sprite::ID]));
+	free(static_cast<std::vector<RigidBody>*>(componentTable[RigidBody::ID]));
+	free(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
+	free(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
+	free(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
+}
+
 int Scene::CreateEntity()
 {
 	entities.emplace_back

@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include "Input.h"
+
 /*
 * =================================================
 *	BASE COMPONENT
@@ -10,7 +12,7 @@
 */
 struct Component
 {
-	static const int COMPONENT_COUNT = 6;
+	static const int COMPONENT_COUNT = 7;
 	int entity;
 };
 
@@ -169,4 +171,33 @@ struct PlayerInputListener : Component
 	{
 		entity = entityId;
 	}
+
+/*
+* =================================================
+* INPUT ACTION COMPONENT
+* =================================================
+*/
+	struct InputAction : Component
+	{
+		static const int ID = 6;
+
+		bool isContinous;
+		ControlType controlType;
+		int controlValue;
+
+		Action* action;
+
+		InputAction(int entityId, bool isContinous, ControlType controlType, int controlValue, Action* action)
+			: isContinous(isContinous)
+			, controlType(controlType)
+			, controlValue(controlValue)
+			, action(action)
+		{
+			entity = entityId;
+		}
+		~InputAction()
+		{
+			free(action);
+		}
+	};
 };
