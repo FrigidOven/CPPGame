@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components.h" />
+    <ClInclude Include="ECS.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Scene.h" />

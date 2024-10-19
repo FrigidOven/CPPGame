@@ -1,10 +1,4 @@
-#include <raylib.h>
-#include <raymath.h>
-#include <vector>
-
-#include "Scene.h"
-#include "Components.h"
-#include "Systems.h"
+#include "ECS.h"
 
 /*
 ===================================================================================================

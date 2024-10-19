@@ -1,10 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <unordered_map>
 
 #include "Entity.h"
-#include "Components.h"
 #include "Systems.h"
 
 /*

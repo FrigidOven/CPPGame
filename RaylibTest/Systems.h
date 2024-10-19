@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Input.h"
 #include "Components.h"
 
