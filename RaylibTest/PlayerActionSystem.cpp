@@ -1,6 +1,8 @@
 #include <vector>
-#include "ECS.h"
-#include <raymath.h>
+
+#include "Scene.h"
+#include "Components.h"
+#include "Systems.h"
 
 /*
 ===================================================================================================

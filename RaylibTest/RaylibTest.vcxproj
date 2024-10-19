@@ -129,7 +129,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AccelerationSystem.cpp" />
-    <ClCompile Include="ECS.h" />
     <ClCompile Include="ForceSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="PlayerActionSystem.cpp" />
@@ -138,6 +137,13 @@
     <ClCompile Include="SpeedLimiterSystem.cpp" />
     <ClCompile Include="SpriteRendererSystem.cpp" />
     <ClCompile Include="VelocitySystem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Components.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Systems.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,7 @@
 #include <vector>
-#include "ECS.h"
-#include <iostream>
+
+#include "Components.h"
+#include "Systems.h"
 
 /*
 ===================================================================================================

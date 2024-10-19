@@ -1,6 +1,4 @@
-#include <iostream>
-#include <raylib.h>
-#include "ECS.h"
+#include "Scene.h"
 
 int main()
 {

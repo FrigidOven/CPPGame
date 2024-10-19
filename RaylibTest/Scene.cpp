@@ -1,5 +1,6 @@
-#include <vector>
-#include "ECS.h"
+#include "Scene.h"
+#include "Entity.h"
+#include "Components.h"
 
 /*
 ===================================================================================================
