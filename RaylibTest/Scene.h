@@ -37,6 +37,7 @@ public:
 		SpeedLimiterSystem& speedLimiterSystem,
 		InputSystem& inputSystem,
 		PlayerActionSystem& playerActionSystem);
+	~Scene();
 
 	int CreateEntity();
 	void Update();

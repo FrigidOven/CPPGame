@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Action.h"
+#include "Command.h"
 
 enum ControlType
 {
@@ -12,4 +12,18 @@ enum ControlType
 enum InputMode
 {
 	Default = 0
+};
+
+struct Input
+{
+	ControlType controlType;
+	int controlValue;
+	bool isContinous;
+
+	Input(ControlType controlType, int controlValue, bool isContinous)
+		: controlType(controlType)
+		, controlValue(controlValue)
+		, isContinous(isContinous)
+	{
+	}
 };

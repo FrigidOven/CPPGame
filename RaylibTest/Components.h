@@ -174,30 +174,23 @@ struct PlayerInputListener : Component
 
 /*
 * =================================================
-* INPUT ACTION COMPONENT
+* ACTION COMPONENT
 * =================================================
 */
-	struct InputAction : Component
+	struct Action : Component
 	{
 		static const int ID = 6;
 
-		bool isContinous;
-		ControlType controlType;
-		int controlValue;
+		Command* command;
 
-		Action* action;
-
-		InputAction(int entityId, bool isContinous, ControlType controlType, int controlValue, Action* action)
-			: isContinous(isContinous)
-			, controlType(controlType)
-			, controlValue(controlValue)
-			, action(action)
+		Action(int entityId, Command* command)
+			: command(command)
 		{
 			entity = entityId;
 		}
-		~InputAction()
+		~Action()
 		{
-			free(action);
+			free(command);
 		}
 	};
 };

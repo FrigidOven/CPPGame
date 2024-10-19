@@ -4,16 +4,16 @@
 
 class Scene;
 
-struct Action
+struct Command
 {
 	virtual void Execute(Scene* scene, int entityId) = 0;
 };
 
-struct MovementAction : Action
+struct MovementCommand : Command
 {
 	Vector2 force;
 
-	MovementAction(Vector2 force)
+	MovementCommand(Vector2 force)
 		: force(force)
 	{
 	}
