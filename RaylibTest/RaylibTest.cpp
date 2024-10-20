@@ -23,57 +23,24 @@ int main()
 
     int testEntity1 = scene.CreateEntity();
 
-    scene.AddComponent<Spatial>
-        (
-            testEntity1, 
-            Vector2{ screenWidth / 2, screenHeight / 2 },
-            0.0f
-        );
-    scene.AddComponent<Sprite>
-    (
-        testEntity1,
-        &texture,
-        Rectangle{ 0, 0, 256, 224 },
-        256 * 3,
-        224 * 3,
-        1,
-        0,
-        1
-    );
-    scene.AddComponent<RigidBody>
-    (
-        testEntity1,
-        1,
-        Vector2{ 0.0f, 0.0f },
-        0,
-        Vector2{ 0.0f, 0.0f },
-        0.0f,
-        0.0f
-    );
-    scene.AddComponent<Force>
-    (
-        testEntity1,
-        Vector2{ 0, 0 },
-        Vector2{ 0, 0 },
-        0.0f,
-        0.0f
-    );
-    scene.AddComponent<SpeedLimiter>
-    (
-        testEntity1,
-        300,
-        3
-    );
-    scene.AddComponent<PlayerInputListener>
-    (
-        testEntity1,
-        Input(Keyboard, KEY_UP,  false),
-        Input(Keyboard, KEY_LEFT, false),
-        Input(Keyboard, KEY_DOWN, false),
-        Input(Keyboard, KEY_RIGHT, false)
-    );
+    scene.AddComponent<Spatial>(testEntity1, Vector2{ screenWidth / 2, screenHeight / 2 + (32*3)/2}, 0.0f);
+    scene.AddComponent<Sprite>(testEntity1, &texture, Rectangle{ 0, 0, 32, 32}, 32 * 3, 32 * 3, 8, 5);
+    scene.AddComponent<RigidBody>(testEntity1, 1, Vector2{ 0.0f, 0.0f }, 0, Vector2{ 0.0f, 0.0f }, 0.0f, 0.8f);
+    scene.AddComponent<Force>(testEntity1, Vector2{ 0, 0 }, Vector2{ 0, 0 }, 0.0f, 0.0f);
+    scene.AddComponent<SpeedLimiter>(testEntity1, 300, 3);
+    scene.AddComponent<PlayerInputListener>(testEntity1, Input(Keyboard, KEY_UP,  true), Input(Keyboard, KEY_LEFT, true), Input(Keyboard, KEY_DOWN, true), Input(Keyboard, KEY_RIGHT, true));
 
-    while (WindowShouldClose() == false)
+    int testEntity2 = scene.CreateEntity();
+
+    scene.AddComponent<Spatial>(testEntity2, Vector2{ screenWidth / 2, screenHeight / 2 - (32*3)/2}, 0.0f);
+    scene.AddComponent<Sprite>(testEntity2, &texture, Rectangle{ 0, 192, 32, 32}, 32 * 3, 32 * 3, 8, 5);
+    scene.AddComponent<RigidBody>(testEntity2, 1, Vector2{ 0.0f, 0.0f }, 0, Vector2{ 0.0f, 0.0f }, 0.0f, 0.8f);
+    scene.AddComponent<Force>(testEntity2, Vector2{ 0, 0 }, Vector2{ 0, 0 }, 0.0f, 0.0f);
+    scene.AddComponent<SpeedLimiter>(testEntity2, 300, 3);
+    scene.AddComponent<PlayerInputListener>(testEntity2, Input(Keyboard, KEY_W, true), Input(Keyboard, KEY_A, true), Input(Keyboard, KEY_S, true), Input(Keyboard, KEY_D, true));
+
+
+    while (!WindowShouldClose())
     {
         scene.Update();
     }

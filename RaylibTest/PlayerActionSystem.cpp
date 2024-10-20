@@ -2,6 +2,33 @@
 
 /*
 ===================================================================================================
+ Private Functions
+===================================================================================================
+*/
+void PlayerActionSystem::WalkUp(Scene* scene, PlayerInputListener& playerInputListener)
+{
+	scene->AddComponent<Action>(playerInputListener.entity, std::make_shared<MovementCommand>(Vector2{ 0.0f, -1000.0f }));
+}
+void PlayerActionSystem::WalkLeft(Scene* scene, PlayerInputListener& playerInputListener)
+{
+	scene->AddComponent<Action>(playerInputListener.entity, std::make_shared<MovementCommand>(Vector2{ -1000.0f, 0.0f }));
+}
+void PlayerActionSystem::WalkDown(Scene* scene, PlayerInputListener& playerInputListener)
+{
+	scene->AddComponent<Action>(playerInputListener.entity, std::make_shared<MovementCommand>(Vector2{ 0.0f, 1000.0f }));
+}
+void PlayerActionSystem::WalkRight(Scene* scene, PlayerInputListener& playerInputListener)
+{
+	scene->AddComponent<Action>(playerInputListener.entity, std::make_shared<MovementCommand>(Vector2{ 1000.0f, 0.0f }));
+}
+
+void PlayerActionSystem::Stop(Scene* scene, PlayerInputListener& playerInputListener)
+{
+	scene->AddComponent<Action>(playerInputListener.entity, std::make_shared<MovementCommand>(Vector2{ 0.0f, 0.0f }));
+}
+
+/*
+===================================================================================================
  Public Functions
 ===================================================================================================
 */
@@ -10,17 +37,14 @@ void PlayerActionSystem::Update(Scene* scene, std::vector<PlayerInputListener>& 
 	for (auto& playerInputListener : playerInputListenerComponents)
 	{
 		if (playerInputListener.up.isActive)
-			scene->AddComponent<Action>(playerInputListener.entity, std::make_shared<MovementCommand>(Vector2{ 0.0f, -1000.0f }));
+			WalkUp(scene, playerInputListener);
 		else if (playerInputListener.left.isActive)
-			scene->AddComponent<Action>(playerInputListener.entity, std::make_shared<MovementCommand>(Vector2{ -1000.0f, 0.0f }));
+			WalkLeft(scene, playerInputListener);
 		else if (playerInputListener.down.isActive)
-			scene->AddComponent<Action>(playerInputListener.entity, std::make_shared<MovementCommand>(Vector2{ 0.0f, 1000.0f }));
+			WalkDown(scene, playerInputListener);
 		else if (playerInputListener.right.isActive)
-			scene->AddComponent<Action>(playerInputListener.entity, std::make_shared<MovementCommand>(Vector2{ 1000.0f, 0.0f }));
+			WalkRight(scene, playerInputListener);
 		else
-		{
-			Force& force = scene->GetComponent<Force>(playerInputListener.entity);
-			force.internalForce = Vector2{ 0, 0 };
-		}
+			Stop(scene, playerInputListener);
 	}
 }

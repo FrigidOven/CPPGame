@@ -56,12 +56,12 @@ struct Sprite : Component
 	float timer;
 	float fps;
 
-	Sprite(int entityId, Texture2D* source, Rectangle sourceRect, float width, float height, int frameCount, float timer, float fps)
+	Sprite(int entityId, Texture2D* source, Rectangle sourceRect, float width, float height, int frameCount, float fps)
 		: source(source)
 		, sourceRect(sourceRect)
 		, width(width), height(height)
 		, frameCount(frameCount)
-		, timer(timer)
+		, timer(0.0f)
 		, fps(fps)
 	{
 		entity = entityId;

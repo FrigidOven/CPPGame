@@ -93,17 +93,6 @@ public:
 
 /*
 * =================================================
-* PLAYER ACTION SYSTEM
-* =================================================
-*/
-class PlayerActionSystem
-{
-public:
-	void Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
-};
-
-/*
-* =================================================
 * ACTION SYSTEM
 * =================================================
 */
@@ -111,4 +100,23 @@ class ActionSystem
 {
 public:
 	void Update(Scene* scene, std::vector<Action>& actions);
+};
+
+/*
+* =================================================
+* PLAYER ACTION SYSTEM
+* =================================================
+*/
+class PlayerActionSystem
+{
+private:
+	void WalkUp(Scene* scene, PlayerInputListener& playerInputListener);
+	void WalkLeft(Scene* scene, PlayerInputListener& playerInputListener);
+	void WalkDown(Scene* scene, PlayerInputListener& playerInputListener);
+	void WalkRight(Scene* scene, PlayerInputListener& playerInputListener);
+
+	void Stop(Scene* scene, PlayerInputListener& playerInputListener);
+
+public:
+	void Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
 };
