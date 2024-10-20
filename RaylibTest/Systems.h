@@ -81,7 +81,8 @@ private:
 	void RemoveKeys();
 	void AddKeys();
 
-	bool CheckInput(Input input);
+	bool CheckActive(Input input);
+	bool CheckDown(Input input);
 
 	void UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
 

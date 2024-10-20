@@ -21,12 +21,14 @@ struct Input
 	bool isContinous;
 
 	bool isActive;
+	bool isDown;
 
 	Input(ControlType controlType, int controlValue, bool isContinous)
 		: controlType(controlType)
 		, controlValue(controlValue)
 		, isContinous(isContinous)
 		, isActive(false)
+		, isDown(false)
 	{
 	}
 };

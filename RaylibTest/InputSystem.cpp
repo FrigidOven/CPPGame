@@ -51,12 +51,26 @@ void InputSystem::AddKeys()
 	} while (key != KEY_NULL);
 }
 
-bool InputSystem::CheckInput(Input input)
+bool InputSystem::CheckActive(Input input)
 {
 	switch (input.controlType)
 	{
 	case Keyboard:
-		return keyboardKeys.size() > 0 && keyboardKeys.back() == input.controlValue;
+
+		bool isActive = keyboardKeys.size() > 0 && keyboardKeys.back() == input.controlValue;
+
+		if (!input.isContinous)
+			isActive &= !(input.isActive || input.isDown);
+
+		return isActive;
+	}
+}
+bool InputSystem::CheckDown(Input input)
+{
+	switch (input.controlType)
+	{
+	case Keyboard:
+		return std::find(keyboardKeys.begin(), keyboardKeys.end(), input.controlValue) != keyboardKeys.end();
 	}
 }
 
@@ -65,9 +79,16 @@ void InputSystem::UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInp
 {
 	for (auto& playerInputListener : playerInputListenerComponents)
 	{
-		playerInputListener.up.isActive= CheckInput(playerInputListener.up);
-		playerInputListener.left.isActive = CheckInput(playerInputListener.left);
-		playerInputListener.down.isActive = CheckInput(playerInputListener.down);
-		playerInputListener.right.isActive = CheckInput(playerInputListener.right);
+		playerInputListener.up.isActive= CheckActive(playerInputListener.up);
+		playerInputListener.up.isDown = CheckDown(playerInputListener.up);
+
+		playerInputListener.left.isActive = CheckActive(playerInputListener.left);
+		playerInputListener.left.isDown = CheckDown(playerInputListener.left);
+
+		playerInputListener.down.isActive = CheckActive(playerInputListener.down);
+		playerInputListener.down.isDown = CheckDown(playerInputListener.down);
+
+		playerInputListener.right.isActive = CheckActive(playerInputListener.right);
+		playerInputListener.right.isDown = CheckDown(playerInputListener.right);
 	}
 }
