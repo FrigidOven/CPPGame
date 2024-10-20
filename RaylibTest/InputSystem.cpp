@@ -53,13 +53,14 @@ void InputSystem::AddKeys()
 
 bool InputSystem::CheckActive(Input input)
 {
+	// check if the input is actually active, even if it is being pressed
 	switch (input.controlType)
 	{
 	case Keyboard:
-
 		bool isActive = keyboardKeys.size() > 0 && keyboardKeys.back() == input.controlValue;
 
-		if (!input.isContinous)
+		// non-continuous inputs should only be active for one frame
+		if (!input.isContinuous)
 			isActive &= !(input.isActive || input.isDown);
 
 		return isActive;
@@ -67,6 +68,7 @@ bool InputSystem::CheckActive(Input input)
 }
 bool InputSystem::CheckDown(Input input)
 {
+	// check if the input is being pressed, regardless of if it is the last pressed
 	switch (input.controlType)
 	{
 	case Keyboard:
@@ -79,6 +81,8 @@ void InputSystem::UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInp
 {
 	for (auto& playerInputListener : playerInputListenerComponents)
 	{
+		// check active before checking down, otherwise input won't be recognized
+
 		playerInputListener.up.isActive= CheckActive(playerInputListener.up);
 		playerInputListener.up.isDown = CheckDown(playerInputListener.up);
 

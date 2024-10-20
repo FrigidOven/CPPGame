@@ -16,17 +16,17 @@ enum InputMode
 
 struct Input
 {
-	ControlType controlType;
-	int controlValue;
-	bool isContinous;
+	ControlType controlType; // input source
+	int controlValue; // input source enum value
+	bool isContinuous;
 
-	bool isActive;
-	bool isDown;
+	bool isActive; // should be processed
+	bool isDown; // do not use for action handling
 
-	Input(ControlType controlType, int controlValue, bool isContinous)
+	Input(ControlType controlType, int controlValue, bool isContinuous)
 		: controlType(controlType)
 		, controlValue(controlValue)
-		, isContinous(isContinous)
+		, isContinuous(isContinuous)
 		, isActive(false)
 		, isDown(false)
 	{
