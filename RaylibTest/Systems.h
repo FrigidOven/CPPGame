@@ -89,5 +89,16 @@ public:
 class PlayerActionSystem
 {
 public:
-	void Update(Scene* scene, std::vector<PlayerInputListener> playerInputListenerComponents);
+	void Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
+};
+
+/*
+* =================================================
+* ACTION SYSTEM
+* =================================================
+*/
+class ActionSystem
+{
+public:
+	void Update(Scene* scene, std::vector<Action>& actions);
 };

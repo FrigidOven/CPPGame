@@ -5,7 +5,7 @@
  Public Functions
 ===================================================================================================
 */
-void PlayerActionSystem::Update(Scene* scene, std::vector<PlayerInputListener> playerInputListenerComponents)
+void PlayerActionSystem::Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents)
 {
 	for (auto& playerInputListener : playerInputListenerComponents)
 	{

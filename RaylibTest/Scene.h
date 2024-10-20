@@ -28,6 +28,7 @@ private:
 	SpeedLimiterSystem& speedLimiterSystem;
 	InputSystem& inputSystem;
 	PlayerActionSystem& playerActionSystem;
+	ActionSystem& actionSystem;
 
 public:
 	Scene(SpriteRendererSystem& spriteRendererSystem,
@@ -36,7 +37,8 @@ public:
 		ForceSystem& forceSystem,
 		SpeedLimiterSystem& speedLimiterSystem,
 		InputSystem& inputSystem,
-		PlayerActionSystem& playerActionSystem);
+		PlayerActionSystem& playerActionSystem,
+		ActionSystem& actionSystem);
 	~Scene();
 
 	int CreateEntity();

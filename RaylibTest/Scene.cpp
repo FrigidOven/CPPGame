@@ -6,12 +6,13 @@
 ===================================================================================================
 */
 Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
-							VelocitySystem& velocitySystem,
-							AccelerationSystem& accelerationSystem,
-							ForceSystem& forceSystem,
-							SpeedLimiterSystem& speedLimiterSystem,
-							InputSystem& inputSystem,
-							PlayerActionSystem& playerActionSystem)
+	VelocitySystem& velocitySystem,
+	AccelerationSystem& accelerationSystem,
+	ForceSystem& forceSystem,
+	SpeedLimiterSystem& speedLimiterSystem,
+	InputSystem& inputSystem,
+	PlayerActionSystem& playerActionSystem,
+	ActionSystem& actionSystem)
 	: spriteRendererSystem(spriteRendererSystem)
 	, velocitySystem(velocitySystem)
 	, accelerationSystem(accelerationSystem)
@@ -19,6 +20,7 @@ Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
 	, speedLimiterSystem(speedLimiterSystem)
 	, inputSystem(inputSystem)
 	, playerActionSystem(playerActionSystem)
+	, actionSystem(actionSystem)
 {
 		componentTable[Spatial::ID] = static_cast<void*>(new std::vector<Spatial>);
 		componentTable[Sprite::ID] = static_cast<void*>(new std::vector<Sprite>);
@@ -61,11 +63,13 @@ void Scene::Update()
 	auto& forceComponents = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
 	auto& speedLimiterComponents = *(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
 	auto& playerInputListenterComponents = *(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
+	auto& actionComponents = *(static_cast<std::vector<Action>*>(componentTable[Action::ID]));
 	
 	// Input Routine:
-	// Update order: Input -> PlayerAction
+	// Update order: Input -> PlayerAction -> Action
 	inputSystem.Update(this, playerInputListenterComponents);
 	playerActionSystem.Update(this, playerInputListenterComponents);
+	actionSystem.Update(this, actionComponents);
 
 
 	// Physics Routine:

@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="AccelerationSystem.cpp" />
     <ClCompile Include="Actions.cpp" />
+    <ClCompile Include="ActionSystem.cpp" />
     <ClCompile Include="ForceSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="PlayerActionSystem.cpp" />
