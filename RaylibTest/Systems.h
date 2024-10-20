@@ -72,8 +72,17 @@ public:
 class InputSystem
 {
 private:
+	std::vector<KeyboardKey> keyboardKeys;
+	std::vector<GamepadButton> gamepadButtons;
+	std::vector<MouseButton> mouseButton;
+
 	InputMode inputMode;
-	KeyboardKey lastPressed;
+
+	void RemoveKeys();
+	void AddKeys();
+
+	bool CheckInput(Input input);
+
 	void UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
 
 public:
