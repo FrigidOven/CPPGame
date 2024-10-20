@@ -13,9 +13,10 @@ struct MovementCommand : Command
 {
 	Vector2 force;
 
+	void Execute(Scene* scene, int entityId) override;
+
 	MovementCommand(Vector2 force)
 		: force(force)
 	{
 	}
-	void Execute(Scene* scene, int entityId) override;
 };

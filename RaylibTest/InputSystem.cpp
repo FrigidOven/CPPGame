@@ -32,9 +32,9 @@ void InputSystem::UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInp
 {
 	for (auto& playerInputListener : playerInputListenerComponents)
 	{
-		playerInputListener.upIsDown = playerInputListener.upKey == lastPressed;
-		playerInputListener.downIsDown = playerInputListener.downKey == lastPressed;
-		playerInputListener.leftIsDown = playerInputListener.leftKey == lastPressed;
-		playerInputListener.rightIsDown = playerInputListener.rightKey == lastPressed;
+		playerInputListener.up.isActive= playerInputListener.up.controlValue == lastPressed;
+		playerInputListener.left.isActive = playerInputListener.left.controlValue == lastPressed;
+		playerInputListener.down.isActive = playerInputListener.down.controlValue == lastPressed;
+		playerInputListener.right.isActive = playerInputListener.right.controlValue == lastPressed;
 	}
 }

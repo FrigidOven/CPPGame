@@ -26,15 +26,17 @@ Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
 		componentTable[Force::ID] = static_cast<void*>(new std::vector<Force>);
 		componentTable[SpeedLimiter::ID] = static_cast<void*>(new std::vector<SpeedLimiter>);
 		componentTable[PlayerInputListener::ID] = static_cast<void*>(new std::vector<PlayerInputListener>);
+		componentTable[Action::ID] = static_cast<void*>(new std::vector<Action>);
 }
 Scene::~Scene()
 {
-	free(static_cast<std::vector<Spatial>*>(componentTable[Spatial::ID]));
-	free(static_cast<std::vector<Sprite>*>(componentTable[Sprite::ID]));
-	free(static_cast<std::vector<RigidBody>*>(componentTable[RigidBody::ID]));
-	free(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
-	free(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
-	free(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
+	delete(static_cast<std::vector<Spatial>*>(componentTable[Spatial::ID]));
+	delete(static_cast<std::vector<Sprite>*>(componentTable[Sprite::ID]));
+	delete(static_cast<std::vector<RigidBody>*>(componentTable[RigidBody::ID]));
+	delete(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
+	delete(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
+	delete(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
+	delete(static_cast<std::vector<Action>*>(componentTable[Action::ID]));
 }
 
 int Scene::CreateEntity()

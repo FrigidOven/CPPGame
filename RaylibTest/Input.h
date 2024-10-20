@@ -20,10 +20,13 @@ struct Input
 	int controlValue;
 	bool isContinous;
 
+	bool isActive;
+
 	Input(ControlType controlType, int controlValue, bool isContinous)
 		: controlType(controlType)
 		, controlValue(controlValue)
 		, isContinous(isContinous)
+		, isActive(false)
 	{
 	}
 };

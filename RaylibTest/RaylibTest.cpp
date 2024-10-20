@@ -66,10 +66,10 @@ int main()
     scene.AddComponent<PlayerInputListener>
     (
         testEntity1,
-        KEY_UP,
-        KEY_LEFT,
-        KEY_DOWN,
-        KEY_RIGHT
+        Input(Keyboard, KEY_UP,  true),
+        Input(Keyboard, KEY_LEFT, true),
+        Input(Keyboard, KEY_DOWN, true),
+        Input(Keyboard, KEY_RIGHT, true)
     );
 
     while (WindowShouldClose() == false)

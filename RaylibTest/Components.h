@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include <memory>
+
 #include "Input.h"
 
 /*
@@ -149,48 +151,36 @@ struct PlayerInputListener : Component
 {
 	static const int ID = 5;
 
-	KeyboardKey upKey;
-	KeyboardKey leftKey;
-	KeyboardKey downKey;
-	KeyboardKey rightKey;
+	Input up;
+	Input left;
+	Input down;
+	Input right;
 
-	bool upIsDown;
-	bool downIsDown;
-	bool leftIsDown;
-	bool rightIsDown;
-
-	PlayerInputListener(int entityId, KeyboardKey upKey, KeyboardKey leftKey, KeyboardKey downKey, KeyboardKey rightKey)
-		: upKey(upKey)
-		, leftKey(leftKey)
-		, downKey(downKey)
-		, rightKey(rightKey)
-		, upIsDown(false)
-		, downIsDown(false)
-		, leftIsDown(false)
-		, rightIsDown(false)
+	PlayerInputListener(int entityId, Input up, Input left, Input down, Input right)
+		: up(up)
+		, left(left)
+		, down(down)
+		, right(right)
 	{
 		entity = entityId;
 	}
+};
 
 /*
 * =================================================
 * ACTION COMPONENT
 * =================================================
 */
-	struct Action : Component
+struct Action : Component
+{
+	static const int ID = 6;
+
+
+	std::shared_ptr<Command>  command;
+
+	Action(int entityId, std::shared_ptr<Command> command)
+		: command(command)
 	{
-		static const int ID = 6;
-
-		Command* command;
-
-		Action(int entityId, Command* command)
-			: command(command)
-		{
-			entity = entityId;
-		}
-		~Action()
-		{
-			free(command);
-		}
-	};
+		entity = entityId;
+	}
 };
