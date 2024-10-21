@@ -5,40 +5,65 @@
  Public Functions
 ===================================================================================================
 */
-Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
-	VelocitySystem& velocitySystem,
-	AccelerationSystem& accelerationSystem,
-	ForceSystem& forceSystem,
-	SpeedLimiterSystem& speedLimiterSystem,
+Scene::Scene(
 	InputSystem& inputSystem,
-	PlayerActionSystem& playerActionSystem,
-	MovementSystem& movementSystem)
-	: spriteRendererSystem(spriteRendererSystem)
-	, velocitySystem(velocitySystem)
-	, accelerationSystem(accelerationSystem)
+	ForceBasedMovementControllerSystem& forceBasedMovementControllerSystem,
+	VelocityBasedMovementControllerSystem& velocityBasedMovementControllerSystem,
+	ForceBasedMovementSystem& forceBasedMovementSystem,
+	VelocityBasedMovementSystem& velocityBasedMovementSystem,
+	ForceSystem& forceSystem,
+	FrictionSystem& frictionSystem,
+	AccelerationSystem& accelerationSystem,
+	VelocitySystem& velocitySystem,
+	ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem,
+	VelocityBasedSpeedLimiterSystem& velocityBasedSpeedLimiterSystem,
+	SpriteRendererSystem& spriteRendererSystem)
+	: inputSystem(inputSystem)
+	, forceBasedMovementControllerSystem(forceBasedMovementControllerSystem)
+	, velocityBasedMovementControllerSystem(velocityBasedMovementControllerSystem)
+	, forceBasedMovementSystem(forceBasedMovementSystem)
+	, velocityBasedMovementSystem(velocityBasedMovementSystem)
 	, forceSystem(forceSystem)
-	, speedLimiterSystem(speedLimiterSystem)
-	, inputSystem(inputSystem)
-	, playerActionSystem(playerActionSystem)
-	, movementSystem(movementSystem)
+	, frictionSystem(frictionSystem)
+	, accelerationSystem(accelerationSystem)
+	, velocitySystem(velocitySystem)
+	, forceBasedSpeedLimiterSystem(forceBasedSpeedLimiterSystem)
+	, velocityBasedSpeedLimiterSystem(velocityBasedSpeedLimiterSystem)
+	, spriteRendererSystem(spriteRendererSystem)
 {
 		componentTable[Spatial::ID] = static_cast<void*>(new std::vector<Spatial>);
-		componentTable[Sprite::ID] = static_cast<void*>(new std::vector<Sprite>);
-		componentTable[RigidBody::ID] = static_cast<void*>(new std::vector<RigidBody>);
+		componentTable[BackgroundSprite::ID] = static_cast<void*>(new std::vector<BackgroundSprite>);
+		componentTable[MiddlegroundSprite::ID] = static_cast<void*>(new std::vector<MiddlegroundSprite>);
+		componentTable[ForegroundSprite::ID] = static_cast<void*>(new std::vector<ForegroundSprite>);
+		componentTable[Velocity::ID] = static_cast<void*>(new std::vector<Velocity>);
+		componentTable[Acceleration::ID] = static_cast<void*>(new std::vector<Acceleration>);
+		componentTable[Mass::ID] = static_cast<void*>(new std::vector<Mass>);
 		componentTable[Force::ID] = static_cast<void*>(new std::vector<Force>);
-		componentTable[SpeedLimiter::ID] = static_cast<void*>(new std::vector<SpeedLimiter>);
-		componentTable[PlayerInputListener::ID] = static_cast<void*>(new std::vector<PlayerInputListener>);
-		componentTable[Movement::ID] = static_cast<void*>(new std::vector<Movement>);
+		componentTable[Friction::ID] = static_cast<void*>(new std::vector<Friction>);
+		componentTable[ForceBasedSpeedLimiter::ID] = static_cast<void*>(new std::vector<ForceBasedSpeedLimiter>);
+		componentTable[VelocityBasedSpeedLimiter::ID] = static_cast<void*>(new std::vector<VelocityBasedSpeedLimiter>);
+		componentTable[ForceBasedMovement::ID] = static_cast<void*>(new std::vector<ForceBasedMovement>);
+		componentTable[VelocityBasedMovement::ID] = static_cast<void*>(new std::vector<VelocityBasedMovement>);
+		componentTable[ForceBasedMovementController::ID] = static_cast<void*>(new std::vector<ForceBasedMovementController>);
+		componentTable[VelocityBasedMovementController::ID] = static_cast<void*>(new std::vector<VelocityBasedMovementController>);
 }
 Scene::~Scene()
 {
 	delete(static_cast<std::vector<Spatial>*>(componentTable[Spatial::ID]));
-	delete(static_cast<std::vector<Sprite>*>(componentTable[Sprite::ID]));
-	delete(static_cast<std::vector<RigidBody>*>(componentTable[RigidBody::ID]));
+	delete(static_cast<std::vector<BackgroundSprite>*>(componentTable[BackgroundSprite::ID]));
+	delete(static_cast<std::vector<MiddlegroundSprite>*>(componentTable[MiddlegroundSprite::ID]));
+	delete(static_cast<std::vector<ForegroundSprite>*>(componentTable[ForegroundSprite::ID]));
+	delete(static_cast<std::vector<Velocity>*>(componentTable[Velocity::ID]));
+	delete(static_cast<std::vector<Acceleration>*>(componentTable[Acceleration::ID]));
+	delete(static_cast<std::vector<Mass>*>(componentTable[Mass::ID]));
 	delete(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
-	delete(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
-	delete(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
-	delete(static_cast<std::vector<Movement>*>(componentTable[Movement::ID]));
+	delete(static_cast<std::vector<Friction>*>(componentTable[Friction::ID]));
+	delete(static_cast<std::vector<ForceBasedSpeedLimiter>*>(componentTable[ForceBasedSpeedLimiter::ID]));
+	delete(static_cast<std::vector<VelocityBasedSpeedLimiter>*>(componentTable[VelocityBasedSpeedLimiter::ID]));
+	delete(static_cast<std::vector<ForceBasedMovement>*>(componentTable[ForceBasedMovement::ID]));
+	delete(static_cast<std::vector<VelocityBasedMovement>*>(componentTable[VelocityBasedMovement::ID]));
+	delete(static_cast<std::vector<ForceBasedMovementController>*>(componentTable[ForceBasedMovementController::ID]));
+	delete(static_cast<std::vector<VelocityBasedMovementController>*>(componentTable[VelocityBasedMovementController::ID]));
 }
 
 int Scene::CreateEntity()
@@ -57,32 +82,43 @@ int Scene::CreateEntity()
 }
 void Scene::Update()
 {
-	// Relevant Component Lists
-	auto& spriteComponents = *(static_cast<std::vector<Sprite>*>(componentTable[Sprite::ID]));
-	auto& rigidBodyComponents = *(static_cast<std::vector<RigidBody>*>(componentTable[RigidBody::ID]));
-	auto& forceComponents = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
-	auto& speedLimiterComponents = *(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
-	auto& playerInputListenterComponents = *(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
-	auto& movementComponents = *(static_cast<std::vector<Movement>*>(componentTable[Movement::ID]));
-	
-	// Input Routine:
-	// Update order: Input -> PlayerAction
-	inputSystem.Update(this, playerInputListenterComponents);
-	playerActionSystem.Update(this, playerInputListenterComponents);
+	// RELEVANT COMPONENT LISTS:
+	// sprite component lists
+	auto& backgroundSprites = *(static_cast<std::vector<BackgroundSprite>*>(componentTable[BackgroundSprite::ID]));
+	auto& middlegroundSprites = *(static_cast<std::vector<MiddlegroundSprite>*>(componentTable[MiddlegroundSprite::ID]));
+	auto& foregroundSprites = *(static_cast<std::vector<ForegroundSprite>*>(componentTable[ForegroundSprite::ID]));
+	// physics related component lists
+	auto& velocities = *(static_cast<std::vector<Velocity>*>(componentTable[Velocity::ID]));
+	auto& accelerations = *(static_cast<std::vector<Acceleration>*>(componentTable[Acceleration::ID]));
+	auto& forces = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
+	auto& frictions = *(static_cast<std::vector<Friction>*>(componentTable[Friction::ID]));
+	// speed limiter component lists
+	auto& forceBasedSpeedLimiters = *(static_cast<std::vector<ForceBasedSpeedLimiter>*>(componentTable[Force::ID]));
+	auto& velocityBasedSpeedLimiters = *(static_cast<std::vector<VelocityBasedSpeedLimiter>*>(componentTable[Friction::ID]));
+	// movement component lists
+	auto& forceBasedMovements = *(static_cast<std::vector<ForceBasedMovement>*>(componentTable[Force::ID]));
+	auto& velocityBasedMovements = *(static_cast<std::vector<VelocityBasedMovement>*>(componentTable[Friction::ID]));
+	// movement controller component lists
+	auto& forceBasedMovementControllers = *(static_cast<std::vector<ForceBasedMovementController>*>(componentTable[Force::ID]));
+	auto& velocityBasedMovementControllers = *(static_cast<std::vector<VelocityBasedMovementController>*>(componentTable[Friction::ID]));
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	// Input Routine:
+	inputSystem.Update(this, forceBasedMovementControllers, velocityBasedMovementControllers);
+	forceBasedMovementControllerSystem.Update(this, forceBasedMovementControllers);
+	velocityBasedMovementControllerSystem.Update(this, velocityBasedMovementControllers);
 
 	// State Routine:
-	movementSystem.Update(this, movementComponents);
-
+	forceBasedMovementSystem.Update(this, forceBasedMovements);
+	velocityBasedMovementSystem.Update(this, velocityBasedMovements);
 
 	// Physics Routine:
-	// Update order : Forces -> Acceleration -> SpeedLimiter -> Velocity
-	forceSystem.Update(this, forceComponents);
-	accelerationSystem.Update(this, rigidBodyComponents);
-	speedLimiterSystem.Update(this, speedLimiterComponents);
-	velocitySystem.Update(this, rigidBodyComponents);
+	forceSystem.Update(this, forces);
+	accelerationSystem.Update(this, accelerations);
+	forceBasedSpeedLimiterSystem.Update(this, forceBasedSpeedLimiters);
+	velocityBasedSpeedLimiterSystem.Update(this, velocityBasedSpeedLimiters);
+	velocitySystem.Update(this, velocities);
 
 	// Rendering Routine:
-	// Update order: Sprite
-	spriteRendererSystem.Draw(this, spriteComponents);
+	spriteRendererSystem.Update(this, backgroundSprites, middlegroundSprites, foregroundSprites);
 }

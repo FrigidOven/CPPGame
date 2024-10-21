@@ -8,10 +8,9 @@ struct Friction : Component
 	static const int ID = 8;
 
 	float coefficient;
-	Vector2 force;
 
-	Friction(int entityId, Vector2 force)
-		: force(force)
+	Friction(int entityId, float coefficient)
+		: coefficient(coefficient)
 	{
 		entity = entityId;
 	}
