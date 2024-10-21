@@ -9,6 +9,20 @@ void InputListener::Update(InputSystem* inputSystem)
 {
 	RemoveUpButtons();
 	AddDownButtons(inputSystem);
+
+	// decrement cool down timers
+	for (size_t i = 0; i < onCooldownInputs.size(); i++)
+	{
+		cooldownTimers[i] -= GetFrameTime();
+		// if time is up remove from cooldown
+		if (cooldownTimers[i] <= 0.0f)
+		{
+			ListenForInput(onCooldownInputs[i]);
+			onCooldownInputs.erase(onCooldownInputs.begin() + i);
+			cooldownTimers.erase(cooldownTimers.begin() + i);
+			i--;
+		}
+	}
 }
 bool InputListener::CheckActive(Input input)
 {
@@ -38,7 +52,29 @@ bool InputListener::CheckDown(Input input)
 	}
 	return false;
 }
-
+void InputListener::BlockForSeconds(Input input, float seconds)
+{
+	// check if input is already on cool down
+	int index = -1;
+	for (size_t i = 0; i < onCooldownInputs.size(); i++)
+	{
+		if (onCooldownInputs[i] == input)
+		{
+			index = static_cast<int>(i);
+			break;
+		}
+	}
+	// if not add it to cooldown list
+	if (index == -1)
+	{
+		onCooldownInputs.push_back(input);
+		cooldownTimers.push_back(seconds);
+		IgnoreInput(input);
+	}
+	// if it is then overwrite the timer for that input
+	else
+		cooldownTimers[index] = seconds;
+}
 /*
 ===================================================================================================
  Private Functions
@@ -84,5 +120,34 @@ void InputListener::AddDownButtons(InputSystem* inputSystem)
 		if (relevantMouseButtons.find(button) != relevantMouseButtons.end() &&
 			std::find(mouseButtons.begin(), mouseButtons.end(), button) == mouseButtons.end())
 			mouseButtons.push_back(button);
+	}
+}
+
+void InputListener::ListenForInput(Input input)
+{
+	switch (input.controlType)
+	{
+	case Keyboard:
+		relevantKeyboardKeys.insert(static_cast<KeyboardKey>(input.controlValue));
+		break;
+	case Gamepad:
+		relevantGamepadButtons.insert(static_cast<GamepadButton>(input.controlValue));
+		break;
+	case Mouse:
+		relevantMouseButtons.insert(static_cast<MouseButton>(input.controlValue));
+	}
+}
+void InputListener::IgnoreInput(Input input)
+{
+	switch (input.controlType)
+	{
+	case Keyboard:
+		relevantKeyboardKeys.erase(static_cast<KeyboardKey>(input.controlValue));
+		break;
+	case Gamepad:
+		relevantGamepadButtons.erase(static_cast<GamepadButton>(input.controlValue));
+		break;
+	case Mouse:
+		relevantMouseButtons.erase(static_cast<MouseButton>(input.controlValue));
 	}
 }

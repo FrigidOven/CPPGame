@@ -42,6 +42,9 @@ int main()
 
     while (!WindowShouldClose())
     {
+        if (5.0f < GetTime() &&  GetTime() < 5.5f)
+            scene.GetComponent<PlayerInputListener>(testEntity1).inputListener.BlockForSeconds(scene.GetComponent<PlayerInputListener>(testEntity1).up, 5.0f);
+
         scene.Update();
     }
     

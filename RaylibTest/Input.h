@@ -34,6 +34,10 @@ struct Input
 		, isDown(false)
 	{
 	}
+	bool operator==(const Input& other) const
+	{
+		return controlType == other.controlType && controlValue == other.controlValue;
+	}
 };
 
 class InputListener
@@ -48,6 +52,9 @@ private:
 	std::vector<GamepadButton> gamepadButtons;
 	std::vector<MouseButton> mouseButtons;
 
+	std::vector<Input> onCooldownInputs;
+	std::vector<float> cooldownTimers;
+
 	void RemoveUpButtons();
 	void AddDownButtons(InputSystem* inputSystem);
 
@@ -55,31 +62,8 @@ public:
 	void Update(InputSystem* inputSystem);
 	bool CheckActive(Input input);
 	bool CheckDown(Input input);
+	void BlockForSeconds(Input input, float seconds);
 
-	template<typename... KeyboardKey>
-	void ListenForKeys(KeyboardKey... keys);
-
-	template<typename... GamepadButton>
-	void ListenForGamepadButtons(GamepadButton... buttons);
-
-	template<typename... MouseButton>
-	void ListenForMouseButtons(MouseButton... buttons);
+	void ListenForInput(Input input);
+	void IgnoreInput(Input input);
 };
-
-template<typename... KeyboardKey>
-void InputListener::ListenForKeys(KeyboardKey... keys)
-{
-	(relevantKeyboardKeys.insert(keys), ...);
-}
-
-template<typename... GamepadButton>
-void InputListener::ListenForGamepadButtons(GamepadButton... buttons)
-{
-	(relevantGamepadButtons.insert(buttons), ...);
-}
-
-template<typename... MouseButton>
-void InputListener::ListenForMouseButtons(MouseButton... buttons)
-{
-	(relevantMouseButtons.insert(buttons), ...);
-}

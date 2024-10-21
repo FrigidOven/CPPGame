@@ -166,27 +166,10 @@ struct PlayerInputListener : Component
 	{
 		entity = entityId;
 
-		AddToListener(up);
-		AddToListener(left);
-		AddToListener(down);
-		AddToListener(right);
-	}
-
-private:
-	void AddToListener(Input input)
-	{
-		switch (input.controlType)
-		{
-		case Keyboard:
-			inputListener.ListenForKeys(static_cast<KeyboardKey>(input.controlValue));
-			break;
-		case Gamepad:
-			inputListener.ListenForGamepadButtons(static_cast<GamepadButton>(input.controlType));
-			break;
-		case Mouse:
-			inputListener.ListenForMouseButtons(static_cast<MouseButton>(input.controlType));
-			break;
-		}
+		inputListener.ListenForInput(up);
+		inputListener.ListenForInput(left);
+		inputListener.ListenForInput(down);
+		inputListener.ListenForInput(right);
 	}
 };
 
