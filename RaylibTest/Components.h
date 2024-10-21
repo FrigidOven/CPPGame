@@ -156,6 +156,8 @@ struct PlayerInputListener : Component
 	Input down;
 	Input right;
 
+	InputListener inputListener;
+
 	PlayerInputListener(int entityId, Input up, Input left, Input down, Input right)
 		: up(up)
 		, left(left)
@@ -163,6 +165,28 @@ struct PlayerInputListener : Component
 		, right(right)
 	{
 		entity = entityId;
+
+		AddToListener(up);
+		AddToListener(left);
+		AddToListener(down);
+		AddToListener(right);
+	}
+
+private:
+	void AddToListener(Input input)
+	{
+		switch (input.controlType)
+		{
+		case Keyboard:
+			inputListener.ListenForKeys(static_cast<KeyboardKey>(input.controlValue));
+			break;
+		case Gamepad:
+			inputListener.ListenForGamepadButtons(static_cast<GamepadButton>(input.controlType));
+			break;
+		case Mouse:
+			inputListener.ListenForMouseButtons(static_cast<MouseButton>(input.controlType));
+			break;
+		}
 	}
 };
 

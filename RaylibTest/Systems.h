@@ -72,21 +72,18 @@ public:
 class InputSystem
 {
 private:
-	std::vector<KeyboardKey> keyboardKeys;
-	std::vector<GamepadButton> gamepadButtons;
-	std::vector<MouseButton> mouseButton;
+	void RemoveUpButtons();
+	void AddDownButtons();
 
 	InputMode inputMode;
-
-	void RemoveKeys();
-	void AddKeys();
-
-	bool CheckActive(Input input);
-	bool CheckDown(Input input);
 
 	void UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
 
 public:
+	std::vector<KeyboardKey> keyboardKeys;
+	std::vector<GamepadButton> gamepadButtons;
+	std::vector<MouseButton> mouseButtons;
+
 	InputSystem(InputMode inputMode);
 	void Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
 };

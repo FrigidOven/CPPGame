@@ -132,6 +132,7 @@
     <ClCompile Include="Actions.cpp" />
     <ClCompile Include="ActionSystem.cpp" />
     <ClCompile Include="ForceSystem.cpp" />
+    <ClCompile Include="InputListener.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="PlayerActionSystem.cpp" />
     <ClCompile Include="Scene.cpp" />

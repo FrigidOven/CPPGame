@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Command.h"
+#include <unordered_set>
+
+class InputSystem;
 
 enum ControlType
 {
@@ -32,3 +35,51 @@ struct Input
 	{
 	}
 };
+
+class InputListener
+{
+private:
+	std::unordered_set<KeyboardKey> relevantKeyboardKeys;
+	std::unordered_set<GamepadButton> relevantGamepadButtons;
+	std::unordered_set<MouseButton> relevantMouseButtons;
+
+
+	std::vector<KeyboardKey> keyboardKeys;
+	std::vector<GamepadButton> gamepadButtons;
+	std::vector<MouseButton> mouseButtons;
+
+	void RemoveUpButtons();
+	void AddDownButtons(InputSystem* inputSystem);
+
+public:
+	void Update(InputSystem* inputSystem);
+	bool CheckActive(Input input);
+	bool CheckDown(Input input);
+
+	template<typename... KeyboardKey>
+	void ListenForKeys(KeyboardKey... keys);
+
+	template<typename... GamepadButton>
+	void ListenForGamepadButtons(GamepadButton... buttons);
+
+	template<typename... MouseButton>
+	void ListenForMouseButtons(MouseButton... buttons);
+};
+
+template<typename... KeyboardKey>
+void InputListener::ListenForKeys(KeyboardKey... keys)
+{
+	(relevantKeyboardKeys.insert(keys), ...);
+}
+
+template<typename... GamepadButton>
+void InputListener::ListenForGamepadButtons(GamepadButton... buttons)
+{
+	(relevantGamepadButtons.insert(buttons), ...);
+}
+
+template<typename... MouseButton>
+void InputListener::ListenForMouseButtons(MouseButton... buttons)
+{
+	(relevantMouseButtons.insert(buttons), ...);
+}
