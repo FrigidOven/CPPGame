@@ -1,11 +1,12 @@
-#include "ECS.h"
+#include "SpriteRendererSystem.h"
+#include "Scene.h"
 
 /*
 ===================================================================================================
  Public Functions
 ===================================================================================================
 */
-void SpriteRendererSystem::Draw(Scene* scene, std::vector<Sprite>& spriteComponents)
+void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& backgroundSprites, std::vector<MiddlegroundSprite>& middlegroundSprites, std::vector<ForegroundSprite>& foregroundSprites)
 {
 	ClearBackground(BLACK);
 	BeginDrawing();
@@ -13,24 +14,80 @@ void SpriteRendererSystem::Draw(Scene* scene, std::vector<Sprite>& spriteCompone
 	Rectangle dest{ 0, 0, 0, 0 };
 	Rectangle source{ 0, 0, 0, 0 };
 
-	for (auto& sprite : spriteComponents)
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+	// BACKGROUND SPRITES
+	for (auto& backgroundSprite : backgroundSprites)
 	{
-		Vector2 position = scene->GetComponent<Spatial>(sprite.entity).position;
-		float rotation = scene->GetComponent<Spatial>(sprite.entity).rotation;
-		
+		Vector2 position = scene->GetComponent<Spatial>(backgroundSprite.entity).position;
+		float rotation = scene->GetComponent<Spatial>(backgroundSprite.entity).rotation;
+
 		dest.x = position.x;
 		dest.y = position.y;
-		dest.width = sprite.width;
-		dest.height = sprite.height;
+		dest.width = backgroundSprite.destWidth;
+		dest.height = backgroundSprite.destHeight;
+
+		// assume frames are layed out horizontally
+		source.x = backgroundSprite.sourceRect.x + backgroundSprite.currentFrame * backgroundSprite.sourceRect.width;
+		source.y = backgroundSprite.sourceRect.y;
+		source.width = backgroundSprite.sourceRect.width;
+		source.height = backgroundSprite.sourceRect.height;
 
 		// draw sprites centered at destination
 		Vector2 origin = { dest.width / 2, dest.height / 2 };
 
-		DrawTexturePro(*sprite.source, sprite.sourceRect, dest, origin, rotation, WHITE);
+		DrawTexturePro(*backgroundSprite.source, source, dest, origin, rotation, WHITE);
 
 		// only update sprites if they have multiple frames
-		if(sprite.frameCount > 1)
-			UpdateSprite(sprite);
+		if (backgroundSprite.frameCount > 1)
+			UpdateBackgroundSprite(backgroundSprite);
+	}
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+	// MIDDLEGROUND SPRITES
+	for (auto& middlegroundSprite : middlegroundSprites)
+	{
+		Vector2 position = scene->GetComponent<Spatial>(middlegroundSprite.entity).position;
+		float rotation = scene->GetComponent<Spatial>(middlegroundSprite.entity).rotation;
+
+		dest.x = position.x;
+		dest.y = position.y;
+		dest.width = middlegroundSprite.destWidth;
+		dest.height = middlegroundSprite.destHeight;
+
+		source.x = middlegroundSprite.sourceRect.x + middlegroundSprite.currentFrame * middlegroundSprite.sourceRect.width;
+		source.y = middlegroundSprite.sourceRect.y;
+		source.width = middlegroundSprite.sourceRect.width;
+		source.height = middlegroundSprite.sourceRect.height;
+
+		Vector2 origin = { dest.width / 2, dest.height / 2 };
+
+		DrawTexturePro(*middlegroundSprite.source, source, dest, origin, rotation, WHITE);
+
+		if (middlegroundSprite.frameCount > 1)
+			UpdateMiddlegroundSprite(middlegroundSprite);
+	}
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    // FOREGROUND SPRITES
+	for (auto& foregroundSprite : foregroundSprites)
+	{
+		Vector2 position = scene->GetComponent<Spatial>(foregroundSprite.entity).position;
+		float rotation = scene->GetComponent<Spatial>(foregroundSprite.entity).rotation;
+
+		dest.x = position.x;
+		dest.y = position.y;
+		dest.width = foregroundSprite.destWidth;
+		dest.height = foregroundSprite.destHeight;
+
+		source.x = foregroundSprite.sourceRect.x + foregroundSprite.currentFrame * foregroundSprite.sourceRect.width;
+		source.y = foregroundSprite.sourceRect.y;
+		source.width = foregroundSprite.sourceRect.width;
+		source.height = foregroundSprite.sourceRect.height;
+
+		Vector2 origin = { dest.width / 2, dest.height / 2 };
+
+		DrawTexturePro(*foregroundSprite.source, source, dest, origin, rotation, WHITE);
+
+		if (foregroundSprite.frameCount > 1)
+			UpdateForegroundSprite(foregroundSprite);
 	}
 
 	EndDrawing();
@@ -41,17 +98,33 @@ void SpriteRendererSystem::Draw(Scene* scene, std::vector<Sprite>& spriteCompone
  Private Functions
 ===================================================================================================
 */
-void SpriteRendererSystem::UpdateSprite(Sprite& sprite)
+void SpriteRendererSystem::UpdateBackgroundSprite(BackgroundSprite& backgroundSprite)
 {
-	sprite.timer += GetFrameTime();
-	
-	if (sprite.timer >= 1 / sprite.fps)
+	backgroundSprite.timer += GetFrameTime();
+
+	if (backgroundSprite.timer >= 1.0f / backgroundSprite.fps)
 	{
-		sprite.timer = 0;
+		backgroundSprite.timer = 0;
+		backgroundSprite.currentFrame = (backgroundSprite.currentFrame + 1) % (backgroundSprite.frameCount - 1);
+	}
+}
+void SpriteRendererSystem::UpdateMiddlegroundSprite(MiddlegroundSprite& middlegroundSprite)
+{
+	middlegroundSprite.timer += GetFrameTime();
 
-		int nextX = static_cast<int>(sprite.sourceRect.x + sprite.sourceRect.width);
-		int maxX = static_cast<int>(sprite.sourceRect.width * sprite.frameCount);
+	if (middlegroundSprite.timer >= 1.0f / middlegroundSprite.fps)
+	{
+		middlegroundSprite.timer = 0;
+		middlegroundSprite.currentFrame = (middlegroundSprite.currentFrame + 1) % (middlegroundSprite.frameCount - 1);
+	}
+}
+void SpriteRendererSystem::UpdateForegroundSprite(ForegroundSprite& foregroundSprite)
+{
+	foregroundSprite.timer += GetFrameTime();
 
-		sprite.sourceRect.x = nextX % maxX;
+	if (foregroundSprite.timer >= 1.0f / foregroundSprite.fps)
+	{
+		foregroundSprite.timer = 0;
+		foregroundSprite.currentFrame = (foregroundSprite.currentFrame + 1) % (foregroundSprite.frameCount - 1);
 	}
 }

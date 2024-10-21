@@ -27,9 +27,6 @@ private:
 	ForceBasedMovementControllerSystem& forceBasedMovementControllerSystem;
 	VelocityBasedMovementControllerSystem& velocityBasedMovementControllerSystem;
 
-	ForceBasedMovementSystem& forceBasedMovementSystem;
-	VelocityBasedMovementSystem& velocityBasedMovementSystem;
-
 	ForceSystem& forceSystem;
 	FrictionSystem& frictionSystem;
 	AccelerationSystem& accelerationSystem;
@@ -45,8 +42,6 @@ public:
 		InputSystem& inputSystem,
 		ForceBasedMovementControllerSystem& forceBasedMovementControllerSystem,
 		VelocityBasedMovementControllerSystem& velocityBasedMovementControllerSystem,
-		ForceBasedMovementSystem& forceBasedMovementSystem,
-		VelocityBasedMovementSystem& velocityBasedMovementSystem,
 		ForceSystem& forceSystem,
 		FrictionSystem& frictionSystem,
 		AccelerationSystem& accelerationSystem,

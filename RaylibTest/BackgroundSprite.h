@@ -14,15 +14,17 @@ struct BackgroundSprite : Component
 	float destHeight;
 
 	int frameCount;
+	int currentFrame;
 	float timer;
 	float fps;
 
-	BackgroundSprite(int entityId, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, float fps)
+	BackgroundSprite(int entityId, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, int currentFrame, float fps)
 		: source(source)
 		, sourceRect(sourceRect)
 		, destWidth(destWidth)
 		, destHeight(destHeight)
 		, frameCount(frameCount)
+		, currentFrame(currentFrame)
 		, timer(0.0f)
 		, fps(fps)
 	{

@@ -9,8 +9,6 @@ Scene::Scene(
 	InputSystem& inputSystem,
 	ForceBasedMovementControllerSystem& forceBasedMovementControllerSystem,
 	VelocityBasedMovementControllerSystem& velocityBasedMovementControllerSystem,
-	ForceBasedMovementSystem& forceBasedMovementSystem,
-	VelocityBasedMovementSystem& velocityBasedMovementSystem,
 	ForceSystem& forceSystem,
 	FrictionSystem& frictionSystem,
 	AccelerationSystem& accelerationSystem,
@@ -21,8 +19,6 @@ Scene::Scene(
 	: inputSystem(inputSystem)
 	, forceBasedMovementControllerSystem(forceBasedMovementControllerSystem)
 	, velocityBasedMovementControllerSystem(velocityBasedMovementControllerSystem)
-	, forceBasedMovementSystem(forceBasedMovementSystem)
-	, velocityBasedMovementSystem(velocityBasedMovementSystem)
 	, forceSystem(forceSystem)
 	, frictionSystem(frictionSystem)
 	, accelerationSystem(accelerationSystem)
@@ -90,8 +86,8 @@ void Scene::Update()
 	// physics related component lists
 	auto& velocities = *(static_cast<std::vector<Velocity>*>(componentTable[Velocity::ID]));
 	auto& accelerations = *(static_cast<std::vector<Acceleration>*>(componentTable[Acceleration::ID]));
-	auto& forces = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
 	auto& frictions = *(static_cast<std::vector<Friction>*>(componentTable[Friction::ID]));
+	auto& forces = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
 	// speed limiter component lists
 	auto& forceBasedSpeedLimiters = *(static_cast<std::vector<ForceBasedSpeedLimiter>*>(componentTable[Force::ID]));
 	auto& velocityBasedSpeedLimiters = *(static_cast<std::vector<VelocityBasedSpeedLimiter>*>(componentTable[Friction::ID]));
@@ -108,11 +104,8 @@ void Scene::Update()
 	forceBasedMovementControllerSystem.Update(this, forceBasedMovementControllers);
 	velocityBasedMovementControllerSystem.Update(this, velocityBasedMovementControllers);
 
-	// State Routine:
-	forceBasedMovementSystem.Update(this, forceBasedMovements);
-	velocityBasedMovementSystem.Update(this, velocityBasedMovements);
-
 	// Physics Routine:
+	frictionSystem.Update(this, frictions);
 	forceSystem.Update(this, forces);
 	accelerationSystem.Update(this, accelerations);
 	forceBasedSpeedLimiterSystem.Update(this, forceBasedSpeedLimiters);

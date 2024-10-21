@@ -16,5 +16,9 @@ private:
 	void UpdateForceBasedMovementControllers(Scene* scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers);
 	void UpdateVelocityBasedMovementControllers(Scene* scene, std::vector<VelocityBasedMovementController>& velocityBasedMovementControllers);
 public:
+	std::vector<KeyboardKey> keyboardKeys;
+	std::vector<GamepadButton> gamepadButtons;
+	std::vector<MouseButton> mouseButtons;
+
 	void Update(Scene* scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers, std::vector<VelocityBasedMovementController>& velocityBasedMovementControllers);
 };

@@ -1,25 +1,18 @@
-#include "ECS.h"
+#include "InputSystem.h"
+#include "Scene.h"
 
 /*
 ===================================================================================================
  Public Functions
 ===================================================================================================
 */
-InputSystem::InputSystem(InputMode inputMode)
-	: inputMode(inputMode)
-{
-}
-void InputSystem::Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents)
+void InputSystem::Update(Scene* scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers, std::vector<VelocityBasedMovementController>& velocityBasedMovementControllers)
 {
 	RemoveUpButtons();
 	AddDownButtons();
 
-	switch (inputMode)
-	{
-	case Default:
-		UpdatePlayerInputListeners(scene, playerInputListenerComponents);
-		break;
-	}
+	UpdateForceBasedMovementControllers(scene, forceBasedMovementControllers);
+	UpdateVelocityBasedMovementControllers(scene, velocityBasedMovementControllers);
 }
 
 /*
@@ -62,25 +55,44 @@ void InputSystem::AddDownButtons()
 	// TODO: add down mouse buttons
 }
 
-void InputSystem::UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents)
+void InputSystem::UpdateForceBasedMovementControllers(Scene* scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers)
 {
-	for (auto& playerInputListener : playerInputListenerComponents)
+	for (auto& forceBasedMovementController : forceBasedMovementControllers)
 	{
 		// update the input listener
-		playerInputListener.inputListener.Update(this);
+		forceBasedMovementController.inputListener.Update(this);
 
 		// use input listener to update inputs
 		// check active before checking down, otherwise input won't be recognized
-		playerInputListener.up.isActive= playerInputListener.inputListener.CheckActive(playerInputListener.up);
-		playerInputListener.up.isDown = playerInputListener.inputListener.CheckDown(playerInputListener.up);
+		forceBasedMovementController.up.isActive = forceBasedMovementController.inputListener.CheckActive(forceBasedMovementController.up);
+		forceBasedMovementController.up.isDown = forceBasedMovementController.inputListener.CheckDown(forceBasedMovementController.up);
 
-		playerInputListener.left.isActive = playerInputListener.inputListener.CheckActive(playerInputListener.left);
-		playerInputListener.left.isDown = playerInputListener.inputListener.CheckDown(playerInputListener.left);
+		forceBasedMovementController.left.isActive = forceBasedMovementController.inputListener.CheckActive(forceBasedMovementController.left);
+		forceBasedMovementController.left.isDown = forceBasedMovementController.inputListener.CheckDown(forceBasedMovementController.left);
 
-		playerInputListener.down.isActive = playerInputListener.inputListener.CheckActive(playerInputListener.down);
-		playerInputListener.down.isDown = playerInputListener.inputListener.CheckDown(playerInputListener.down);
+		forceBasedMovementController.down.isActive = forceBasedMovementController.inputListener.CheckActive(forceBasedMovementController.down);
+		forceBasedMovementController.down.isDown = forceBasedMovementController.inputListener.CheckDown(forceBasedMovementController.down);
 
-		playerInputListener.right.isActive = playerInputListener.inputListener.CheckActive(playerInputListener.right);
-		playerInputListener.right.isDown = playerInputListener.inputListener.CheckDown(playerInputListener.right);
+		forceBasedMovementController.right.isActive = forceBasedMovementController.inputListener.CheckActive(forceBasedMovementController.right);
+		forceBasedMovementController.right.isDown = forceBasedMovementController.inputListener.CheckDown(forceBasedMovementController.right);
+	}
+}
+void InputSystem::UpdateVelocityBasedMovementControllers(Scene* scene, std::vector<VelocityBasedMovementController>& velocityBasedMovementControllers)
+{
+	for (auto& velocityBasedMovementController : velocityBasedMovementControllers)
+	{
+		velocityBasedMovementController.inputListener.Update(this);
+
+		velocityBasedMovementController.up.isActive = velocityBasedMovementController.inputListener.CheckActive(velocityBasedMovementController.up);
+		velocityBasedMovementController.up.isDown = velocityBasedMovementController.inputListener.CheckDown(velocityBasedMovementController.up);
+
+		velocityBasedMovementController.left.isActive = velocityBasedMovementController.inputListener.CheckActive(velocityBasedMovementController.left);
+		velocityBasedMovementController.left.isDown = velocityBasedMovementController.inputListener.CheckDown(velocityBasedMovementController.left);
+
+		velocityBasedMovementController.down.isActive = velocityBasedMovementController.inputListener.CheckActive(velocityBasedMovementController.down);
+		velocityBasedMovementController.down.isDown = velocityBasedMovementController.inputListener.CheckDown(velocityBasedMovementController.down);
+
+		velocityBasedMovementController.right.isActive = velocityBasedMovementController.inputListener.CheckActive(velocityBasedMovementController.right);
+		velocityBasedMovementController.right.isDown = velocityBasedMovementController.inputListener.CheckDown(velocityBasedMovementController.right);
 	}
 }

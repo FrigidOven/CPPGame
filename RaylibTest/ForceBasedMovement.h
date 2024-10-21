@@ -5,12 +5,12 @@
 
 struct ForceBasedMovement : Component
 {
-	static const int ID = 9;
+	static const int ID = 11;
 
-	Vector2 direction;
+	Vector2 force;
 
-	ForceBasedMovement(int entityId, Vector2 direction)
-		: direction(direction)
+	ForceBasedMovement(int entityId, Vector2 force)
+		: force(force)
 	{
 		entity = entityId;
 	}
