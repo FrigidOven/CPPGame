@@ -129,7 +129,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AccelerationSystem.cpp" />
+    <ClCompile Include="Actions.cpp" />
+    <ClCompile Include="ActionSystem.cpp" />
     <ClCompile Include="ForceSystem.cpp" />
+    <ClCompile Include="InputListener.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="PlayerActionSystem.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -139,6 +142,7 @@
     <ClCompile Include="VelocitySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Command.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="Entity.h" />

@@ -3,6 +3,10 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include <memory>
+
+#include "Input.h"
+
 /*
 * =================================================
 *	BASE COMPONENT
@@ -10,7 +14,7 @@
 */
 struct Component
 {
-	static const int COMPONENT_COUNT = 6;
+	static const int COMPONENT_COUNT = 7;
 	int entity;
 };
 
@@ -52,12 +56,12 @@ struct Sprite : Component
 	float timer;
 	float fps;
 
-	Sprite(int entityId, Texture2D* source, Rectangle sourceRect, float width, float height, int frameCount, float timer, float fps)
+	Sprite(int entityId, Texture2D* source, Rectangle sourceRect, float width, float height, int frameCount, float fps)
 		: source(source)
 		, sourceRect(sourceRect)
 		, width(width), height(height)
 		, frameCount(frameCount)
-		, timer(timer)
+		, timer(0.0f)
 		, fps(fps)
 	{
 		entity = entityId;
@@ -147,25 +151,59 @@ struct PlayerInputListener : Component
 {
 	static const int ID = 5;
 
-	KeyboardKey upKey;
-	KeyboardKey leftKey;
-	KeyboardKey downKey;
-	KeyboardKey rightKey;
+	Input up;
+	Input left;
+	Input down;
+	Input right;
 
-	bool upIsDown;
-	bool downIsDown;
-	bool leftIsDown;
-	bool rightIsDown;
+	InputListener inputListener;
 
-	PlayerInputListener(int entityId, KeyboardKey upKey, KeyboardKey leftKey, KeyboardKey downKey, KeyboardKey rightKey)
-		: upKey(upKey)
-		, leftKey(leftKey)
-		, downKey(downKey)
-		, rightKey(rightKey)
-		, upIsDown(false)
-		, downIsDown(false)
-		, leftIsDown(false)
-		, rightIsDown(false)
+	PlayerInputListener(int entityId, Input up, Input left, Input down, Input right)
+		: up(up)
+		, left(left)
+		, down(down)
+		, right(right)
+	{
+		entity = entityId;
+
+		AddToListener(up);
+		AddToListener(left);
+		AddToListener(down);
+		AddToListener(right);
+	}
+
+private:
+	void AddToListener(Input input)
+	{
+		switch (input.controlType)
+		{
+		case Keyboard:
+			inputListener.ListenForKeys(static_cast<KeyboardKey>(input.controlValue));
+			break;
+		case Gamepad:
+			inputListener.ListenForGamepadButtons(static_cast<GamepadButton>(input.controlType));
+			break;
+		case Mouse:
+			inputListener.ListenForMouseButtons(static_cast<MouseButton>(input.controlType));
+			break;
+		}
+	}
+};
+
+/*
+* =================================================
+* ACTION COMPONENT
+* =================================================
+*/
+struct Action : Component
+{
+	static const int ID = 6;
+
+
+	std::shared_ptr<Command>  command;
+
+	Action(int entityId, std::shared_ptr<Command> command)
+		: command(command)
 	{
 		entity = entityId;
 	}

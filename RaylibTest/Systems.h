@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "Input.h"
 #include "Components.h"
 
 class Scene;
@@ -73,13 +72,31 @@ public:
 class InputSystem
 {
 private:
+	void RemoveUpButtons();
+	void AddDownButtons();
+
 	InputMode inputMode;
-	KeyboardKey lastPressed;
+
 	void UpdatePlayerInputListeners(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
 
 public:
+	std::vector<KeyboardKey> keyboardKeys;
+	std::vector<GamepadButton> gamepadButtons;
+	std::vector<MouseButton> mouseButtons;
+
 	InputSystem(InputMode inputMode);
 	void Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
+};
+
+/*
+* =================================================
+* ACTION SYSTEM
+* =================================================
+*/
+class ActionSystem
+{
+public:
+	void Update(Scene* scene, std::vector<Action>& actions);
 };
 
 /*
@@ -89,6 +106,14 @@ public:
 */
 class PlayerActionSystem
 {
+private:
+	void WalkUp(Scene* scene, PlayerInputListener& playerInputListener);
+	void WalkLeft(Scene* scene, PlayerInputListener& playerInputListener);
+	void WalkDown(Scene* scene, PlayerInputListener& playerInputListener);
+	void WalkRight(Scene* scene, PlayerInputListener& playerInputListener);
+
+	void Stop(Scene* scene, PlayerInputListener& playerInputListener);
+
 public:
-	void Update(Scene* scene, std::vector<PlayerInputListener> playerInputListenerComponents);
+	void Update(Scene* scene, std::vector<PlayerInputListener>& playerInputListenerComponents);
 };

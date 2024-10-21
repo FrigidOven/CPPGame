@@ -28,6 +28,7 @@ private:
 	SpeedLimiterSystem& speedLimiterSystem;
 	InputSystem& inputSystem;
 	PlayerActionSystem& playerActionSystem;
+	ActionSystem& actionSystem;
 
 public:
 	Scene(SpriteRendererSystem& spriteRendererSystem,
@@ -36,7 +37,9 @@ public:
 		ForceSystem& forceSystem,
 		SpeedLimiterSystem& speedLimiterSystem,
 		InputSystem& inputSystem,
-		PlayerActionSystem& playerActionSystem);
+		PlayerActionSystem& playerActionSystem,
+		ActionSystem& actionSystem);
+	~Scene();
 
 	int CreateEntity();
 	void Update();
@@ -78,8 +81,7 @@ bool Scene::RemoveComponent(int entityId)
 	if (successful)
 	{
 		int index = components[entityId * Component::COMPONENT_COUNT + T::ID];
-		std::vector<T>* componentList;
-		componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
+		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
 
 		// swap and pop approach to keep vectors tightly packed
 		if (index < componentList->size())
