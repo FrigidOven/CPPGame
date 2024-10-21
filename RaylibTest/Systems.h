@@ -90,24 +90,13 @@ public:
 
 /*
 * =================================================
-* WALKING SYSTEM
+* MOVEMENT SYSTEM
 * =================================================
 */
-class WalkingSystem
+class MovementSystem
 {
 public:
-	void Update(Scene* scene, std::vector<Walking>& walkingComponents);
-};
-
-/*
-* =================================================
-* STOPPED SYSTEM
-* =================================================
-*/
-class StoppedSystem
-{
-public:
-	void Update(Scene* scene, std::vector<Stopped>& stoppedComponents);
+	void Update(Scene* scene, std::vector<Movement>& movementComponents);
 };
 
 /*

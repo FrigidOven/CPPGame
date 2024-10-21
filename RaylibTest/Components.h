@@ -12,7 +12,7 @@
 */
 struct Component
 {
-	static const int COMPONENT_COUNT = 8;
+	static const int COMPONENT_COUNT = 7;
 	int entity;
 };
 
@@ -173,37 +173,19 @@ struct PlayerInputListener : Component
 
 /*
 * =================================================
-* WALKING COMPONENT
+* MOVEMENT COMPONENT
 * =================================================
 */
-struct Walking : Component
+struct Movement : Component
 {
 	static const int ID = 6;
 
 	bool isForceBased;
 	Vector2 direction;
 
-	Walking(int entityId, bool isForceBased, Vector2 direction)
+	Movement(int entityId, bool isForceBased, Vector2 direction)
 		: isForceBased(isForceBased)
 		, direction(direction)
-	{
-		entity = entityId;
-	}
-};
-
-/*
-* =================================================
-* STOPPED COMPONENT
-* =================================================
-*/
-struct Stopped : Component
-{
-	static const int ID = 7;
-
-	bool isForceBased;
-
-	Stopped(int entityId, bool isForceBased)
-		: isForceBased(isForceBased)
 	{
 		entity = entityId;
 	}

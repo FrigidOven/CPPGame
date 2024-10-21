@@ -12,8 +12,7 @@ Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
 	SpeedLimiterSystem& speedLimiterSystem,
 	InputSystem& inputSystem,
 	PlayerActionSystem& playerActionSystem,
-	WalkingSystem& walkingSystem,
-	StoppedSystem& stoppedSystem)
+	MovementSystem& movementSystem)
 	: spriteRendererSystem(spriteRendererSystem)
 	, velocitySystem(velocitySystem)
 	, accelerationSystem(accelerationSystem)
@@ -21,8 +20,7 @@ Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
 	, speedLimiterSystem(speedLimiterSystem)
 	, inputSystem(inputSystem)
 	, playerActionSystem(playerActionSystem)
-	, walkingSystem(walkingSystem)
-	, stoppedSystem(stoppedSystem)
+	, movementSystem(movementSystem)
 {
 		componentTable[Spatial::ID] = static_cast<void*>(new std::vector<Spatial>);
 		componentTable[Sprite::ID] = static_cast<void*>(new std::vector<Sprite>);
@@ -30,8 +28,7 @@ Scene::Scene(SpriteRendererSystem& spriteRendererSystem,
 		componentTable[Force::ID] = static_cast<void*>(new std::vector<Force>);
 		componentTable[SpeedLimiter::ID] = static_cast<void*>(new std::vector<SpeedLimiter>);
 		componentTable[PlayerInputListener::ID] = static_cast<void*>(new std::vector<PlayerInputListener>);
-		componentTable[Walking::ID] = static_cast<void*>(new std::vector<Walking>);
-		componentTable[Stopped::ID] = static_cast<void*>(new std::vector<Stopped>);
+		componentTable[Movement::ID] = static_cast<void*>(new std::vector<Movement>);
 }
 Scene::~Scene()
 {
@@ -41,8 +38,7 @@ Scene::~Scene()
 	delete(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
 	delete(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
 	delete(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
-	delete(static_cast<std::vector<Walking>*>(componentTable[Walking::ID]));
-	delete(static_cast<std::vector<Stopped>*>(componentTable[Stopped::ID]));
+	delete(static_cast<std::vector<Movement>*>(componentTable[Movement::ID]));
 }
 
 int Scene::CreateEntity()
@@ -67,8 +63,7 @@ void Scene::Update()
 	auto& forceComponents = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
 	auto& speedLimiterComponents = *(static_cast<std::vector<SpeedLimiter>*>(componentTable[SpeedLimiter::ID]));
 	auto& playerInputListenterComponents = *(static_cast<std::vector<PlayerInputListener>*>(componentTable[PlayerInputListener::ID]));
-	auto& walkingComponents = *(static_cast<std::vector<Walking>*>(componentTable[Walking::ID]));
-	auto& stoppedComponents = *(static_cast<std::vector<Stopped>*>(componentTable[Stopped::ID]));
+	auto& movementComponents = *(static_cast<std::vector<Movement>*>(componentTable[Movement::ID]));
 	
 	// Input Routine:
 	// Update order: Input -> PlayerAction
@@ -77,8 +72,7 @@ void Scene::Update()
 
 
 	// State Routine:
-	walkingSystem.Update(this, walkingComponents);
-	stoppedSystem.Update(this, stoppedComponents);
+	movementSystem.Update(this, movementComponents);
 
 
 	// Physics Routine:

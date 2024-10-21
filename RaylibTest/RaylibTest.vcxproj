@@ -129,8 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AccelerationSystem.cpp" />
-    <ClCompile Include="StoppedSystem.cpp" />
-    <ClCompile Include="WalkingSystem.cpp" />
+    <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="ForceSystem.cpp" />
     <ClCompile Include="InputListener.cpp" />
     <ClCompile Include="InputSystem.cpp" />

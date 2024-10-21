@@ -8,10 +8,16 @@
 void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
 {
 	const float GRAVITY = 9.8f;
-	const float FRICTION_CUT_OFF_VELOCITY = 0.1;
+	const float FRICTION_CUT_OFF_VELOCITY = 0.1f;
 
 	for (auto& force : forceComponents)
 	{
+		if (!scene->HasComponent<Movement>(force.entity))
+		{
+			force.internalForce = Vector2Zero();
+			force.internalAngularForce = 0.0f;
+		}
+
 		RigidBody& rigidBody = scene->GetComponent<RigidBody>(force.entity);
 
 		// sum internal and external forces

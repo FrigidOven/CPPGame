@@ -15,8 +15,7 @@ int main()
     SpeedLimiterSystem speedLimiterSystem;
     InputSystem inputSystem(InputMode::Default);
     PlayerActionSystem playerActionSystem;
-    WalkingSystem walkingSystem;
-    StoppedSystem stoppedSystem;
+    MovementSystem movementSystem;
 
     Scene scene
     (
@@ -26,8 +25,7 @@ int main()
         forceSystem,
         speedLimiterSystem,
         inputSystem, playerActionSystem,
-        walkingSystem,
-        stoppedSystem
+        movementSystem
     );
 
     Texture2D texture = LoadTexture("Textures/Background.png");
@@ -53,7 +51,7 @@ int main()
 
     while (!WindowShouldClose())
     {
-        if (5.0f < GetTime() &&  GetTime() < 5.5f)
+        if (1.0f < GetTime() &&  GetTime() < 1.5f)
             scene.GetComponent<PlayerInputListener>(testEntity1).inputListener.BlockForSeconds(scene.GetComponent<PlayerInputListener>(testEntity1).up, 5.0f);
 
         scene.Update();
