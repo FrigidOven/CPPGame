@@ -15,9 +15,20 @@ int main()
     SpeedLimiterSystem speedLimiterSystem;
     InputSystem inputSystem(InputMode::Default);
     PlayerActionSystem playerActionSystem;
-    ActionSystem actionSystem;
+    WalkingSystem walkingSystem;
+    StoppedSystem stoppedSystem;
 
-    Scene scene (spriteRenderSystem, velocitySystem, accelerationSystem, forceSystem, speedLimiterSystem, inputSystem, playerActionSystem, actionSystem);
+    Scene scene
+    (
+        spriteRenderSystem,
+        velocitySystem,
+        accelerationSystem,
+        forceSystem,
+        speedLimiterSystem,
+        inputSystem, playerActionSystem,
+        walkingSystem,
+        stoppedSystem
+    );
 
     Texture2D texture = LoadTexture("Textures/Background.png");
 

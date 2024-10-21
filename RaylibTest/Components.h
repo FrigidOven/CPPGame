@@ -3,8 +3,6 @@
 #include <raylib.h>
 #include <raymath.h>
 
-#include <memory>
-
 #include "Input.h"
 
 /*
@@ -14,7 +12,7 @@
 */
 struct Component
 {
-	static const int COMPONENT_COUNT = 7;
+	static const int COMPONENT_COUNT = 8;
 	int entity;
 };
 
@@ -175,18 +173,37 @@ struct PlayerInputListener : Component
 
 /*
 * =================================================
-* ACTION COMPONENT
+* WALKING COMPONENT
 * =================================================
 */
-struct Action : Component
+struct Walking : Component
 {
 	static const int ID = 6;
 
+	bool isForceBased;
+	Vector2 direction;
 
-	std::shared_ptr<Command>  command;
+	Walking(int entityId, bool isForceBased, Vector2 direction)
+		: isForceBased(isForceBased)
+		, direction(direction)
+	{
+		entity = entityId;
+	}
+};
 
-	Action(int entityId, std::shared_ptr<Command> command)
-		: command(command)
+/*
+* =================================================
+* STOPPED COMPONENT
+* =================================================
+*/
+struct Stopped : Component
+{
+	static const int ID = 7;
+
+	bool isForceBased;
+
+	Stopped(int entityId, bool isForceBased)
+		: isForceBased(isForceBased)
 	{
 		entity = entityId;
 	}

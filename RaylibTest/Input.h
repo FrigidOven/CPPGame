@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Command.h"
 #include <unordered_set>
 
 class InputSystem;

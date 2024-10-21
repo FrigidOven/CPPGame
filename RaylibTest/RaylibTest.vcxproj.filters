@@ -45,20 +45,17 @@
     <ClCompile Include="AccelerationSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Actions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="InputListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ActionSystem.cpp">
+    <ClCompile Include="WalkingSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="StoppedSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Command.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
