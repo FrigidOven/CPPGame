@@ -146,7 +146,6 @@
     <ClInclude Include="AccelerationSystem.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components.h" />
-    <ClInclude Include="ECS.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Force.h" />
     <ClInclude Include="ForceBasedMovement.h" />
