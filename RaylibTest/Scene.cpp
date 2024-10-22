@@ -14,7 +14,6 @@ Scene::Scene(
 	AccelerationSystem& accelerationSystem,
 	VelocitySystem& velocitySystem,
 	ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem,
-	VelocityBasedSpeedLimiterSystem& velocityBasedSpeedLimiterSystem,
 	SpriteRendererSystem& spriteRendererSystem)
 	: inputSystem(inputSystem)
 	, forceBasedMovementControllerSystem(forceBasedMovementControllerSystem)
@@ -24,7 +23,6 @@ Scene::Scene(
 	, accelerationSystem(accelerationSystem)
 	, velocitySystem(velocitySystem)
 	, forceBasedSpeedLimiterSystem(forceBasedSpeedLimiterSystem)
-	, velocityBasedSpeedLimiterSystem(velocityBasedSpeedLimiterSystem)
 	, spriteRendererSystem(spriteRendererSystem)
 {
 		componentTable[Spatial::ID] = static_cast<void*>(new std::vector<Spatial>);
@@ -109,7 +107,6 @@ void Scene::Update()
 	forceSystem.Update(this, forces);
 	accelerationSystem.Update(this, accelerations);
 	forceBasedSpeedLimiterSystem.Update(this, forceBasedSpeedLimiters);
-	velocityBasedSpeedLimiterSystem.Update(this, velocityBasedSpeedLimiters);
 	velocitySystem.Update(this, velocities);
 
 	// Rendering Routine:

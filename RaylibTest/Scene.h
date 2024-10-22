@@ -33,7 +33,6 @@ private:
 	VelocitySystem& velocitySystem;
 
 	ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem;
-	VelocityBasedSpeedLimiterSystem& velocityBasedSpeedLimiterSystem;
 
 	SpriteRendererSystem& spriteRendererSystem;
 
@@ -47,7 +46,6 @@ public:
 		AccelerationSystem& accelerationSystem,
 		VelocitySystem& velocitySystem,
 		ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem,
-		VelocityBasedSpeedLimiterSystem& velocityBasedSpeedLimiterSystem,
 		SpriteRendererSystem& spriteRendererSystem);
 	~Scene();
 

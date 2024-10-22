@@ -139,7 +139,6 @@
     <ClCompile Include="RaylibTest.cpp" />
     <ClCompile Include="SpriteRendererSystem.cpp" />
     <ClCompile Include="VelocityBasedMovementControllerSystem.cpp" />
-    <ClCompile Include="VelocityBasedSpeedLimiterSystem.cpp" />
     <ClCompile Include="VelocitySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,7 +172,6 @@
     <ClInclude Include="VelocityBasedMovementController.h" />
     <ClInclude Include="VelocityBasedMovementControllerSystem.h" />
     <ClInclude Include="VelocityBasedSpeedLimiter.h" />
-    <ClInclude Include="VelocityBasedSpeedLimiterSystem.h" />
     <ClInclude Include="VelocitySystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

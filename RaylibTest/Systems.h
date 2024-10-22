@@ -11,6 +11,5 @@
 #include "VelocitySystem.h"
 
 #include "ForceBasedSpeedLimiterSystem.h"
-#include "VelocityBasedSpeedLimiterSystem.h"
 
 #include "SpriteRendererSystem.h"

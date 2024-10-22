@@ -7,10 +7,10 @@ struct VelocityBasedMovement : Component
 {
 	static const int ID = 12;
 
-	Vector2 direction;
+	Vector2 velocity;
 
-	VelocityBasedMovement(int entityId, Vector2 direction)
-		: direction(direction)
+	VelocityBasedMovement(int entityId, Vector2 velocity)
+		: velocity(velocity)
 	{
 		entity = entityId;
 	}

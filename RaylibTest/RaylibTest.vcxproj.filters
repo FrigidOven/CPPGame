@@ -60,9 +60,6 @@
     <ClCompile Include="ForceBasedSpeedLimiterSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="VelocityBasedSpeedLimiterSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ECS.h">
@@ -147,9 +144,6 @@
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="ForceBasedSpeedLimiterSystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="VelocityBasedSpeedLimiterSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="SpriteRendererSystem.h">
