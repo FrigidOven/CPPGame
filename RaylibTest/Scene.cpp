@@ -89,14 +89,14 @@ void Scene::Update()
 	auto& frictions = *(static_cast<std::vector<Friction>*>(componentTable[Friction::ID]));
 	auto& forces = *(static_cast<std::vector<Force>*>(componentTable[Force::ID]));
 	// speed limiter component lists
-	auto& forceBasedSpeedLimiters = *(static_cast<std::vector<ForceBasedSpeedLimiter>*>(componentTable[Force::ID]));
-	auto& velocityBasedSpeedLimiters = *(static_cast<std::vector<VelocityBasedSpeedLimiter>*>(componentTable[Friction::ID]));
+	auto& forceBasedSpeedLimiters = *(static_cast<std::vector<ForceBasedSpeedLimiter>*>(componentTable[ForceBasedSpeedLimiter::ID]));
+	auto& velocityBasedSpeedLimiters = *(static_cast<std::vector<VelocityBasedSpeedLimiter>*>(componentTable[VelocityBasedSpeedLimiter::ID]));
 	// movement component lists
-	auto& forceBasedMovements = *(static_cast<std::vector<ForceBasedMovement>*>(componentTable[Force::ID]));
-	auto& velocityBasedMovements = *(static_cast<std::vector<VelocityBasedMovement>*>(componentTable[Friction::ID]));
+	auto& forceBasedMovements = *(static_cast<std::vector<ForceBasedMovement>*>(componentTable[ForceBasedMovement::ID]));
+	auto& velocityBasedMovements = *(static_cast<std::vector<VelocityBasedMovement>*>(componentTable[VelocityBasedMovement::ID]));
 	// movement controller component lists
-	auto& forceBasedMovementControllers = *(static_cast<std::vector<ForceBasedMovementController>*>(componentTable[Force::ID]));
-	auto& velocityBasedMovementControllers = *(static_cast<std::vector<VelocityBasedMovementController>*>(componentTable[Friction::ID]));
+	auto& forceBasedMovementControllers = *(static_cast<std::vector<ForceBasedMovementController>*>(componentTable[ForceBasedMovementController::ID]));
+	auto& velocityBasedMovementControllers = *(static_cast<std::vector<VelocityBasedMovementController>*>(componentTable[VelocityBasedMovementController::ID]));
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	// Input Routine:

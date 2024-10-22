@@ -105,7 +105,7 @@ void SpriteRendererSystem::UpdateBackgroundSprite(BackgroundSprite& backgroundSp
 	if (backgroundSprite.timer >= 1.0f / backgroundSprite.fps)
 	{
 		backgroundSprite.timer = 0;
-		backgroundSprite.currentFrame = (backgroundSprite.currentFrame + 1) % (backgroundSprite.frameCount - 1);
+		backgroundSprite.currentFrame = (backgroundSprite.currentFrame + 1) % (backgroundSprite.frameCount);
 	}
 }
 void SpriteRendererSystem::UpdateMiddlegroundSprite(MiddlegroundSprite& middlegroundSprite)
@@ -115,7 +115,7 @@ void SpriteRendererSystem::UpdateMiddlegroundSprite(MiddlegroundSprite& middlegr
 	if (middlegroundSprite.timer >= 1.0f / middlegroundSprite.fps)
 	{
 		middlegroundSprite.timer = 0;
-		middlegroundSprite.currentFrame = (middlegroundSprite.currentFrame + 1) % (middlegroundSprite.frameCount - 1);
+		middlegroundSprite.currentFrame = (middlegroundSprite.currentFrame + 1) % (middlegroundSprite.frameCount);
 	}
 }
 void SpriteRendererSystem::UpdateForegroundSprite(ForegroundSprite& foregroundSprite)
@@ -125,6 +125,6 @@ void SpriteRendererSystem::UpdateForegroundSprite(ForegroundSprite& foregroundSp
 	if (foregroundSprite.timer >= 1.0f / foregroundSprite.fps)
 	{
 		foregroundSprite.timer = 0;
-		foregroundSprite.currentFrame = (foregroundSprite.currentFrame + 1) % (foregroundSprite.frameCount - 1);
+		foregroundSprite.currentFrame = (foregroundSprite.currentFrame + 1) % (foregroundSprite.frameCount);
 	}
 }
