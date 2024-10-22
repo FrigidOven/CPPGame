@@ -18,6 +18,11 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
 	// BACKGROUND SPRITES
 	for (auto& backgroundSprite : backgroundSprites)
 	{
+		int componentMask = scene->GetComponentMask(backgroundSprite.entity);
+		int requiredComponentsMask = 1 << Spatial::ID;
+		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+			continue;
+
 		Vector2 position = scene->GetComponent<Spatial>(backgroundSprite.entity).position;
 		float rotation = scene->GetComponent<Spatial>(backgroundSprite.entity).rotation;
 
@@ -45,6 +50,11 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
 	// MIDDLEGROUND SPRITES
 	for (auto& middlegroundSprite : middlegroundSprites)
 	{
+		int componentMask = scene->GetComponentMask(middlegroundSprite.entity);
+		int requiredComponentsMask = 1 << Spatial::ID;
+		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+			continue;
+
 		Vector2 position = scene->GetComponent<Spatial>(middlegroundSprite.entity).position;
 		float rotation = scene->GetComponent<Spatial>(middlegroundSprite.entity).rotation;
 
@@ -69,6 +79,11 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
     // FOREGROUND SPRITES
 	for (auto& foregroundSprite : foregroundSprites)
 	{
+		int componentMask = scene->GetComponentMask(foregroundSprite.entity);
+		int requiredComponentsMask = 1 << Spatial::ID;
+		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+			continue;
+
 		Vector2 position = scene->GetComponent<Spatial>(foregroundSprite.entity).position;
 		float rotation = scene->GetComponent<Spatial>(foregroundSprite.entity).rotation;
 

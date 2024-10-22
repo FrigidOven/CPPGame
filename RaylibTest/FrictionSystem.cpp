@@ -14,6 +14,11 @@ void FrictionSystem::Update(Scene* scene, std::vector<Friction>& frictions)
 
 	for (auto& friction : frictions)
 	{
+		int componentMask = scene->GetComponentMask(friction.entity);
+		int requiredComponentsMask = (1 << Velocity::ID) | (1 << Mass::ID);
+		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+			continue;
+
 		// initialize friction to zero
 		friction.force = Vector2Zero();
 

@@ -12,6 +12,11 @@ void VelocitySystem::Update(Scene* scene, std::vector<Velocity>& velocities)
 {
 	for (auto& velocity  : velocities)
 	{
+		int componentMask = scene->GetComponentMask(velocity.entity);
+		int requiredComponentsMask = 1 << Spatial::ID;
+		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+			continue;
+
 		float deltaTime = GetFrameTime();
 
 		// find displacement

@@ -14,6 +14,7 @@ Scene::Scene(
 	AccelerationSystem& accelerationSystem,
 	VelocitySystem& velocitySystem,
 	ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem,
+	SpriteManagerSystem& spriteManagerSystem,
 	SpriteRendererSystem& spriteRendererSystem)
 	: inputSystem(inputSystem)
 	, forceBasedMovementControllerSystem(forceBasedMovementControllerSystem)
@@ -23,6 +24,7 @@ Scene::Scene(
 	, accelerationSystem(accelerationSystem)
 	, velocitySystem(velocitySystem)
 	, forceBasedSpeedLimiterSystem(forceBasedSpeedLimiterSystem)
+	, spriteManagerSystem(spriteManagerSystem)
 	, spriteRendererSystem(spriteRendererSystem)
 {
 		componentTable[Spatial::ID] = static_cast<void*>(new std::vector<Spatial>);
@@ -40,6 +42,7 @@ Scene::Scene(
 		componentTable[VelocityBasedMovement::ID] = static_cast<void*>(new std::vector<VelocityBasedMovement>);
 		componentTable[ForceBasedMovementController::ID] = static_cast<void*>(new std::vector<ForceBasedMovementController>);
 		componentTable[VelocityBasedMovementController::ID] = static_cast<void*>(new std::vector<VelocityBasedMovementController>);
+		componentTable[SpriteManager::ID] = static_cast<void*>(new std::vector<SpriteManager>);
 }
 Scene::~Scene()
 {
@@ -58,13 +61,15 @@ Scene::~Scene()
 	delete(static_cast<std::vector<VelocityBasedMovement>*>(componentTable[VelocityBasedMovement::ID]));
 	delete(static_cast<std::vector<ForceBasedMovementController>*>(componentTable[ForceBasedMovementController::ID]));
 	delete(static_cast<std::vector<VelocityBasedMovementController>*>(componentTable[VelocityBasedMovementController::ID]));
+	delete(static_cast<std::vector<SpriteManager>*>(componentTable[SpriteManager::ID]));
 }
 
-int Scene::CreateEntity()
+int Scene::CreateEntity(EntityTag tag)
 {
 	entities.emplace_back
 	(
 		static_cast<int>(entities.size()),	// id
+		tag,
 		0															// component mask
 	);
 
@@ -78,6 +83,7 @@ void Scene::Update()
 {
 	// RELEVANT COMPONENT LISTS:
 	// sprite component lists
+	auto& spriteManagers = *(static_cast<std::vector<SpriteManager>*>(componentTable[SpriteManager::ID]));
 	auto& backgroundSprites = *(static_cast<std::vector<BackgroundSprite>*>(componentTable[BackgroundSprite::ID]));
 	auto& middlegroundSprites = *(static_cast<std::vector<MiddlegroundSprite>*>(componentTable[MiddlegroundSprite::ID]));
 	auto& foregroundSprites = *(static_cast<std::vector<ForegroundSprite>*>(componentTable[ForegroundSprite::ID]));
@@ -110,5 +116,16 @@ void Scene::Update()
 	velocitySystem.Update(this, velocities);
 
 	// Rendering Routine:
+	spriteManagerSystem.Update(this, spriteManagers);
 	spriteRendererSystem.Update(this, backgroundSprites, middlegroundSprites, foregroundSprites);
+}
+
+int Scene::GetComponentMask(int entityId)
+{
+	return entities[entityId].componentMask;
+}
+
+EntityTag Scene::GetTag(int entityId)
+{
+	return entities[entityId].tag;
 }

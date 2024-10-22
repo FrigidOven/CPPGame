@@ -12,4 +12,6 @@
 
 #include "ForceBasedSpeedLimiterSystem.h"
 
+#include "SpriteManagerSystem.h"
+
 #include "SpriteRendererSystem.h"

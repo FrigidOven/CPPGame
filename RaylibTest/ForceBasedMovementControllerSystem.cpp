@@ -10,6 +10,8 @@ void ForceBasedMovementControllerSystem::Update(Scene* scene, std::vector<ForceB
 {
 	for (auto& forceBasedMovementController : forceBasedMovementControllers)
 	{
+		int componentMask = scene->GetComponentMask(forceBasedMovementController.entity);
+
 		scene->RemoveComponent<ForceBasedMovement>(forceBasedMovementController.entity);
 
 		if (forceBasedMovementController.up.isActive)

@@ -135,6 +135,8 @@
     <ClCompile Include="FrictionSystem.cpp" />
     <ClCompile Include="InputListener.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="PlayerSpriteAtlas.cpp" />
+    <ClCompile Include="SpriteManagerSystem.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="RaylibTest.cpp" />
     <ClCompile Include="SpriteRendererSystem.cpp" />
@@ -161,9 +163,12 @@
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Mass.h" />
     <ClInclude Include="MiddlegroundSprite.h" />
+    <ClInclude Include="SpriteManager.h" />
+    <ClInclude Include="SpriteManagerSystem.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Spatial.h" />
     <ClInclude Include="BackgroundSprite.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteRendererSystem.h" />
     <ClInclude Include="Systems.h" />
     <ClInclude Include="Velocity.h" />

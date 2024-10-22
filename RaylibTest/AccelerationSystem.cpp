@@ -11,6 +11,11 @@ void AccelerationSystem::Update(Scene* scene, std::vector<Acceleration>& acceler
 {
 	for (auto& acceleration : accelerations)
 	{
+		int componentMask = scene->GetComponentMask(acceleration.entity);
+		int requiredComponentsMask = 1 << Velocity::ID;
+		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+			continue;
+
 		float deltaTime = GetFrameTime();
 
 		// find delta velocity

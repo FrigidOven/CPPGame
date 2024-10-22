@@ -34,6 +34,7 @@ private:
 
 	ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem;
 
+	SpriteManagerSystem& spriteManagerSystem;
 	SpriteRendererSystem& spriteRendererSystem;
 
 public:
@@ -46,10 +47,11 @@ public:
 		AccelerationSystem& accelerationSystem,
 		VelocitySystem& velocitySystem,
 		ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem,
+		SpriteManagerSystem& spriteManagerSystem,
 		SpriteRendererSystem& spriteRendererSystem);
 	~Scene();
 
-	int CreateEntity();
+	int CreateEntity(EntityTag tag);
 	void Update();
 
 	template<typename T, typename... Args>
@@ -63,6 +65,10 @@ public:
 
 	template<typename T>
 	bool HasComponent(int entityId);
+
+	int GetComponentMask(int entityId);
+
+	EntityTag GetTag(int entityId);
 };
 
 template<typename T, typename... Args>

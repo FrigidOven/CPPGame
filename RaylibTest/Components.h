@@ -20,3 +20,5 @@
 
 #include "ForceBasedMovementController.h"
 #include "VelocityBasedMovementController.h"
+
+#include "SpriteManager.h"

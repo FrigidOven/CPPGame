@@ -11,6 +11,12 @@ void ForceBasedSpeedLimiterSystem::Update(Scene* scene, std::vector<ForceBasedSp
 {
 	for (auto& forceBasedSpeedLimiter : forceBasedSpeedLimiters)
 	{
+		int componentMask = scene->GetComponentMask(forceBasedSpeedLimiter.entity);
+		int requiredComponentsMask = (1 << Velocity::ID) | (1 << Acceleration::ID);
+		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+			continue;
+
+
 		Velocity& velocity = scene->GetComponent<Velocity>(forceBasedSpeedLimiter.entity);
 		Acceleration& acceleration = scene->GetComponent<Acceleration>(forceBasedSpeedLimiter.entity);
 

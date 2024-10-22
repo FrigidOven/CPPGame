@@ -12,6 +12,11 @@ void ForceSystem::Update(Scene* scene, std::vector<Force>& forces)
 {
 	for (auto& force : forces)
 	{
+		int componentMask = scene->GetComponentMask(force.entity);
+		int requiredComponentsMask = 1 << Acceleration::ID;
+		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+			continue;
+
 		Vector2 totalForce = force.force;
 
 		// get movement force if it exists
