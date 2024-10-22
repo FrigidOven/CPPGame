@@ -1,4 +1,4 @@
-#include "ECS.h"
+#include "Scene.h"
 
 /*
 ===================================================================================================
@@ -24,7 +24,7 @@ void InputListener::Update(InputSystem* inputSystem)
 		}
 	}
 }
-bool InputListener::CheckActive(Input input)
+bool InputListener::CheckActive(Input& input)
 {
 	// check if the input is actually active, even if it is being pressed
 	switch (input.controlType)
@@ -41,7 +41,7 @@ bool InputListener::CheckActive(Input input)
 	}
 	return false;
 }
-bool InputListener::CheckDown(Input input)
+bool InputListener::CheckDown(Input& input)
 {
 	// check if the input is being pressed, regardless of if it is the last pressed
 	switch (input.controlType)
@@ -52,8 +52,12 @@ bool InputListener::CheckDown(Input input)
 	}
 	return false;
 }
-void InputListener::BlockForSeconds(Input input, float seconds)
+void InputListener::BlockForSeconds(Input& input, float seconds)
 {
+	// deactivate input
+	input.isActive = false;
+	input.isDown = false;
+
 	// check if input is already on cool down
 	int index = -1;
 	for (size_t i = 0; i < onCooldownInputs.size(); i++)
@@ -87,7 +91,8 @@ void InputListener::RemoveUpButtons()
 	// removing up keyboard keys
 	for (size_t i = 0; i < keyboardKeys.size(); i++)
 	{
-		if (IsKeyUp(keyboardKeys[i]))
+		// if its irrelevant or if it is up remove it
+		if (relevantKeyboardKeys.find(keyboardKeys[i]) == relevantKeyboardKeys.end() || IsKeyUp(keyboardKeys[i]))
 		{
 			keyboardKeys.erase(keyboardKeys.begin() + i);
 			i--;
@@ -123,7 +128,7 @@ void InputListener::AddDownButtons(InputSystem* inputSystem)
 	}
 }
 
-void InputListener::ListenForInput(Input input)
+void InputListener::ListenForInput(Input& input)
 {
 	switch (input.controlType)
 	{
@@ -137,7 +142,7 @@ void InputListener::ListenForInput(Input input)
 		relevantMouseButtons.insert(static_cast<MouseButton>(input.controlValue));
 	}
 }
-void InputListener::IgnoreInput(Input input)
+void InputListener::IgnoreInput(Input& input)
 {
 	switch (input.controlType)
 	{

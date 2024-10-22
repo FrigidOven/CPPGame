@@ -1,39 +1,28 @@
-#include "ECS.h"
+#include "ForceSystem.h"
+#include "Scene.h"
+
+#include <raymath.h>
 
 /*
 ===================================================================================================
  Public Functions
 ===================================================================================================
 */
-void ForceSystem::Update(Scene* scene, std::vector<Force>& forceComponents)
+void ForceSystem::Update(Scene* scene, std::vector<Force>& forces)
 {
-	const float GRAVITY = 9.8f;
-	const float FRICTION_CUT_OFF_VELOCITY = 0.1;
-
-	for (auto& force : forceComponents)
+	for (auto& force : forces)
 	{
-		RigidBody& rigidBody = scene->GetComponent<RigidBody>(force.entity);
+		Vector2 totalForce = force.force;
 
-		// sum internal and external forces
-		Vector2 totalForce = Vector2Add(force.internalForce, force.externalForce);
-		float totalAngularForce = force.internalAngularForce + force.externalAngularForce;
+		// get movement force if it exists
+		if (scene->HasComponent<ForceBasedMovement>(force.entity))
+			totalForce = Vector2Add(totalForce, scene->GetComponent<ForceBasedMovement>(force.entity).force);
 
-		// initialize friction to zero
-		Vector2 frictionForce = { 0.0f, 0.0f };
-		float angularFrictionForce = 0.0f;
-
-		// only find friction if velocity is above the cut off for friction
-		if (Vector2Length(rigidBody.velocity) >= FRICTION_CUT_OFF_VELOCITY)
-			frictionForce = Vector2Scale(rigidBody.velocity, -rigidBody.frictionCoefficient * GRAVITY * rigidBody.mass);
-		if (rigidBody.angularVelocity >= FRICTION_CUT_OFF_VELOCITY)
-			angularFrictionForce = rigidBody.angularVelocity * -rigidBody.frictionCoefficient * GRAVITY * rigidBody.mass;
-
-		// add friction
-		totalForce = Vector2Add(totalForce, frictionForce);
-		totalAngularForce += angularFrictionForce;
+		// get friction force if it exists
+		if (scene->HasComponent<Friction>(force.entity))
+			totalForce = Vector2Add(totalForce, scene->GetComponent<Friction>(force.entity).force);
 
 		// f = ma so a = f/m
-		rigidBody.acceleration = Vector2Scale(totalForce, 1.0f / rigidBody.mass);
-		rigidBody.angularAcceleration = totalAngularForce / rigidBody.mass;
+		scene->GetComponent<Acceleration>(force.entity).acceleration = Vector2Scale(totalForce, 1.0f / scene->GetComponent<Mass>(force.entity).mass);
 	}
 }

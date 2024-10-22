@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include "Entity.h"
+#include "Components.h"
 #include "Systems.h"
 
 /*
@@ -21,24 +22,31 @@ private:
 	// key = component id, value = vector<component>
 	std::unordered_map<int, void*> componentTable;
 
-	SpriteRendererSystem& spriteRendererSystem;
-	VelocitySystem& velocitySystem;
-	AccelerationSystem& accelerationSystem;
-	ForceSystem& forceSystem;
-	SpeedLimiterSystem& speedLimiterSystem;
 	InputSystem& inputSystem;
-	PlayerActionSystem& playerActionSystem;
-	ActionSystem& actionSystem;
+
+	ForceBasedMovementControllerSystem& forceBasedMovementControllerSystem;
+	VelocityBasedMovementControllerSystem& velocityBasedMovementControllerSystem;
+
+	ForceSystem& forceSystem;
+	FrictionSystem& frictionSystem;
+	AccelerationSystem& accelerationSystem;
+	VelocitySystem& velocitySystem;
+
+	ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem;
+
+	SpriteRendererSystem& spriteRendererSystem;
 
 public:
-	Scene(SpriteRendererSystem& spriteRendererSystem,
-		VelocitySystem& velocitySystem,
-		AccelerationSystem& accelerationSystem,
-		ForceSystem& forceSystem,
-		SpeedLimiterSystem& speedLimiterSystem,
+	Scene(
 		InputSystem& inputSystem,
-		PlayerActionSystem& playerActionSystem,
-		ActionSystem& actionSystem);
+		ForceBasedMovementControllerSystem& forceBasedMovementControllerSystem,
+		VelocityBasedMovementControllerSystem& velocityBasedMovementControllerSystem,
+		ForceSystem& forceSystem,
+		FrictionSystem& frictionSystem,
+		AccelerationSystem& accelerationSystem,
+		VelocitySystem& velocitySystem,
+		ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem,
+		SpriteRendererSystem& spriteRendererSystem);
 	~Scene();
 
 	int CreateEntity();

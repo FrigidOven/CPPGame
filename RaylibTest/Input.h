@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Command.h"
 #include <unordered_set>
+#include <raylib.h>
 
 class InputSystem;
 
@@ -60,10 +60,10 @@ private:
 
 public:
 	void Update(InputSystem* inputSystem);
-	bool CheckActive(Input input);
-	bool CheckDown(Input input);
-	void BlockForSeconds(Input input, float seconds);
+	bool CheckActive(Input& input);
+	bool CheckDown(Input& input);
+	void BlockForSeconds(Input& input, float seconds);
 
-	void ListenForInput(Input input);
-	void IgnoreInput(Input input);
+	void ListenForInput(Input& input);
+	void IgnoreInput(Input& input);
 };
