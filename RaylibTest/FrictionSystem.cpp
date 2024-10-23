@@ -10,13 +10,12 @@
 void FrictionSystem::Update(Scene* scene, std::vector<Friction>& frictions)
 {
 	const float GRAVITY = -9.8f;
-	//const float FRICTION_CUT_OFF_VELOCITY = 0.01f;
+
+	int requiredComponentsMask = (1 << Velocity::ID) | (1 << Mass::ID);
 
 	for (auto& friction : frictions)
-	{
-		int componentMask = scene->GetComponentMask(friction.entity);
-		int requiredComponentsMask = (1 << Velocity::ID) | (1 << Mass::ID);
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+	{	
+		if ((scene->GetComponentMask(friction.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
 		Vector2& velocity = scene->GetComponent<Velocity>(friction.entity).velocity;

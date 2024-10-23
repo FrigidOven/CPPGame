@@ -9,5 +9,5 @@ class Scene;
 class AccelerationSystem
 {
 public:
-	void Update(Scene* scene, std::vector<Acceleration>& accelerations);
+	void Update(Scene* scene, std::vector<Acceleration>& accelerations, float deltaTime);
 };

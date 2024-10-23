@@ -108,6 +108,8 @@ void Scene::Update()
 	auto& velocityBasedMovementControllers = *(static_cast<std::vector<VelocityBasedMovementController>*>(componentTable[VelocityBasedMovementController::ID]));
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	float deltaTime = GetFrameTime();
+
 	// Input Routine:
 	inputSystem.Update(this, forceBasedMovementControllers, velocityBasedMovementControllers);
 	forceBasedMovementControllerSystem.Update(this, forceBasedMovementControllers);
@@ -116,14 +118,14 @@ void Scene::Update()
 	// Physics Routine:
 	frictionSystem.Update(this, frictions);
 	stoppingForceSystem.Update(this, stopingForces);
-	forceSystem.Update(this, forces);
-	accelerationSystem.Update(this, accelerations);
+	forceSystem.Update(this, forces, deltaTime);
+	accelerationSystem.Update(this, accelerations, deltaTime);
 	forceBasedSpeedLimiterSystem.Update(this, forceBasedSpeedLimiters);
-	velocitySystem.Update(this, velocities);
+	velocitySystem.Update(this, velocities, deltaTime);
 
 	// Rendering Routine:
 	spriteManagerSystem.Update(this, spriteManagers);
-	spriteRendererSystem.Update(this, backgroundSprites, middlegroundSprites, foregroundSprites);
+	spriteRendererSystem.Update(this, backgroundSprites, middlegroundSprites, foregroundSprites, deltaTime);
 }
 
 int Scene::GetComponentMask(int entityId)

@@ -8,16 +8,14 @@
  Public Functions
 ===================================================================================================
 */
-void VelocitySystem::Update(Scene* scene, std::vector<Velocity>& velocities)
+void VelocitySystem::Update(Scene* scene, std::vector<Velocity>& velocities, float deltaTime)
 {
+	int requiredComponentsMask = 1 << Spatial::ID;
+
 	for (auto& velocity  : velocities)
 	{
-		int componentMask = scene->GetComponentMask(velocity.entity);
-		int requiredComponentsMask = 1 << Spatial::ID;
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene->GetComponentMask(velocity.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
-
-		float deltaTime = GetFrameTime();
 
 		// find displacement
 		Vector2 displacement = Vector2Scale(velocity.velocity, deltaTime);

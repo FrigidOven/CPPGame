@@ -7,16 +7,14 @@
  Public Functions
 ===================================================================================================
 */
-void AccelerationSystem::Update(Scene* scene, std::vector<Acceleration>& accelerations)
+void AccelerationSystem::Update(Scene* scene, std::vector<Acceleration>& accelerations, float deltaTime)
 {
+	int requiredComponentsMask = 1 << Velocity::ID;
+
 	for (auto& acceleration : accelerations)
 	{
-		int componentMask = scene->GetComponentMask(acceleration.entity);
-		int requiredComponentsMask = 1 << Velocity::ID;
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene->GetComponentMask(acceleration.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
-
-		float deltaTime = GetFrameTime();
 
 		// find delta velocity
 		Vector2 deltaVelocity = Vector2Scale(acceleration.acceleration, deltaTime);

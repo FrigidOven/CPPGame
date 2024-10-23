@@ -8,13 +8,13 @@
  Public Functions
 ===================================================================================================
 */
-void ForceSystem::Update(Scene* scene, std::vector<Force>& forces)
+void ForceSystem::Update(Scene* scene, std::vector<Force>& forces, float deltaTime)
 {
+	int requiredComponentsMask = (1 << Acceleration::ID) | (1<<Velocity::ID) | (1<<Mass::ID);
+
 	for (auto& force : forces)
-	{
-		int componentMask = scene->GetComponentMask(force.entity);
-		int requiredComponentsMask = 1 << Acceleration::ID;
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+	{	
+		if ((scene->GetComponentMask(force.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
 		Vector2 pushingForces = force.force;
@@ -32,10 +32,8 @@ void ForceSystem::Update(Scene* scene, std::vector<Force>& forces)
 		if (scene->HasComponent<StoppingForce>(force.entity))
 			resistingForces = Vector2Add(resistingForces, scene->GetComponent<StoppingForce>(force.entity).force);
 
-
 		Vector2 velocity = scene->GetComponent<Velocity>(force.entity).velocity;
 		float mass = scene->GetComponent<Mass>(force.entity).mass;
-		float deltaTime = GetFrameTime();
 
 		Vector2 acceleration = Vector2Scale(pushingForces, 1.0f / mass);
 		Vector2 deceleration = Vector2Scale(resistingForces, 1.0f / mass);

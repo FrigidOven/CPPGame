@@ -9,5 +9,5 @@ class Scene;
 class ForceSystem
 {
 public:
-	void Update(Scene* scene, std::vector<Force>& forces);
+	void Update(Scene* scene, std::vector<Force>& forces, float deltaTime);
 };

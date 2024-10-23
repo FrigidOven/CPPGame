@@ -21,6 +21,8 @@ SpriteManagerSystem::~SpriteManagerSystem()
 }
 void SpriteManagerSystem::Update(Scene* scene, std::vector<SpriteManager>& spriteManagers)
 {
+	int requiredComponentsMask = 1 << MiddlegroundSprite::ID;
+
 	for (auto& spriteManager : spriteManagers)
 	{
 		// update orientation and state of sprite manager
@@ -28,9 +30,7 @@ void SpriteManagerSystem::Update(Scene* scene, std::vector<SpriteManager>& sprit
 		UpdateState(scene, spriteManager);
 
 		// procede to update sprite itself
-		int componentMask = scene->GetComponentMask(spriteManager.entity);
-		int requiredComponentsMask = 1 << MiddlegroundSprite::ID;
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene->GetComponentMask(spriteManager.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
 		MiddlegroundSprite& sprite = scene->GetComponent<MiddlegroundSprite>(spriteManager.entity);

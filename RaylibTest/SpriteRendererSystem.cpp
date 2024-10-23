@@ -6,7 +6,7 @@
  Public Functions
 ===================================================================================================
 */
-void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& backgroundSprites, std::vector<MiddlegroundSprite>& middlegroundSprites, std::vector<ForegroundSprite>& foregroundSprites)
+void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& backgroundSprites, std::vector<MiddlegroundSprite>& middlegroundSprites, std::vector<ForegroundSprite>& foregroundSprites, float deltaTime)
 {
 	ClearBackground(BLACK);
 	BeginDrawing();
@@ -14,13 +14,12 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
 	Rectangle dest{ 0, 0, 0, 0 };
 	Rectangle source{ 0, 0, 0, 0 };
 
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+	int requiredComponentsMask = 1 << Spatial::ID;
+
 	// BACKGROUND SPRITES
 	for (auto& backgroundSprite : backgroundSprites)
 	{
-		int componentMask = scene->GetComponentMask(backgroundSprite.entity);
-		int requiredComponentsMask = 1 << Spatial::ID;
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene->GetComponentMask(backgroundSprite.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
 		Vector2 position = scene->GetComponent<Spatial>(backgroundSprite.entity).position;
@@ -44,15 +43,13 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
 
 		// only update sprites if they have multiple frames
 		if (backgroundSprite.frameCount > 1)
-			UpdateBackgroundSprite(backgroundSprite);
+			UpdateBackgroundSprite(backgroundSprite, deltaTime);
 	}
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 	// MIDDLEGROUND SPRITES
 	for (auto& middlegroundSprite : middlegroundSprites)
 	{
-		int componentMask = scene->GetComponentMask(middlegroundSprite.entity);
-		int requiredComponentsMask = 1 << Spatial::ID;
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene->GetComponentMask(middlegroundSprite.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
 		Vector2 position = scene->GetComponent<Spatial>(middlegroundSprite.entity).position;
@@ -73,15 +70,13 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
 		DrawTexturePro(*middlegroundSprite.source, source, dest, origin, rotation, WHITE);
 
 		if (middlegroundSprite.frameCount > 1)
-			UpdateMiddlegroundSprite(middlegroundSprite);
+			UpdateMiddlegroundSprite(middlegroundSprite, deltaTime);
 	}
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
     // FOREGROUND SPRITES
 	for (auto& foregroundSprite : foregroundSprites)
 	{
-		int componentMask = scene->GetComponentMask(foregroundSprite.entity);
-		int requiredComponentsMask = 1 << Spatial::ID;
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene->GetComponentMask(foregroundSprite.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
 		Vector2 position = scene->GetComponent<Spatial>(foregroundSprite.entity).position;
@@ -102,7 +97,7 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
 		DrawTexturePro(*foregroundSprite.source, source, dest, origin, rotation, WHITE);
 
 		if (foregroundSprite.frameCount > 1)
-			UpdateForegroundSprite(foregroundSprite);
+			UpdateForegroundSprite(foregroundSprite, deltaTime);
 	}
 
 	EndDrawing();
@@ -113,9 +108,9 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
  Private Functions
 ===================================================================================================
 */
-void SpriteRendererSystem::UpdateBackgroundSprite(BackgroundSprite& backgroundSprite)
+void SpriteRendererSystem::UpdateBackgroundSprite(BackgroundSprite& backgroundSprite, float deltaTime)
 {
-	backgroundSprite.timer += GetFrameTime();
+	backgroundSprite.timer += deltaTime;
 
 	if (backgroundSprite.timer >= 1.0f / backgroundSprite.fps)
 	{
@@ -123,9 +118,9 @@ void SpriteRendererSystem::UpdateBackgroundSprite(BackgroundSprite& backgroundSp
 		backgroundSprite.currentFrame = (backgroundSprite.currentFrame + 1) % (backgroundSprite.frameCount);
 	}
 }
-void SpriteRendererSystem::UpdateMiddlegroundSprite(MiddlegroundSprite& middlegroundSprite)
+void SpriteRendererSystem::UpdateMiddlegroundSprite(MiddlegroundSprite& middlegroundSprite, float deltaTime)
 {
-	middlegroundSprite.timer += GetFrameTime();
+	middlegroundSprite.timer += deltaTime;
 
 	if (middlegroundSprite.timer >= 1.0f / middlegroundSprite.fps)
 	{
@@ -133,9 +128,9 @@ void SpriteRendererSystem::UpdateMiddlegroundSprite(MiddlegroundSprite& middlegr
 		middlegroundSprite.currentFrame = (middlegroundSprite.currentFrame + 1) % (middlegroundSprite.frameCount);
 	}
 }
-void SpriteRendererSystem::UpdateForegroundSprite(ForegroundSprite& foregroundSprite)
+void SpriteRendererSystem::UpdateForegroundSprite(ForegroundSprite& foregroundSprite, float deltaTime)
 {
-	foregroundSprite.timer += GetFrameTime();
+	foregroundSprite.timer += deltaTime;
 
 	if (foregroundSprite.timer >= 1.0f / foregroundSprite.fps)
 	{

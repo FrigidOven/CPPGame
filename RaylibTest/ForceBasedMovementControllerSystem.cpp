@@ -8,11 +8,11 @@
 */
 void ForceBasedMovementControllerSystem::Update(Scene* scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers)
 {
+	int requiredComponentsMask = 1 << Velocity::ID;
+
 	for (auto& forceBasedMovementController : forceBasedMovementControllers)
 	{
-		int componentMask = scene->GetComponentMask(forceBasedMovementController.entity);
-		int requiredComponentsMask = 1 << Velocity::ID;
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene->GetComponentMask(forceBasedMovementController.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
 		float stoppingForceMagnitude = 0.0f;
