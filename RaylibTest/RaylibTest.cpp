@@ -17,6 +17,7 @@ int main()
     AccelerationSystem accelerationSystem;
     VelocitySystem velocitySystem;
     ForceBasedSpeedLimiterSystem forceBasedSpeedLimiterSystem;
+    StoppingForceSystem stoppingForceSystem;
     SpriteManagerSystem spriteMangerSystem;
     SpriteRendererSystem spriteRenderSystem;
    
@@ -30,6 +31,7 @@ int main()
         accelerationSystem,
         velocitySystem,
         forceBasedSpeedLimiterSystem,
+        stoppingForceSystem,
         spriteMangerSystem,
         spriteRenderSystem
     );
@@ -50,7 +52,7 @@ int main()
     scene.AddComponent<Acceleration>(testEntity1, Vector2Zero());
     scene.AddComponent<Mass>(testEntity1, 1.0f);
     scene.AddComponent<Force>(testEntity1, Vector2Zero());
-    scene.AddComponent<Friction>(testEntity1, 0.9f);
+    scene.AddComponent<Friction>(testEntity1, 0.8f);
     scene.AddComponent<ForceBasedMovementController>(testEntity1, 3000.0f, Input(Keyboard, KEY_UP, true), Input(Keyboard, KEY_LEFT, true), Input(Keyboard, KEY_DOWN, true), Input(Keyboard, KEY_RIGHT, true));
     scene.AddComponent<ForceBasedSpeedLimiter>(testEntity1, 300.0f);
     scene.AddComponent<SpriteManager>(testEntity1, SpriteOrientation::Down, SpriteState::Idle);
@@ -65,10 +67,10 @@ int main()
     scene.AddComponent<SpriteManager>(testEntity2, SpriteOrientation::Up, SpriteState::Idle);
 
     while (!WindowShouldClose())
-    {      
+    {
         scene.Update();
     }
-    
+
     CloseWindow();
     return 0;
 }

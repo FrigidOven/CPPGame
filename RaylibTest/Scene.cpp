@@ -14,6 +14,7 @@ Scene::Scene(
 	AccelerationSystem& accelerationSystem,
 	VelocitySystem& velocitySystem,
 	ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem,
+	StoppingForceSystem& stoppingForceSystem,
 	SpriteManagerSystem& spriteManagerSystem,
 	SpriteRendererSystem& spriteRendererSystem)
 	: inputSystem(inputSystem)
@@ -24,6 +25,7 @@ Scene::Scene(
 	, accelerationSystem(accelerationSystem)
 	, velocitySystem(velocitySystem)
 	, forceBasedSpeedLimiterSystem(forceBasedSpeedLimiterSystem)
+	, stoppingForceSystem(stoppingForceSystem)
 	, spriteManagerSystem(spriteManagerSystem)
 	, spriteRendererSystem(spriteRendererSystem)
 {
@@ -43,6 +45,7 @@ Scene::Scene(
 		componentTable[ForceBasedMovementController::ID] = static_cast<void*>(new std::vector<ForceBasedMovementController>);
 		componentTable[VelocityBasedMovementController::ID] = static_cast<void*>(new std::vector<VelocityBasedMovementController>);
 		componentTable[SpriteManager::ID] = static_cast<void*>(new std::vector<SpriteManager>);
+		componentTable[StoppingForce::ID] = static_cast<void*>(new std::vector<StoppingForce>);
 }
 Scene::~Scene()
 {
@@ -62,6 +65,7 @@ Scene::~Scene()
 	delete(static_cast<std::vector<ForceBasedMovementController>*>(componentTable[ForceBasedMovementController::ID]));
 	delete(static_cast<std::vector<VelocityBasedMovementController>*>(componentTable[VelocityBasedMovementController::ID]));
 	delete(static_cast<std::vector<SpriteManager>*>(componentTable[SpriteManager::ID]));
+	delete(static_cast<std::vector<StoppingForce>*>(componentTable[StoppingForce::ID]));
 }
 
 int Scene::CreateEntity(EntityTag tag)
@@ -98,6 +102,7 @@ void Scene::Update()
 	// movement component lists
 	auto& forceBasedMovements = *(static_cast<std::vector<ForceBasedMovement>*>(componentTable[ForceBasedMovement::ID]));
 	auto& velocityBasedMovements = *(static_cast<std::vector<VelocityBasedMovement>*>(componentTable[VelocityBasedMovement::ID]));
+	auto& stopingForces = *(static_cast<std::vector<StoppingForce>*>(componentTable[StoppingForce::ID]));
 	// movement controller component lists
 	auto& forceBasedMovementControllers = *(static_cast<std::vector<ForceBasedMovementController>*>(componentTable[ForceBasedMovementController::ID]));
 	auto& velocityBasedMovementControllers = *(static_cast<std::vector<VelocityBasedMovementController>*>(componentTable[VelocityBasedMovementController::ID]));
@@ -110,6 +115,7 @@ void Scene::Update()
 
 	// Physics Routine:
 	frictionSystem.Update(this, frictions);
+	stoppingForceSystem.Update(this, stopingForces);
 	forceSystem.Update(this, forces);
 	accelerationSystem.Update(this, accelerations);
 	forceBasedSpeedLimiterSystem.Update(this, forceBasedSpeedLimiters);

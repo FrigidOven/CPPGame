@@ -140,6 +140,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="RaylibTest.cpp" />
     <ClCompile Include="SpriteRendererSystem.cpp" />
+    <ClCompile Include="StoppingForceSystem.cpp" />
     <ClCompile Include="VelocityBasedMovementControllerSystem.cpp" />
     <ClCompile Include="VelocitySystem.cpp" />
   </ItemGroup>
@@ -170,6 +171,8 @@
     <ClInclude Include="BackgroundSprite.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteRendererSystem.h" />
+    <ClInclude Include="StoppingForce.h" />
+    <ClInclude Include="StoppingForceSystem.h" />
     <ClInclude Include="Systems.h" />
     <ClInclude Include="Velocity.h" />
     <ClInclude Include="VelocityBasedMovement.h" />

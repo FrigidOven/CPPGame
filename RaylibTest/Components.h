@@ -17,6 +17,7 @@
 
 #include "ForceBasedMovement.h"
 #include "VelocityBasedMovement.h"
+#include "StoppingForce.h"
 
 #include "ForceBasedMovementController.h"
 #include "VelocityBasedMovementController.h"
