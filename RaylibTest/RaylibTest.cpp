@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "Game.h"
 #include <iostream>
 
 int main()
@@ -9,32 +9,8 @@ int main()
     InitWindow(screenWidth, screenHeight, "RaylibTest");
     SetTargetFPS(60);
 
-    InputSystem inputSystem;
-    ForceBasedMovementControllerSystem forceBasedMovementControllerSystem;
-    VelocityBasedMovementControllerSystem velocityBasedMovementControllerSystem;
-    ForceSystem forceSystem;
-    FrictionSystem frictionSystem;
-    AccelerationSystem accelerationSystem;
-    VelocitySystem velocitySystem;
-    ForceBasedSpeedLimiterSystem forceBasedSpeedLimiterSystem;
-    StoppingForceSystem stoppingForceSystem;
-    SpriteManagerSystem spriteMangerSystem;
-    SpriteRendererSystem spriteRenderSystem;
-   
-    Scene scene
-    (
-        inputSystem,
-        forceBasedMovementControllerSystem,
-        velocityBasedMovementControllerSystem,
-        forceSystem,
-        frictionSystem,
-        accelerationSystem,
-        velocitySystem,
-        forceBasedSpeedLimiterSystem,
-        stoppingForceSystem,
-        spriteMangerSystem,
-        spriteRenderSystem
-    );
+    Game game;
+    Scene& scene = game.GetCurrentScene();
 
     Texture2D backgroundSprite = LoadTexture("Textures/Background.png");
     Texture2D golemSprite = LoadTexture("Textures/GolemSprite.png");
@@ -68,7 +44,7 @@ int main()
 
     while (!WindowShouldClose())
     {
-        scene.Update();
+        game.Update();
     }
 
     CloseWindow();

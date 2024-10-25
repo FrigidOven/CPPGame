@@ -6,55 +6,59 @@
 #include "Components.h"
 #include "Systems.h"
 
-/*
-* =================================================
-* SCENE
-* =================================================
-*/
-
 class Scene
 {
 private:
 
+	// all entities in the scene
 	std::vector<Entity> entities;
-	std::vector<int> components; // holds indecies into component lists for each entity
+	// indecies into component lists for each entity
+	std::vector<int> components;
 
-	// key = component id, value = vector<component>
-	std::unordered_map<int, void*> componentTable;
+	// all component lists
+	std::vector<Spatial> spatials;
+	std::vector<BackgroundSprite> backgroundSprites;
+	std::vector<MiddlegroundSprite> middlegroundSprites;
+	std::vector<ForegroundSprite> foregroundSprites;
+	std::vector<Velocity> velocities;
+	std::vector<Acceleration> accelerations;
+	std::vector<Mass> masses;
+	std::vector<Force> forces;
+	std::vector<Friction> frictions;
+	std::vector<ForceBasedSpeedLimiter> forceBasedSpeedLimiters;
+	std::vector<VelocityBasedSpeedLimiter> velocityBasedSpeedLimiters;
+	std::vector<ForceBasedMovement> forceBasedMovements;
+	std::vector<VelocityBasedMovement> velocityBasedMovements;
+	std::vector<ForceBasedMovementController> forceBasedMovementControllers;
+	std::vector<VelocityBasedMovementController> velocityBasedMovementControllers;
+	std::vector<SpriteManager> spriteManagers;
+	std::vector<StoppingForce> stoppingForces;
 
-	InputSystem& inputSystem;
-
-	ForceBasedMovementControllerSystem& forceBasedMovementControllerSystem;
-	VelocityBasedMovementControllerSystem& velocityBasedMovementControllerSystem;
-
-	ForceSystem& forceSystem;
-	FrictionSystem& frictionSystem;
-	AccelerationSystem& accelerationSystem;
-	VelocitySystem& velocitySystem;
-
-	ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem;
-	StoppingForceSystem& stoppingForceSystem;
-
-	SpriteManagerSystem& spriteManagerSystem;
-	SpriteRendererSystem& spriteRendererSystem;
+	// table of components for generalized access
+	void* componentLists[17]
+	{
+		&spatials,
+		&backgroundSprites,
+		&middlegroundSprites,
+		&foregroundSprites,
+		&velocities,
+		&accelerations,
+		&masses,
+		&forces,
+		&frictions,
+		&forceBasedSpeedLimiters,
+		&velocityBasedSpeedLimiters,
+		&forceBasedMovements,
+		&velocityBasedMovements,
+		&forceBasedMovementControllers,
+		&velocityBasedMovementControllers,
+		&spriteManagers,
+		&stoppingForces
+	};
 
 public:
-	Scene(
-		InputSystem& inputSystem,
-		ForceBasedMovementControllerSystem& forceBasedMovementControllerSystem,
-		VelocityBasedMovementControllerSystem& velocityBasedMovementControllerSystem,
-		ForceSystem& forceSystem,
-		FrictionSystem& frictionSystem,
-		AccelerationSystem& accelerationSystem,
-		VelocitySystem& velocitySystem,
-		ForceBasedSpeedLimiterSystem& forceBasedSpeedLimiterSystem,
-		StoppingForceSystem& stoppingForceSystem,
-		SpriteManagerSystem& spriteManagerSystem,
-		SpriteRendererSystem& spriteRendererSystem);
-	~Scene();
 
 	int CreateEntity(EntityTag tag);
-	void Update();
 
 	template<typename T, typename... Args>
 	bool AddComponent(int entityId, Args... args);
@@ -64,6 +68,9 @@ public:
 
 	template<typename T>
 	T& GetComponent(int entityId);
+
+	template<typename T>
+	std::vector<T>& GetComponents();
 
 	template<typename T>
 	bool HasComponent(int entityId);
@@ -81,7 +88,7 @@ bool Scene::AddComponent(int entityId, Args... args)
 	if (successful)
 	{
 		entities[entityId].componentMask |= 1 << T::ID;
-		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
+		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentLists[T::ID]);
 		componentList->emplace_back(entityId, args...);
 		components[entityId * Component::COMPONENT_COUNT + T::ID] = static_cast<int>(componentList->size()) - 1;
 	}
@@ -97,7 +104,7 @@ bool Scene::RemoveComponent(int entityId)
 	if (successful)
 	{
 		int index = components[entityId * Component::COMPONENT_COUNT + T::ID];
-		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
+		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentLists[T::ID]);
 
 		// swap and pop approach to keep vectors tightly packed
 		if (index < componentList->size())
@@ -124,11 +131,13 @@ template<typename T>
 T& Scene::GetComponent(int entityId)
 {
 	int index = components[entityId * Component::COMPONENT_COUNT + T::ID];
+	return (*static_cast<std::vector<T>*>(componentLists[T::ID]))[index];
+}
 
-	std::vector<T>* componentList;
-	componentList = static_cast<std::vector<T>*>(componentTable[T::ID]);
-
-	return (*componentList)[index];
+template<typename T>
+std::vector<T>& Scene::GetComponents()
+{
+	return *(static_cast<std::vector<T>*>(componentLists[T::ID]));
 }
 
 template<typename T>
