@@ -8,43 +8,39 @@
 */
 void ForceBasedMovementControllerSystem::Update(Scene* scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers)
 {
-	int requiredComponentsMask = 1 << Velocity::ID;
-
-
-
-
-
 	for (auto& forceBasedMovementController : forceBasedMovementControllers)
 	{
-		if ((scene->GetComponentMask(forceBasedMovementController.entity) & requiredComponentsMask) != requiredComponentsMask)
-			continue;
-
 		int entity = forceBasedMovementController.entity;
 
-		Vector2 upForce(0.0f, -forceBasedMovementController.force);
-		Vector2 leftForce(-forceBasedMovementController.force, 0.0f);
-		Vector2 downForce(0.0f, forceBasedMovementController.force);
-		Vector2 rightForce(forceBasedMovementController.force, 0.0f);
-
-		Vector2 previousForce(0.0f, 0.0f);
+		Vector2 currentForce(0.0f, 0.0f);
+		Vector2 currentStoppingForce(0.0f, 0.f);
 		float frictionCoefficient = 0.0f;
 
-		bool wasMoving = scene->HasComponent<ForceBasedMovement>(entity);
+		bool hasMovement = scene->HasComponent<ForceBasedMovement>(entity);
 
-		if (wasMoving)
-			previousForce = scene->GetComponent<ForceBasedMovement>(entity).force;
-
-		if (wasMoving && scene->HasComponent<Friction>(entity))
+		if (hasMovement)
+			currentForce = scene->GetComponent<ForceBasedMovement>(entity).force;
+		if (hasMovement && scene->HasComponent<Friction>(entity))
 			frictionCoefficient = scene->GetComponent<Friction>(entity).coefficient;
+		if (scene->HasComponent<StoppingForce>(entity))
+			currentStoppingForce = scene->GetComponent<StoppingForce>(entity).force;
 
-		bool wasMoving[4] =
+		// all arrays ordered: up, left, down, right
+		Vector2 directions[4] =
 		{
-			Vector2Equals(previousForce, upForce),
-			Vector2Equals(previousForce, leftForce),
-			Vector2Equals(previousForce, downForce),
-			Vector2Equals(previousForce, rightForce)
+			Vector2(0.0f, -forceBasedMovementController.force),
+			Vector2(-forceBasedMovementController.force, 0.0f),
+			Vector2(0.0f, forceBasedMovementController.force),
+			Vector2(forceBasedMovementController.force, 0.0f)
 		};
 		bool isMoving[4] =
+		{
+			Vector2Equals(currentForce, directions[0]),
+			Vector2Equals(currentForce, directions[1]),
+			Vector2Equals(currentForce, directions[2]),
+			Vector2Equals(currentForce, directions[3])
+		};
+		bool wantsToMove[4] =
 		{
 			forceBasedMovementController.up.isActive,
 			forceBasedMovementController.left.isActive,
@@ -52,58 +48,27 @@ void ForceBasedMovementControllerSystem::Update(Scene* scene, std::vector<ForceB
 			forceBasedMovementController.right.isActive
 		};
 
-		for (int i = 0; i < 4; i++)
+		// doesn't want to move and is moving
+		if (!wantsToMove[0] && !wantsToMove[1] && !wantsToMove[2] && !wantsToMove[3] && 
+			(isMoving[0] || isMoving[1] || isMoving[2] || isMoving[3]))
 		{
-			if (wasMoving[i] && !isMoving[i])
-				scene->RemoveComponent<ForceBasedMovement>(entity);
-
-
-
+			scene->RemoveComponent<ForceBasedMovement>(entity);
+			scene->RemoveComponent<StoppingForce>(entity);
+			scene->AddComponent<StoppingForce>(entity, Vector2Add(currentStoppingForce, Vector2Scale(currentForce, -frictionCoefficient)));
+			continue;
 		}
 
-
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-	for (auto& forceBasedMovementController : forceBasedMovementControllers)
-	{
-		if ((scene->GetComponentMask(forceBasedMovementController.entity) & requiredComponentsMask) != requiredComponentsMask)
-			continue;
-
-		float stoppingForceMagnitude = 0.0f;
-		bool hadMovement = scene->HasComponent<ForceBasedMovement>(forceBasedMovementController.entity);
-
-		if (hadMovement)
-			stoppingForceMagnitude = Vector2Length(scene->GetComponent<ForceBasedMovement>(forceBasedMovementController.entity).force);
-
-		scene->RemoveComponent<ForceBasedMovement>(forceBasedMovementController.entity);
-
-		if (forceBasedMovementController.up.isActive)
-			scene->AddComponent<ForceBasedMovement>(forceBasedMovementController.entity, Vector2(0.0f, -forceBasedMovementController.force));
-		else if (forceBasedMovementController.left.isActive)
-			scene->AddComponent<ForceBasedMovement>(forceBasedMovementController.entity, Vector2(-forceBasedMovementController.force, 0.0f));
-		else if (forceBasedMovementController.down.isActive)
-			scene->AddComponent<ForceBasedMovement>(forceBasedMovementController.entity, Vector2(0.0f, forceBasedMovementController.force));
-		else if (forceBasedMovementController.right.isActive)
-			scene->AddComponent<ForceBasedMovement>(forceBasedMovementController.entity, Vector2(forceBasedMovementController.force, 0.0f));
-		else if (hadMovement)
+		// wants to move somewhere else and is moving
+		for (int i = 0; i < 4; i++)
 		{
-			Vector2 velocity = scene->GetComponent<Velocity>(forceBasedMovementController.entity).velocity;
+			if (wantsToMove[i] && !isMoving[i])
+			{
+				scene->RemoveComponent<ForceBasedMovement>(entity);
+				scene->RemoveComponent<StoppingForce>(entity);
 
-			if (scene->HasComponent<Friction>(forceBasedMovementController.entity))
-				stoppingForceMagnitude *= scene->GetComponent<Friction>(forceBasedMovementController.entity).coefficient;
-
-			scene->AddComponent<StoppingForce>(forceBasedMovementController.entity, Vector2Scale(Vector2Normalize(velocity), -1.0f * stoppingForceMagnitude));
+				scene->AddComponent<StoppingForce>(entity, Vector2Add(currentStoppingForce, Vector2Scale(currentForce, -frictionCoefficient)));
+				scene->AddComponent<ForceBasedMovement>(entity, directions[i]);
+			}
 		}
 	}
 }
