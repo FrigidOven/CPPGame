@@ -7,17 +7,17 @@
  Public Functions
 ===================================================================================================
 */
-void ForceBasedSpeedLimiterSystem::Update(Scene* scene, std::vector<ForceBasedSpeedLimiter>& forceBasedSpeedLimiters)
+void ForceBasedSpeedLimiterSystem::Update(Scene& scene, std::vector<ForceBasedSpeedLimiter>& forceBasedSpeedLimiters)
 {
 	int requiredComponentsMask = (1 << Velocity::ID) | (1 << Acceleration::ID);
 
 	for (auto& forceBasedSpeedLimiter : forceBasedSpeedLimiters)
 	{
-		if ((scene->GetComponentMask(forceBasedSpeedLimiter.entity) & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene.GetComponentMask(forceBasedSpeedLimiter.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
-		Velocity& velocity = scene->GetComponent<Velocity>(forceBasedSpeedLimiter.entity);
-		Acceleration& acceleration = scene->GetComponent<Acceleration>(forceBasedSpeedLimiter.entity);
+		Velocity& velocity = scene.GetComponent<Velocity>(forceBasedSpeedLimiter.entity);
+		Acceleration& acceleration = scene.GetComponent<Acceleration>(forceBasedSpeedLimiter.entity);
 
 		// if at max velocity
 		if (Vector2Length(velocity.velocity) >= forceBasedSpeedLimiter.maxVelocity)

@@ -1,13 +1,12 @@
 #pragma once
 
+#include "Scene.h"
 #include "Friction.h"
 
 #include <vector>
 
-class Scene;
-
 class FrictionSystem
 {
 public:
-	void Update(Scene* scene, std::vector<Friction>& frictions);
+	void Update(Scene& scene, std::vector<Friction>& frictions);
 };

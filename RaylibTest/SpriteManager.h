@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Component.h"
-#include "Sprite.h"
+#include "SpriteAtlas.h"
 #include <raylib.h>
 
 struct SpriteManager : Component
 {
-	static const int ID = 15;
+	static const int ID = 13;
 
 	SpriteOrientation orientation;
 	SpriteState state;

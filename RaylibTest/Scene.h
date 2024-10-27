@@ -1,10 +1,9 @@
 #pragma once
 
-#include <unordered_map>
+#include <array>
 
 #include "Entity.h"
 #include "Components.h"
-#include "Systems.h"
 
 class Scene
 {
@@ -16,10 +15,28 @@ private:
 	std::vector<int> components;
 
 	// all component lists
+
 	std::vector<Spatial> spatials;
-	std::vector<BackgroundSprite> backgroundSprites;
-	std::vector<MiddlegroundSprite> middlegroundSprites;
-	std::vector<ForegroundSprite> foregroundSprites;
+	// sprites are organized into layers
+	std::array<std::vector<Sprite>, 16> sprites
+	{ {
+		{ },	// layer-zero sprites
+		{ },	// layer-one sprites
+		{ },	// ...
+		{ },
+		{ },
+		{ },
+		{ },
+		{ },
+		{ },
+		{ },
+		{ },
+		{ },
+		{ },
+		{ },
+		{ },
+		{ }   // layer-sixteen sprites
+	} };
 	std::vector<Velocity> velocities;
 	std::vector<Acceleration> accelerations;
 	std::vector<Mass> masses;
@@ -34,13 +51,13 @@ private:
 	std::vector<SpriteManager> spriteManagers;
 	std::vector<StoppingForce> stoppingForces;
 
+	// TODO: Consider layers for physics too, for dynamically switching which hitboxes should be checked.
+
 	// table of components for generalized access
 	void* componentLists[17]
 	{
 		&spatials,
-		&backgroundSprites,
-		&middlegroundSprites,
-		&foregroundSprites,
+		nullptr,				// sprites aren't held here
 		&velocities,
 		&accelerations,
 		&masses,
@@ -57,20 +74,30 @@ private:
 	};
 
 public:
-
 	int CreateEntity(EntityTag tag);
 
-	template<typename T, typename... Args>
-	bool AddComponent(int entityId, Args... args);
+	template< typename T, typename... Args >
+	typename std::enable_if<!std::is_same<T, Sprite>::value, bool>::type
+	AddComponent(int entityId, Args... args);
 
 	template<typename T>
-	bool RemoveComponent(int entityId);
+	typename std::enable_if<!std::is_same<T, Sprite>::value, bool>::type
+	RemoveComponent(int entityId);
 
 	template<typename T>
-	T& GetComponent(int entityId);
+	typename std::enable_if<!std::is_same<T, Sprite>::value, T&>::type
+	GetComponent(int entityId);
 
 	template<typename T>
-	std::vector<T>& GetComponents();
+	typename std::enable_if<!std::is_same<T, Sprite>::value, std::vector<T>&>::type
+	GetComponents();
+
+	// sprites are handled differently so they are excluded by
+	// the template and handled here instead
+	bool AddSpriteComponent(int entityId, int layer, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, int currentFrame, float fps);
+	bool RemoveSpriteComponent(int entityId);
+	Sprite& GetSpriteComponent(int entityId);
+	std::array<std::vector<Sprite>, 16>& GetSpriteComponents();
 
 	template<typename T>
 	bool HasComponent(int entityId);
@@ -81,7 +108,8 @@ public:
 };
 
 template<typename T, typename... Args>
-bool Scene::AddComponent(int entityId, Args... args)
+typename std::enable_if<!std::is_same<T, Sprite>::value, bool>::type
+Scene::AddComponent(int entityId, Args... args)
 {
 	bool successful = !HasComponent<T>(entityId);
 
@@ -97,7 +125,8 @@ bool Scene::AddComponent(int entityId, Args... args)
 }
 
 template<typename T>
-bool Scene::RemoveComponent(int entityId)
+typename std::enable_if<!std::is_same<T, Sprite>::value, bool>::type
+Scene::RemoveComponent(int entityId)
 {
 	bool successful = HasComponent<T>(entityId);
 
@@ -128,14 +157,16 @@ bool Scene::RemoveComponent(int entityId)
 }
 
 template<typename T>
-T& Scene::GetComponent(int entityId)
+typename std::enable_if<!std::is_same<T, Sprite>::value, T&>::type
+Scene::GetComponent(int entityId)
 {
 	int index = components[entityId * Component::COMPONENT_COUNT + T::ID];
 	return (*static_cast<std::vector<T>*>(componentLists[T::ID]))[index];
 }
 
 template<typename T>
-std::vector<T>& Scene::GetComponents()
+typename std::enable_if<!std::is_same<T, Sprite>::value, std::vector<T>&>::type
+Scene::GetComponents()
 {
 	return *(static_cast<std::vector<T>*>(componentLists[T::ID]));
 }

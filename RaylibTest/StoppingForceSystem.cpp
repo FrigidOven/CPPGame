@@ -7,17 +7,17 @@
  Public Functions
 ===================================================================================================
 */
-void StoppingForceSystem::Update(Scene* scene, std::vector<StoppingForce>& stoppingForces)
+void StoppingForceSystem::Update(Scene& scene, std::vector<StoppingForce>& stoppingForces)
 {
 	for (size_t i = 0; i < stoppingForces.size(); i++)
 	{
-		int componentMask = scene->GetComponentMask(stoppingForces[i].entity);
+		int componentMask = scene.GetComponentMask(stoppingForces[i].entity);
 		int requiredComponentsMask = 1 << Velocity::ID;
 		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
 	
-		Vector2 velocity = scene->GetComponent<Velocity>(stoppingForces[i].entity).velocity;
+		Vector2 velocity = scene.GetComponent<Velocity>(stoppingForces[i].entity).velocity;
 	
 		if (stoppingForces[i].force.x * velocity.x  >= 0.0f)
 			stoppingForces[i].force.x = 0.0f;
@@ -27,7 +27,7 @@ void StoppingForceSystem::Update(Scene* scene, std::vector<StoppingForce>& stopp
 
 		if (Vector2Equals(stoppingForces[i].force, Vector2Zero()))
 		{
-			scene->RemoveComponent<StoppingForce>(stoppingForces[i].entity);
+			scene.RemoveComponent<StoppingForce>(stoppingForces[i].entity);
 			i--;
 		}
 	}

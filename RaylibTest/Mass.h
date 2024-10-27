@@ -5,7 +5,7 @@
 
 struct Mass : Component
 {
-	static const int ID = 6;
+	static const int ID = 4;
 
 	float mass;
 

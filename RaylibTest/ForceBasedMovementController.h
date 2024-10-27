@@ -6,7 +6,7 @@
 
 struct ForceBasedMovementController : Component
 {
-	static const int ID = 13;
+	static const int ID = 11;
 
 	float force;
 

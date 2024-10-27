@@ -5,7 +5,7 @@
 
 struct ForceBasedMovement : Component
 {
-	static const int ID = 11;
+	static const int ID = 9;
 
 	Vector2 force;
 

@@ -6,7 +6,7 @@
 
 struct VelocityBasedMovementController : Component
 {
-	static const int ID = 14;
+	static const int ID = 12;
 
 	float speed;
 

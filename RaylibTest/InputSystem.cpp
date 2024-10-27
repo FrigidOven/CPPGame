@@ -6,7 +6,7 @@
  Public Functions
 ===================================================================================================
 */
-void InputSystem::Update(Scene* scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers, std::vector<VelocityBasedMovementController>& velocityBasedMovementControllers)
+void InputSystem::Update(Scene& scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers, std::vector<VelocityBasedMovementController>& velocityBasedMovementControllers)
 {
 	RemoveUpButtons();
 	AddDownButtons();
@@ -55,7 +55,7 @@ void InputSystem::AddDownButtons()
 	// TODO: add down mouse buttons
 }
 
-void InputSystem::UpdateForceBasedMovementControllers(Scene* scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers)
+void InputSystem::UpdateForceBasedMovementControllers(Scene& scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers)
 {
 	for (auto& forceBasedMovementController : forceBasedMovementControllers)
 	{
@@ -77,7 +77,7 @@ void InputSystem::UpdateForceBasedMovementControllers(Scene* scene, std::vector<
 		forceBasedMovementController.right.isDown = forceBasedMovementController.inputListener.CheckDown(forceBasedMovementController.right);
 	}
 }
-void InputSystem::UpdateVelocityBasedMovementControllers(Scene* scene, std::vector<VelocityBasedMovementController>& velocityBasedMovementControllers)
+void InputSystem::UpdateVelocityBasedMovementControllers(Scene& scene, std::vector<VelocityBasedMovementController>& velocityBasedMovementControllers)
 {
 	for (auto& velocityBasedMovementController : velocityBasedMovementControllers)
 	{

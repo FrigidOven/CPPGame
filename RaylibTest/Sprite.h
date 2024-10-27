@@ -1,52 +1,33 @@
 #pragma once
 
-#include <unordered_map>
+#include "Component.h"
+#include <raylib.h>
 
-enum class SpriteOrientation
+struct Sprite : Component
 {
-	Up,
-	Left,
-	Down,
-	Right
-};
+	static const int ID = 1;
 
-enum class SpriteState
-{
-	Idle,
-	Moving
-};
+	Texture2D* source;
+	Rectangle sourceRect;
 
-struct StateOrientationHash
-{
-	std::size_t operator () (const std::pair<SpriteState, SpriteOrientation>& stateOrientation) const
+	float destWidth;
+	float destHeight;
+
+	int frameCount;
+	int currentFrame;
+	float timer;
+	float fps;
+
+	Sprite(int entityId, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, int currentFrame, float fps)
+		: source(source)
+		, sourceRect(sourceRect)
+		, destWidth(destWidth)
+		, destHeight(destHeight)
+		, frameCount(frameCount)
+		, currentFrame(currentFrame)
+		, timer(0.0f)
+		, fps(fps)
 	{
-		return std::hash<SpriteState>{}(stateOrientation.first) ^ std::hash<SpriteOrientation>{}(stateOrientation.second);
+		entity = entityId;
 	}
-};
-
-class SpriteAtlas
-{
-public:
-	virtual int GetYPos(SpriteState state, SpriteOrientation orientation) = 0;
-	virtual int GetFrameCount(SpriteState state, SpriteOrientation orientation) = 0;
-	virtual float GetFPS(SpriteState state, SpriteOrientation orientation) = 0;
-};
-
-class PlayerSpriteAtlas : public SpriteAtlas
-{
-private:
-	std::unordered_map<SpriteOrientation, int> orientationYPos;
-	std::unordered_map<SpriteState, int> stateYPos;
-	std::unordered_map<std::pair<SpriteState, SpriteOrientation>, int, StateOrientationHash> stateOrientationFrameCounts;
-	std::unordered_map<std::pair<SpriteState, SpriteOrientation>, float, StateOrientationHash> stateOrientationFPS;
-
-public:
-	PlayerSpriteAtlas();
-	
-	static const int WIDTH = 25;
-	static const int HEIGHT = 34;
-
-	int GetYPos(SpriteState state, SpriteOrientation orientation) override;
-    int GetFrameCount(SpriteState state, SpriteOrientation orientation) override;
-	float GetFPS(SpriteState state, SpriteOrientation orientation) override;
 };

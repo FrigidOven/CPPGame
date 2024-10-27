@@ -6,7 +6,7 @@
  Public Functions
 ===================================================================================================
 */
-void ForceBasedMovementControllerSystem::Update(Scene* scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers)
+void ForceBasedMovementControllerSystem::Update(Scene& scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers)
 {
 	for (auto& forceBasedMovementController : forceBasedMovementControllers)
 	{
@@ -16,14 +16,14 @@ void ForceBasedMovementControllerSystem::Update(Scene* scene, std::vector<ForceB
 		Vector2 currentStoppingForce(0.0f, 0.f);
 		float frictionCoefficient = 0.0f;
 
-		bool hasMovement = scene->HasComponent<ForceBasedMovement>(entity);
+		bool hasMovement = scene.HasComponent<ForceBasedMovement>(entity);
 
 		if (hasMovement)
-			currentForce = scene->GetComponent<ForceBasedMovement>(entity).force;
-		if (hasMovement && scene->HasComponent<Friction>(entity))
-			frictionCoefficient = scene->GetComponent<Friction>(entity).coefficient;
-		if (scene->HasComponent<StoppingForce>(entity))
-			currentStoppingForce = scene->GetComponent<StoppingForce>(entity).force;
+			currentForce = scene.GetComponent<ForceBasedMovement>(entity).force;
+		if (hasMovement && scene.HasComponent<Friction>(entity))
+			frictionCoefficient = scene.GetComponent<Friction>(entity).coefficient;
+		if (scene.HasComponent<StoppingForce>(entity))
+			currentStoppingForce = scene.GetComponent<StoppingForce>(entity).force;
 
 		// all arrays ordered: up, left, down, right
 		Vector2 directions[4] =
@@ -52,9 +52,9 @@ void ForceBasedMovementControllerSystem::Update(Scene* scene, std::vector<ForceB
 		if (!wantsToMove[0] && !wantsToMove[1] && !wantsToMove[2] && !wantsToMove[3] && 
 			(isMoving[0] || isMoving[1] || isMoving[2] || isMoving[3]))
 		{
-			scene->RemoveComponent<ForceBasedMovement>(entity);
-			scene->RemoveComponent<StoppingForce>(entity);
-			scene->AddComponent<StoppingForce>(entity, Vector2Add(currentStoppingForce, Vector2Scale(currentForce, -frictionCoefficient)));
+			scene.RemoveComponent<ForceBasedMovement>(entity);
+			scene.RemoveComponent<StoppingForce>(entity);
+			scene.AddComponent<StoppingForce>(entity, Vector2Add(currentStoppingForce, Vector2Scale(currentForce, -frictionCoefficient)));
 			continue;
 		}
 
@@ -63,11 +63,11 @@ void ForceBasedMovementControllerSystem::Update(Scene* scene, std::vector<ForceB
 		{
 			if (wantsToMove[i] && !isMoving[i])
 			{
-				scene->RemoveComponent<ForceBasedMovement>(entity);
-				scene->RemoveComponent<StoppingForce>(entity);
+				scene.RemoveComponent<ForceBasedMovement>(entity);
+				scene.RemoveComponent<StoppingForce>(entity);
 
-				scene->AddComponent<StoppingForce>(entity, Vector2Add(currentStoppingForce, Vector2Scale(currentForce, -frictionCoefficient)));
-				scene->AddComponent<ForceBasedMovement>(entity, directions[i]);
+				scene.AddComponent<StoppingForce>(entity, Vector2Add(currentStoppingForce, Vector2Scale(currentForce, -frictionCoefficient)));
+				scene.AddComponent<ForceBasedMovement>(entity, directions[i]);
 			}
 		}
 	}

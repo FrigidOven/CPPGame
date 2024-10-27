@@ -5,7 +5,7 @@
 
 struct VelocityBasedSpeedLimiter : Component
 {
-	static const int ID = 10;
+	static const int ID = 8;
 
 	float maxVelocity;
 

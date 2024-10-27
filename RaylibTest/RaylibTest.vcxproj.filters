@@ -66,11 +66,11 @@
     <ClCompile Include="PlayerSpriteAtlas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StoppingForceSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StoppingForceSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,13 +89,7 @@
     <ClInclude Include="Component.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="BackgroundSprite.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="MiddlegroundSprite.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ForegroundSprite.h">
+    <ClInclude Include="Sprite.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Velocity.h">
@@ -167,20 +161,20 @@
     <ClInclude Include="SpriteManager.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="SpriteAtlas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpriteManagerSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="StoppingForce.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StoppingForceSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StoppingForce.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="StoppingForceSystem.h">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

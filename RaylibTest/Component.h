@@ -2,6 +2,6 @@
 
 struct Component
 {
-	static const int COMPONENT_COUNT = 17;
+	static const int COMPONENT_COUNT = 15;
 	int entity;
 };

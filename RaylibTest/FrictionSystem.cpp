@@ -7,7 +7,7 @@
  Public Functions
 ===================================================================================================
 */
-void FrictionSystem::Update(Scene* scene, std::vector<Friction>& frictions)
+void FrictionSystem::Update(Scene& scene, std::vector<Friction>& frictions)
 {
 	const float GRAVITY = -9.8f;
 
@@ -15,11 +15,11 @@ void FrictionSystem::Update(Scene* scene, std::vector<Friction>& frictions)
 
 	for (auto& friction : frictions)
 	{	
-		if ((scene->GetComponentMask(friction.entity) & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene.GetComponentMask(friction.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
-		Vector2& velocity = scene->GetComponent<Velocity>(friction.entity).velocity;
-		float mass = scene->GetComponent<Mass>(friction.entity).mass;
+		Vector2& velocity = scene.GetComponent<Velocity>(friction.entity).velocity;
+		float mass = scene.GetComponent<Mass>(friction.entity).mass;
 
 		friction.force = Vector2Scale(Vector2Normalize(velocity), friction.coefficient * GRAVITY * mass);
 	}

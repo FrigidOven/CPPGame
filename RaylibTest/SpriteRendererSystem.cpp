@@ -6,7 +6,7 @@
  Public Functions
 ===================================================================================================
 */
-void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& backgroundSprites, std::vector<MiddlegroundSprite>& middlegroundSprites, std::vector<ForegroundSprite>& foregroundSprites, float deltaTime)
+void SpriteRendererSystem::Update(Scene& scene, std::array<std::vector<Sprite>, 16>& spriteLayers, float deltaTime)
 {
 	ClearBackground(BLACK);
 	BeginDrawing();
@@ -16,88 +16,36 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
 
 	int requiredComponentsMask = 1 << Spatial::ID;
 
-	// BACKGROUND SPRITES
-	for (auto& backgroundSprite : backgroundSprites)
+	for (auto& sprites : spriteLayers)
 	{
-		if ((scene->GetComponentMask(backgroundSprite.entity) & requiredComponentsMask) != requiredComponentsMask)
-			continue;
+		for (auto& sprite : sprites)
+		{
+			if ((scene.GetComponentMask(sprite.entity) & requiredComponentsMask) != requiredComponentsMask)
+				continue;
 
-		Vector2 position = scene->GetComponent<Spatial>(backgroundSprite.entity).position;
-		float rotation = scene->GetComponent<Spatial>(backgroundSprite.entity).rotation;
+			Vector2 position = scene.GetComponent<Spatial>(sprite.entity).position;
+			float rotation = scene.GetComponent<Spatial>(sprite.entity).rotation;
 
-		dest.x = position.x;
-		dest.y = position.y;
-		dest.width = backgroundSprite.destWidth;
-		dest.height = backgroundSprite.destHeight;
+			dest.x = position.x;
+			dest.y = position.y;
+			dest.width = sprite.destWidth;
+			dest.height = sprite.destHeight;
 
-		// assume frames are layed out horizontally
-		source.x = backgroundSprite.sourceRect.x + backgroundSprite.currentFrame * backgroundSprite.sourceRect.width;
-		source.y = backgroundSprite.sourceRect.y;
-		source.width = backgroundSprite.sourceRect.width;
-		source.height = backgroundSprite.sourceRect.height;
+			// assume frames are layed out horizontally
+			source.x = sprite.sourceRect.x + sprite.currentFrame * sprite.sourceRect.width;
+			source.y = sprite.sourceRect.y;
+			source.width = sprite.sourceRect.width;
+			source.height = sprite.sourceRect.height;
 
-		// draw sprites centered at destination
-		Vector2 origin = { dest.width / 2, dest.height / 2 };
+			// draw sprites centered at destination
+			Vector2 origin = { dest.width / 2, dest.height / 2 };
 
-		DrawTexturePro(*backgroundSprite.source, source, dest, origin, rotation, WHITE);
+			DrawTexturePro(*sprite.source, source, dest, origin, rotation, WHITE);
 
-		// only update sprites if they have multiple frames
-		if (backgroundSprite.frameCount > 1)
-			UpdateBackgroundSprite(backgroundSprite, deltaTime);
-	}
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
-	// MIDDLEGROUND SPRITES
-	for (auto& middlegroundSprite : middlegroundSprites)
-	{
-		if ((scene->GetComponentMask(middlegroundSprite.entity) & requiredComponentsMask) != requiredComponentsMask)
-			continue;
-
-		Vector2 position = scene->GetComponent<Spatial>(middlegroundSprite.entity).position;
-		float rotation = scene->GetComponent<Spatial>(middlegroundSprite.entity).rotation;
-
-		dest.x = position.x;
-		dest.y = position.y;
-		dest.width = middlegroundSprite.destWidth;
-		dest.height = middlegroundSprite.destHeight;
-
-		source.x = middlegroundSprite.sourceRect.x + middlegroundSprite.currentFrame * middlegroundSprite.sourceRect.width;
-		source.y = middlegroundSprite.sourceRect.y;
-		source.width = middlegroundSprite.sourceRect.width;
-		source.height = middlegroundSprite.sourceRect.height;
-
-		Vector2 origin = { dest.width / 2, dest.height / 2 };
-
-		DrawTexturePro(*middlegroundSprite.source, source, dest, origin, rotation, WHITE);
-
-		if (middlegroundSprite.frameCount > 1)
-			UpdateMiddlegroundSprite(middlegroundSprite, deltaTime);
-	}
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    // FOREGROUND SPRITES
-	for (auto& foregroundSprite : foregroundSprites)
-	{
-		if ((scene->GetComponentMask(foregroundSprite.entity) & requiredComponentsMask) != requiredComponentsMask)
-			continue;
-
-		Vector2 position = scene->GetComponent<Spatial>(foregroundSprite.entity).position;
-		float rotation = scene->GetComponent<Spatial>(foregroundSprite.entity).rotation;
-
-		dest.x = position.x;
-		dest.y = position.y;
-		dest.width = foregroundSprite.destWidth;
-		dest.height = foregroundSprite.destHeight;
-
-		source.x = foregroundSprite.sourceRect.x + foregroundSprite.currentFrame * foregroundSprite.sourceRect.width;
-		source.y = foregroundSprite.sourceRect.y;
-		source.width = foregroundSprite.sourceRect.width;
-		source.height = foregroundSprite.sourceRect.height;
-
-		Vector2 origin = { dest.width / 2, dest.height / 2 };
-
-		DrawTexturePro(*foregroundSprite.source, source, dest, origin, rotation, WHITE);
-
-		if (foregroundSprite.frameCount > 1)
-			UpdateForegroundSprite(foregroundSprite, deltaTime);
+			// only update sprites if they have multiple frames
+			if (sprite.frameCount > 1)
+				UpdateSprite(sprite, deltaTime);
+		}
 	}
 
 	EndDrawing();
@@ -108,33 +56,13 @@ void SpriteRendererSystem::Update(Scene* scene, std::vector<BackgroundSprite>& b
  Private Functions
 ===================================================================================================
 */
-void SpriteRendererSystem::UpdateBackgroundSprite(BackgroundSprite& backgroundSprite, float deltaTime)
+void SpriteRendererSystem::UpdateSprite(Sprite& sprite, float deltaTime)
 {
-	backgroundSprite.timer += deltaTime;
+	sprite.timer += deltaTime;
 
-	if (backgroundSprite.timer >= 1.0f / backgroundSprite.fps)
+	if (sprite.timer >= 1.0f / sprite.fps)
 	{
-		backgroundSprite.timer = 0;
-		backgroundSprite.currentFrame = (backgroundSprite.currentFrame + 1) % (backgroundSprite.frameCount);
-	}
-}
-void SpriteRendererSystem::UpdateMiddlegroundSprite(MiddlegroundSprite& middlegroundSprite, float deltaTime)
-{
-	middlegroundSprite.timer += deltaTime;
-
-	if (middlegroundSprite.timer >= 1.0f / middlegroundSprite.fps)
-	{
-		middlegroundSprite.timer = 0;
-		middlegroundSprite.currentFrame = (middlegroundSprite.currentFrame + 1) % (middlegroundSprite.frameCount);
-	}
-}
-void SpriteRendererSystem::UpdateForegroundSprite(ForegroundSprite& foregroundSprite, float deltaTime)
-{
-	foregroundSprite.timer += deltaTime;
-
-	if (foregroundSprite.timer >= 1.0f / foregroundSprite.fps)
-	{
-		foregroundSprite.timer = 0;
-		foregroundSprite.currentFrame = (foregroundSprite.currentFrame + 1) % (foregroundSprite.frameCount);
+		sprite.timer = 0;
+		sprite.currentFrame = (sprite.currentFrame + 1) % (sprite.frameCount);
 	}
 }

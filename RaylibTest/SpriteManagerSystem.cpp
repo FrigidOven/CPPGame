@@ -8,20 +8,9 @@
  Public Functions
 ===================================================================================================
 */
-SpriteManagerSystem::SpriteManagerSystem()
-{	
-	spriteAtlases[EntityTag::Player] = new PlayerSpriteAtlas();
-}
-SpriteManagerSystem::~SpriteManagerSystem()
+void SpriteManagerSystem::Update(Scene& scene, std::vector<SpriteManager>& spriteManagers)
 {
-	for (auto& spriteAtlas : spriteAtlases)
-	{
-		delete(spriteAtlas.second);
-	}
-}
-void SpriteManagerSystem::Update(Scene* scene, std::vector<SpriteManager>& spriteManagers)
-{
-	int requiredComponentsMask = 1 << MiddlegroundSprite::ID;
+	int requiredComponentsMask = 1 << Sprite::ID;
 
 	for (auto& spriteManager : spriteManagers)
 	{
@@ -30,11 +19,11 @@ void SpriteManagerSystem::Update(Scene* scene, std::vector<SpriteManager>& sprit
 		UpdateState(scene, spriteManager);
 
 		// procede to update sprite itself
-		if ((scene->GetComponentMask(spriteManager.entity) & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene.GetComponentMask(spriteManager.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
-		MiddlegroundSprite& sprite = scene->GetComponent<MiddlegroundSprite>(spriteManager.entity);
-		EntityTag tag = scene->GetTag(spriteManager.entity);
+		Sprite& sprite = scene.GetSpriteComponent(spriteManager.entity);
+		EntityTag tag = scene.GetTag(spriteManager.entity);
 
 		sprite.sourceRect.y = spriteAtlases[tag]->GetYPos(spriteManager.state, spriteManager.orientation);
 		sprite.frameCount = spriteAtlases[tag]->GetFrameCount(spriteManager.state, spriteManager.orientation);
@@ -49,30 +38,30 @@ void SpriteManagerSystem::Update(Scene* scene, std::vector<SpriteManager>& sprit
  Private Functions
 ===================================================================================================
 */
-void SpriteManagerSystem::UpdateState(Scene* scene, SpriteManager& spriteManager)
+void SpriteManagerSystem::UpdateState(Scene& scene, SpriteManager& spriteManager)
 {
 	int entity = spriteManager.entity;
 
 	SpriteState newState;
 
-	if (scene->HasComponent<ForceBasedMovement>(entity) || scene->HasComponent<VelocityBasedMovement>(entity))
+	if (scene.HasComponent<ForceBasedMovement>(entity) || scene.HasComponent<VelocityBasedMovement>(entity))
 		newState = SpriteState::Moving;
 	else
 		newState = SpriteState::Idle;
 
 	spriteManager.state = newState;
 }
-void SpriteManagerSystem::UpdateOrientation(Scene* scene, SpriteManager& spriteManager)
+void SpriteManagerSystem::UpdateOrientation(Scene& scene, SpriteManager& spriteManager)
 {
 	int entity = spriteManager.entity;
 
 	SpriteOrientation newOrientation = spriteManager.orientation;
 	Vector2 movementDirection = Vector2Zero();
 
-	if (scene->HasComponent<ForceBasedMovement>(entity))
-		movementDirection = Vector2Normalize(scene->GetComponent<ForceBasedMovement>(entity).force);
-	else if (scene->HasComponent<VelocityBasedMovement>(entity))
-		movementDirection = Vector2Normalize(scene->GetComponent<VelocityBasedMovement>(entity).velocity);
+	if (scene.HasComponent<ForceBasedMovement>(entity))
+		movementDirection = Vector2Normalize(scene.GetComponent<ForceBasedMovement>(entity).force);
+	else if (scene.HasComponent<VelocityBasedMovement>(entity))
+		movementDirection = Vector2Normalize(scene.GetComponent<VelocityBasedMovement>(entity).velocity);
 
 	if (Vector2Equals(movementDirection, Vector2{ 0.0f, -1.0f }))
 		newOrientation = SpriteOrientation::Up;
