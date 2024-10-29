@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="Acceleration.h" />
     <ClInclude Include="AccelerationSystem.h" />
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="Entity.h" />
