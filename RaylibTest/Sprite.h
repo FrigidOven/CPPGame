@@ -7,6 +7,8 @@ struct Sprite : Component
 {
 	static const int ID = 1;
 
+	int layer;
+
 	Texture2D* source;
 	Rectangle sourceRect;
 
@@ -18,8 +20,9 @@ struct Sprite : Component
 	float timer;
 	float fps;
 
-	Sprite(int entityId, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, int currentFrame, float fps)
-		: source(source)
+	Sprite(int entityId, int layer, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, int currentFrame, float fps)
+		: layer(layer)
+		, source(source)
 		, sourceRect(sourceRect)
 		, destWidth(destWidth)
 		, destHeight(destHeight)

@@ -14,5 +14,5 @@
 #include "StoppingForceSystem.h"
 
 #include "SpriteManagerSystem.h"
-
+#include "SpriteSortingSystem.h"
 #include "SpriteRendererSystem.h"

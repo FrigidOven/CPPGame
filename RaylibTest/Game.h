@@ -19,6 +19,7 @@ private:
 	VelocitySystem velocitySystem;
 	// Sprite systems
 	SpriteManagerSystem spriteManagerSystem;
+	SpriteSortingSystem spriteSortingSystem;
 	SpriteRendererSystem spriteRendererSystem;
 	
 	// Scenes

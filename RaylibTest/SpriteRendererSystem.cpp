@@ -6,7 +6,7 @@
  Public Functions
 ===================================================================================================
 */
-void SpriteRendererSystem::Update(Scene& scene, std::array<std::vector<Sprite>, 16>& spriteLayers, float deltaTime)
+void SpriteRendererSystem::Update(Scene& scene, std::vector<Sprite>& sprites, std::vector<int>& sortedSpriteIndecies, float deltaTime)
 {
 	ClearBackground(BLACK);
 	BeginDrawing();
@@ -16,36 +16,35 @@ void SpriteRendererSystem::Update(Scene& scene, std::array<std::vector<Sprite>, 
 
 	int requiredComponentsMask = 1 << Spatial::ID;
 
-	for (auto& sprites : spriteLayers)
+	for (auto& index : sortedSpriteIndecies)
 	{
-		for (auto& sprite : sprites)
-		{
-			if ((scene.GetComponentMask(sprite.entity) & requiredComponentsMask) != requiredComponentsMask)
-				continue;
+		Sprite& sprite = sprites[index];
 
-			Vector2 position = scene.GetComponent<Spatial>(sprite.entity).position;
-			float rotation = scene.GetComponent<Spatial>(sprite.entity).rotation;
+		if ((scene.GetComponentMask(sprite.entity) & requiredComponentsMask) != requiredComponentsMask)
+			continue;
 
-			dest.x = position.x;
-			dest.y = position.y;
-			dest.width = sprite.destWidth;
-			dest.height = sprite.destHeight;
+		Vector2 position = scene.GetComponent<Spatial>(sprite.entity).position;
+		float rotation = scene.GetComponent<Spatial>(sprite.entity).rotation;
 
-			// assume frames are layed out horizontally
-			source.x = sprite.sourceRect.x + sprite.currentFrame * sprite.sourceRect.width;
-			source.y = sprite.sourceRect.y;
-			source.width = sprite.sourceRect.width;
-			source.height = sprite.sourceRect.height;
+		dest.x = position.x;
+		dest.y = position.y;
+		dest.width = sprite.destWidth;
+		dest.height = sprite.destHeight;
 
-			// draw sprites centered at destination
-			Vector2 origin = { dest.width / 2, dest.height / 2 };
+		// assume frames are layed out horizontally
+		source.x = sprite.sourceRect.x + sprite.currentFrame * sprite.sourceRect.width;
+		source.y = sprite.sourceRect.y;
+		source.width = sprite.sourceRect.width;
+		source.height = sprite.sourceRect.height;
 
-			DrawTexturePro(*sprite.source, source, dest, origin, rotation, WHITE);
+		// draw sprites centered at destination
+		Vector2 origin = { dest.width / 2, dest.height / 2 };
 
-			// only update sprites if they have multiple frames
-			if (sprite.frameCount > 1)
-				UpdateSprite(sprite, deltaTime);
-		}
+		DrawTexturePro(*sprite.source, source, dest, origin, rotation, WHITE);
+
+		// only update sprites if they have multiple frames
+		if (sprite.frameCount > 1)
+			UpdateSprite(sprite, deltaTime);
 	}
 
 	EndDrawing();

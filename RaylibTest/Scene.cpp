@@ -29,64 +29,22 @@ bool Scene::AddSpriteComponent(int entityId, int layer, Texture2D* source, Recta
 	if (successful)
 	{
 		entities[entityId].componentMask |= 1 << Sprite::ID;
-		std::vector<Sprite>& componentList = sprites[layer];
-		componentList.emplace_back(entityId, source, sourceRect, destWidth, destHeight, frameCount, currentFrame, fps);
-
-		// the first four bits of the entry in "components" will be used to store the layer,
-		// the last 28 bits will be used to store the actual index into the list at that layer.
-		int layerMask = layer << 28;
-		int indexMask = (static_cast<int>(componentList.size()) - 1) & (0x0FFF);
-		int location = layerMask | indexMask;
-
-		components[entityId * Component::COMPONENT_COUNT + Sprite::ID] = location;
+		std::vector<Sprite>* componentList = static_cast<std::vector<Sprite>*>(componentLists[Sprite::ID]);
+		sortedSpriteIndecies.push_back(static_cast<int>(componentList->size()));
+		componentList->emplace_back(entityId, layer, source, sourceRect, destWidth, destHeight, frameCount, currentFrame, fps);
+		components[entityId * Component::COMPONENT_COUNT + Sprite::ID] = static_cast<int>(componentList->size()) - 1;
 	}
 
 	return successful;
 }
-
 bool Scene::RemoveSpriteComponent(int entityId)
 {
-	bool successful = HasComponent<Sprite>(entityId);
-
-	if (successful)
-	{
-		int layerAndIndex = components[entityId * Component::COMPONENT_COUNT + Sprite::ID];
-		int layer = (layerAndIndex >> 28) & 0x000F;
-		int index = layerAndIndex & 0x0FFF;
-		std::vector<Sprite>& componentList = sprites[layer];
-
-		// swap and pop approach to keep vectors tightly packed
-		if (index < componentList.size())
-		{
-			Sprite toRemove = componentList[index];
-			Sprite back = componentList.back();
-
-			componentList[componentList.size() - 1] = toRemove;
-			componentList[index] = back;
-
-			components[back.entity * Component::COMPONENT_COUNT + Sprite::ID] = index;
-		}
-
-		components[entityId * Component::COMPONENT_COUNT + Sprite::ID] = -1;
-		componentList.pop_back();
-
-		entities[entityId].componentMask &= ~(1 << Sprite::ID);
-	}
-
-	return successful;
+	return false;
 }
 
-Sprite& Scene::GetSpriteComponent(int entityId)
+std::vector<int>& Scene::GetSortedSpriteIndecies()
 {
-	int layerAndIndex = components[entityId * Component::COMPONENT_COUNT + Sprite::ID];
-	int layer = (layerAndIndex >> 28) & 0x000F;
-	int index = layerAndIndex & 0x0FFF;
-	return sprites[layer][index];
-}
-
-std::array<std::vector<Sprite>, 16>& Scene::GetSpriteComponents()
-{
-	return sprites;
+	return sortedSpriteIndecies;
 }
 
 int Scene::GetComponentMask(int entityId)

@@ -17,26 +17,9 @@ private:
 	// all component lists
 
 	std::vector<Spatial> spatials;
-	// sprites are organized into layers
-	std::array<std::vector<Sprite>, 16> sprites
-	{ {
-		{ },	// layer-zero sprites
-		{ },	// layer-one sprites
-		{ },	// ...
-		{ },
-		{ },
-		{ },
-		{ },
-		{ },
-		{ },
-		{ },
-		{ },
-		{ },
-		{ },
-		{ },
-		{ },
-		{ }   // layer-sixteen sprites
-	} };
+	std::vector<Sprite> sprites;
+	// for rendering sprites are also sorted by y-value and layer
+	std::vector<int> sortedSpriteIndecies;
 	std::vector<Velocity> velocities;
 	std::vector<Acceleration> accelerations;
 	std::vector<Mass> masses;
@@ -57,7 +40,7 @@ private:
 	void* componentLists[17]
 	{
 		&spatials,
-		nullptr,				// sprites aren't held here
+		&sprites,
 		&velocities,
 		&accelerations,
 		&masses,
@@ -84,20 +67,16 @@ public:
 	typename std::enable_if<!std::is_same<T, Sprite>::value, bool>::type
 	RemoveComponent(int entityId);
 
-	template<typename T>
-	typename std::enable_if<!std::is_same<T, Sprite>::value, T&>::type
-	GetComponent(int entityId);
-
-	template<typename T>
-	typename std::enable_if<!std::is_same<T, Sprite>::value, std::vector<T>&>::type
-	GetComponents();
-
-	// sprites are handled differently so they are excluded by
-	// the template and handled here instead
 	bool AddSpriteComponent(int entityId, int layer, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, int currentFrame, float fps);
 	bool RemoveSpriteComponent(int entityId);
-	Sprite& GetSpriteComponent(int entityId);
-	std::array<std::vector<Sprite>, 16>& GetSpriteComponents();
+
+	template<typename T>
+	T& GetComponent(int entityId);
+
+	std::vector<int>& GetSortedSpriteIndecies();
+
+	template<typename T>
+	std::vector<T>& GetComponents();
 
 	template<typename T>
 	bool HasComponent(int entityId);
@@ -157,16 +136,14 @@ Scene::RemoveComponent(int entityId)
 }
 
 template<typename T>
-typename std::enable_if<!std::is_same<T, Sprite>::value, T&>::type
-Scene::GetComponent(int entityId)
+T& Scene::GetComponent(int entityId)
 {
 	int index = components[entityId * Component::COMPONENT_COUNT + T::ID];
 	return (*static_cast<std::vector<T>*>(componentLists[T::ID]))[index];
 }
 
 template<typename T>
-typename std::enable_if<!std::is_same<T, Sprite>::value, std::vector<T>&>::type
-Scene::GetComponents()
+std::vector<T>&  Scene::GetComponents()
 {
 	return *(static_cast<std::vector<T>*>(componentLists[T::ID]));
 }

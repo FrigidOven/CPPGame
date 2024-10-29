@@ -22,7 +22,7 @@ void SpriteManagerSystem::Update(Scene& scene, std::vector<SpriteManager>& sprit
 		if ((scene.GetComponentMask(spriteManager.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
-		Sprite& sprite = scene.GetSpriteComponent(spriteManager.entity);
+		Sprite& sprite = scene.GetComponent<Sprite>(spriteManager.entity);
 		EntityTag tag = scene.GetTag(spriteManager.entity);
 
 		sprite.sourceRect.y = spriteAtlases[tag]->GetYPos(spriteManager.state, spriteManager.orientation);
