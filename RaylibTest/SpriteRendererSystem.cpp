@@ -6,7 +6,7 @@
  Public Functions
 ===================================================================================================
 */
-void SpriteRendererSystem::Update(Scene& scene, std::vector<Sprite>& sprites, std::vector<int>& sortedSpriteIndecies, float deltaTime)
+void SpriteRendererSystem::Update(Scene& scene, std::vector<Sprite>& sprites, std::vector<int>& sortedSpriteIndices, float deltaTime)
 {
 	ClearBackground(BLACK);
 	BeginDrawing();
@@ -16,7 +16,7 @@ void SpriteRendererSystem::Update(Scene& scene, std::vector<Sprite>& sprites, st
 
 	int requiredComponentsMask = 1 << Spatial::ID;
 
-	for (auto& index : sortedSpriteIndecies)
+	for (auto& index : sortedSpriteIndices)
 	{
 		Sprite& sprite = sprites[index];
 

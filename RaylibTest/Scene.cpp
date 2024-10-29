@@ -22,29 +22,9 @@ int Scene::CreateEntity(EntityTag tag)
 	return static_cast<int>(entities.size()) - 1;
 }
 
-bool Scene::AddSpriteComponent(int entityId, int layer, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, int currentFrame, float fps)
+std::vector<int>& Scene::GetSortedSpriteIndices()
 {
-	bool successful = !HasComponent<Sprite>(entityId);
-
-	if (successful)
-	{
-		entities[entityId].componentMask |= 1 << Sprite::ID;
-		std::vector<Sprite>* componentList = static_cast<std::vector<Sprite>*>(componentLists[Sprite::ID]);
-		sortedSpriteIndecies.push_back(static_cast<int>(componentList->size()));
-		componentList->emplace_back(entityId, layer, source, sourceRect, destWidth, destHeight, frameCount, currentFrame, fps);
-		components[entityId * Component::COMPONENT_COUNT + Sprite::ID] = static_cast<int>(componentList->size()) - 1;
-	}
-
-	return successful;
-}
-bool Scene::RemoveSpriteComponent(int entityId)
-{
-	return false;
-}
-
-std::vector<int>& Scene::GetSortedSpriteIndecies()
-{
-	return sortedSpriteIndecies;
+	return sortedSpriteIndices;
 }
 
 int Scene::GetComponentMask(int entityId)

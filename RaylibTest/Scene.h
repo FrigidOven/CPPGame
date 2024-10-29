@@ -19,7 +19,7 @@ private:
 	std::vector<Spatial> spatials;
 	std::vector<Sprite> sprites;
 	// for rendering sprites are also sorted by y-value and layer
-	std::vector<int> sortedSpriteIndecies;
+	std::vector<int> sortedSpriteIndices;
 	std::vector<Velocity> velocities;
 	std::vector<Acceleration> accelerations;
 	std::vector<Mass> masses;
@@ -60,20 +60,15 @@ public:
 	int CreateEntity(EntityTag tag);
 
 	template< typename T, typename... Args >
-	typename std::enable_if<!std::is_same<T, Sprite>::value, bool>::type
-	AddComponent(int entityId, Args... args);
+	bool AddComponent(int entityId, Args... args);
 
 	template<typename T>
-	typename std::enable_if<!std::is_same<T, Sprite>::value, bool>::type
-	RemoveComponent(int entityId);
-
-	bool AddSpriteComponent(int entityId, int layer, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, int currentFrame, float fps);
-	bool RemoveSpriteComponent(int entityId);
+	bool RemoveComponent(int entityId);
 
 	template<typename T>
 	T& GetComponent(int entityId);
 
-	std::vector<int>& GetSortedSpriteIndecies();
+	std::vector<int>& GetSortedSpriteIndices();
 
 	template<typename T>
 	std::vector<T>& GetComponents();
@@ -87,8 +82,7 @@ public:
 };
 
 template<typename T, typename... Args>
-typename std::enable_if<!std::is_same<T, Sprite>::value, bool>::type
-Scene::AddComponent(int entityId, Args... args)
+bool Scene::AddComponent(int entityId, Args... args)
 {
 	bool successful = !HasComponent<T>(entityId);
 
@@ -104,8 +98,7 @@ Scene::AddComponent(int entityId, Args... args)
 }
 
 template<typename T>
-typename std::enable_if<!std::is_same<T, Sprite>::value, bool>::type
-Scene::RemoveComponent(int entityId)
+bool Scene::RemoveComponent(int entityId)
 {
 	bool successful = HasComponent<T>(entityId);
 

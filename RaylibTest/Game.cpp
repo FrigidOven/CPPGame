@@ -27,6 +27,6 @@ void Game::Update()
 	velocitySystem.Update(currentScene, currentScene.GetComponents<Velocity>(), deltaTime);
 	// Rendering Routine:
 	spriteManagerSystem.Update(currentScene, currentScene.GetComponents<SpriteManager>());
-	spriteSortingSystem.Update(currentScene, currentScene.GetComponents<Sprite>(), currentScene.GetSortedSpriteIndecies());
-	spriteRendererSystem.Update(currentScene, currentScene.GetComponents<Sprite>(), currentScene.GetSortedSpriteIndecies(), deltaTime);
+	spriteSortingSystem.Update(currentScene, currentScene.GetComponents<Sprite>(), currentScene.GetSortedSpriteIndices());
+	spriteRendererSystem.Update(currentScene, currentScene.GetComponents<Sprite>(), currentScene.GetSortedSpriteIndices(), deltaTime);
 }
