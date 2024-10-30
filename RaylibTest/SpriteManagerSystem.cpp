@@ -25,11 +25,16 @@ void SpriteManagerSystem::Update(Scene& scene, std::vector<SpriteManager>& sprit
 		Sprite& sprite = scene.GetComponent<Sprite>(spriteManager.entity);
 		EntityTag tag = scene.GetTag(spriteManager.entity);
 
+		float oldY = sprite.sourceRect.y;
+
 		sprite.sourceRect.y = spriteAtlases[tag]->GetYPos(spriteManager.state, spriteManager.orientation);
 		sprite.frameCount = spriteAtlases[tag]->GetFrameCount(spriteManager.state, spriteManager.orientation);
 		sprite.fps = spriteAtlases[tag]->GetFPS(spriteManager.state, spriteManager.orientation);
 
-		sprite.currentFrame = Clamp(sprite.currentFrame, 0, sprite.frameCount - 1);
+		bool spriteChanged = oldY != sprite.sourceRect.y;
+
+		if (spriteChanged)
+			sprite.currentFrame = 0;
 	}
 }
 
