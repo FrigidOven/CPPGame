@@ -2,10 +2,14 @@
 
 #include "Systems.h"
 #include "Scene.h"
+#include "TextureManager.h"
 
 class Game
 {
 private:
+	// Resource managers
+	TextureManager textureManager;
+
 	// Input routine systems
 	InputSystem inputSystem;
 	ForceBasedMovementControllerSystem forceBasedMovementControllerSystem;

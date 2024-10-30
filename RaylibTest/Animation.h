@@ -1,63 +1,22 @@
 #pragma once
 
+#include "Component.h"
+#include "AnimationData.h"
 #include <raylib.h>
-#include <array>
 
-struct Animation
+struct Animation : Component
 {
-	bool loops;
-	virtual int GetFrameCount() = 0;
-	virtual Frame& GetFrame(int index) = 0;
-};
+	static const int ID = 15;
 
-template<int frameCount>
-struct SpriteAnimation : Animation
-{
-	std::array<Frame, frameCount> frames;
-
-	int GetFrameCount() override
-	{
-		return frameCount;
-	}
-	Frame& GetFrame(int& index) override
-	{
-		return frames[index];
-	}
-};
-
-struct AnimationReader
-{
-	Texture2D* source;
-	Animation* animation;
+	AnimationData* animationData;
 	int currentFrame;
 	float timer;
 
-	void Update(float deltaTime)
+	Animation(int entityId, AnimationData* animationData, int currentFrame, float timer)
+		: animationData(animationData)
+		, currentFrame(currentFrame)
+		, timer(timer)
 	{
-		float frameDurration = animation->GetFrame(currentFrame).durration;
-		int frameCount = animation->GetFrameCount();
-
-		timer += deltaTime;
-
-		if (timer >= frameDurration)
-		{
-			timer = 0.0f;
-			currentFrame++;
-		}
-
-		if (currentFrame >= frameCount)
-			currentFrame = animation->loops ? currentFrame % frameCount : frameCount - 1;
+		entity = entityId;
 	}
-	Frame& GetFrame()
-	{
-		return animation->GetFrame(currentFrame);
-	}
-};
-
-struct Frame
-{
-	Rectangle sourceRect;
-	Vector2 offset;
-	float durration;
-	Color tint;
 };
