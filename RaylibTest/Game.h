@@ -17,15 +17,20 @@ private:
 	AccelerationSystem accelerationSystem;
 	ForceBasedSpeedLimiterSystem forceBasedSpeedLimiterSystem;
 	VelocitySystem velocitySystem;
-	// Sprite systems
+	// Rendering systems
+	FollowCameraSystem followCameraSystem;
 	SpriteManagerSystem spriteManagerSystem;
 	SpriteSortingSystem spriteSortingSystem;
 	SpriteRendererSystem spriteRendererSystem;
-	
+
+	// camera
+	Camera2D camera;
+
 	// Scenes
-	Scene currentScene;
+	Scene currentScene{ &camera };
 
 public:
+	Game();
 	Scene& GetCurrentScene();
 	void Update();
 };

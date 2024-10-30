@@ -3,7 +3,8 @@
 enum class EntityTag
 {
 	Untagged,
-	Player
+	Player,
+	Camera
 };
 
 struct Entity

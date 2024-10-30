@@ -6,6 +6,13 @@
 ===================================================================================================
 */
 
+Scene::Scene(Camera2D* camera)
+{
+	int cameraEntity = CreateEntity(EntityTag::Camera);
+	AddComponent<CameraManager>(cameraEntity, camera);
+	AddComponent<Spatial>(cameraEntity, Vector2Zero(), 0.0f);
+}
+
 int Scene::CreateEntity(EntityTag tag)
 {
 	entities.emplace_back

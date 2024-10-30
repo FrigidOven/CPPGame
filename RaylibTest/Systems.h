@@ -13,6 +13,7 @@
 #include "ForceBasedSpeedLimiterSystem.h"
 #include "StoppingForceSystem.h"
 
+#include "FollowCameraSystem.h"
 #include "SpriteManagerSystem.h"
 #include "SpriteSortingSystem.h"
 #include "SpriteRendererSystem.h"

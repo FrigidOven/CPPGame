@@ -6,10 +6,12 @@
  Public Functions
 ===================================================================================================
 */
-void SpriteRendererSystem::Update(Scene& scene, std::vector<Sprite>& sprites, std::vector<int>& sortedSpriteIndices, float deltaTime)
+void SpriteRendererSystem::Update(Scene& scene, Camera2D& camera, std::vector<Sprite>& sprites, std::vector<int>& sortedSpriteIndices, float deltaTime)
 {
 	ClearBackground(BLACK);
 	BeginDrawing();
+
+	BeginMode2D(camera);
 
 	Rectangle dest{ 0, 0, 0, 0 };
 	Rectangle source{ 0, 0, 0, 0 };
@@ -47,6 +49,8 @@ void SpriteRendererSystem::Update(Scene& scene, std::vector<Sprite>& sprites, st
 			UpdateSprite(sprite, deltaTime);
 	}
 
+	EndMode2D();
+	
 	EndDrawing();
 }
 

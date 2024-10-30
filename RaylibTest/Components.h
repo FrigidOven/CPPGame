@@ -21,3 +21,5 @@
 #include "VelocityBasedMovementController.h"
 
 #include "SpriteManager.h"
+#include "CameraManager.h"
+#include "FollowCamera.h"

@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AccelerationSystem.cpp" />
+    <ClCompile Include="FollowCameraSystem.cpp" />
     <ClCompile Include="ForceBasedMovementControllerSystem.cpp" />
     <ClCompile Include="ForceBasedSpeedLimiterSystem.cpp" />
     <ClCompile Include="ForceSystem.cpp" />
@@ -149,6 +150,8 @@
   <ItemGroup>
     <ClInclude Include="Acceleration.h" />
     <ClInclude Include="AccelerationSystem.h" />
+    <ClInclude Include="FollowCameraSystem.h" />
+    <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="Entity.h" />
@@ -162,8 +165,10 @@
     <ClInclude Include="Friction.h" />
     <ClInclude Include="FrictionSystem.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameConstants.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="Mass.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />

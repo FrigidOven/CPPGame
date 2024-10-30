@@ -5,6 +5,11 @@
 #include "Entity.h"
 #include "Components.h"
 
+enum class SpecialEntities
+{
+	Camera = 0
+};
+
 class Scene
 {
 private:
@@ -15,7 +20,6 @@ private:
 	std::vector<int> components;
 
 	// all component lists
-
 	std::vector<Spatial> spatials;
 	std::vector<Sprite> sprites;
 	// for rendering sprites are also sorted by y-value and layer
@@ -33,6 +37,8 @@ private:
 	std::vector<VelocityBasedMovementController> velocityBasedMovementControllers;
 	std::vector<SpriteManager> spriteManagers;
 	std::vector<StoppingForce> stoppingForces;
+	std::vector<CameraManager> cameraManagers;
+	std::vector<FollowCamera> followCameras;
 
 	// TODO: Consider layers for physics too, for dynamically switching which hitboxes should be checked.
 
@@ -53,10 +59,14 @@ private:
 		&forceBasedMovementControllers,
 		&velocityBasedMovementControllers,
 		&spriteManagers,
-		&stoppingForces
+		&stoppingForces,
+		&cameraManagers,
+		&followCameras
 	};
 
 public:
+	Scene(Camera2D* camera);
+
 	int CreateEntity(EntityTag tag);
 
 	template< typename T, typename... Args >
