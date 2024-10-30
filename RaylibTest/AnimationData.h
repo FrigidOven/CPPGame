@@ -11,27 +11,7 @@ struct AnimationData
 	virtual Frame& GetFrame(int index) = 0;
 };
 
-template<int frameCount>
-struct CustomFrameLayout : AnimationData
-{
-	std::array<Frame, frameCount> frames;
-
-	int GetFrameCount() override
-	{
-		return frameCount;
-	}
-	Frame& GetFrame(int& index) override
-	{
-		return frames[index];
-	}
-
-	CustomFrameLayout(std::array<Frame, frameCount> frames)
-		: frames(frames)
-	{
-	}
-};
-
-template<int frameCount>
+template<size_t frameCount>
 struct HorizontalFrameLayout : AnimationData
 {
 	std::array<Frame, frameCount> frames;
@@ -40,14 +20,18 @@ struct HorizontalFrameLayout : AnimationData
 	{
 		return frameCount;
 	}
-	Frame& GetFrame(int& index) override
+	Frame& GetFrame(int index) override
 	{
 		return frames[index];
 	}
 
 	HorizontalFrameLayout(const Texture2D* source, Rectangle initialSourceRect, Vector2 destWidthHeight, Vector2 offset, float frameDurration, Color tint)
 	{
-
+		for (size_t i = 0; i < frameCount; i++)
+		{
+			Rectangle currentRect(initialSourceRect.x + (initialSourceRect.width * i), initialSourceRect.y, initialSourceRect.width, initialSourceRect.height);
+			frames[i] = Frame(source, currentRect, destWidthHeight, offset, frameDurration, tint);
+		}
 	}
 };
 
