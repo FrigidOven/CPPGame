@@ -43,8 +43,8 @@ private:
 public:
 	PlayerSpriteAtlas();
 	
-	static const int WIDTH = 25;
-	static const int HEIGHT = 34;
+	static const int WIDTH = 32;
+	static const int HEIGHT = 32;
 
 	int GetYPos(SpriteState state, SpriteOrientation orientation) override;
     int GetFrameCount(SpriteState state, SpriteOrientation orientation) override;

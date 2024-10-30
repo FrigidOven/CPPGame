@@ -12,8 +12,8 @@ int main()
     Game game;
     Scene& scene = game.GetCurrentScene();
 
-    Texture2D backgroundSprite = LoadTexture("Textures/Background.png");
-    Texture2D golemSprite = LoadTexture("Textures/GolemSprite.png");
+    Texture2D backgroundSprite = LoadTexture("Textures/Grass.png");
+    Texture2D golemSprite = LoadTexture("Textures/Player.png");
 
     int testEntity0 = scene.CreateEntity(EntityTag::Untagged);
 
@@ -23,7 +23,7 @@ int main()
     int testEntity1 = scene.CreateEntity(EntityTag::Player);
 
     scene.AddComponent<Spatial>(testEntity1, Vector2{ screenWidth / 2, screenHeight / 2 + (32 * 3) / 2 }, 0.0f);
-    scene.AddComponent<Sprite>(testEntity1, 1, &golemSprite, Rectangle{ 0, 34 * 2, 25, 34 }, 25 * 3, 34 * 3, 1, 0, 1);
+    scene.AddComponent<Sprite>(testEntity1, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 32 * 3, 32 * 3, 1, 0, 1);
     scene.AddComponent<Velocity>(testEntity1, Vector2Zero());
     scene.AddComponent<Acceleration>(testEntity1, Vector2Zero());
     scene.AddComponent<Mass>(testEntity1, 1.0f);
@@ -36,7 +36,7 @@ int main()
     int testEntity2 = scene.CreateEntity(EntityTag::Player);
 
     scene.AddComponent<Spatial>(testEntity2, Vector2{ screenWidth / 2, screenHeight / 2 - (32 * 3) / 2 }, 0.0f);
-    scene.AddComponent<Sprite>(testEntity2, 1, &golemSprite, Rectangle{ 0, 34 * 2, 25, 34 }, 25 * 3, 34 * 3, 1, 0, 1);
+    scene.AddComponent<Sprite>(testEntity2, 1, &golemSprite, Rectangle{ 0, 64, 32, 32 }, 32 * 3, 32 * 3, 1, 0, 1);
     scene.AddComponent<Velocity>(testEntity2, Vector2Zero());
     scene.AddComponent<VelocityBasedMovementController>(testEntity2, 300.0f, Input(Keyboard, KEY_W, true), Input(Keyboard, KEY_A, true), Input(Keyboard, KEY_S, true), Input(Keyboard, KEY_D, true));
     scene.AddComponent<VelocityBasedSpeedLimiter>(testEntity2, 300.0f);
@@ -45,13 +45,6 @@ int main()
     while (!WindowShouldClose())
     {
         game.Update();
-        if (GetTime() > 5.0f && GetTime() < 10.0f)
-        {
-            scene.RemoveComponent<Sprite>(testEntity2);
-            scene.RemoveComponent<Sprite>(testEntity0);
-        }
-        else if(GetTime() > 10.0f)
-            scene.AddComponent<Sprite>(testEntity2, 2, &golemSprite, Rectangle{ 0, 34 * 2, 25, 34 }, 25 * 3, 34 * 3, 1, 0, 1);
     }
 
     CloseWindow();
