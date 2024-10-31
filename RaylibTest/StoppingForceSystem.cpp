@@ -9,11 +9,11 @@
 */
 void StoppingForceSystem::Update(Scene& scene, std::vector<StoppingForce>& stoppingForces)
 {
+	int requiredComponentsMask = 1 << Velocity::ID;
+
 	for (size_t i = 0; i < stoppingForces.size(); i++)
 	{
-		int componentMask = scene.GetComponentMask(stoppingForces[i].entity);
-		int requiredComponentsMask = 1 << Velocity::ID;
-		if ((componentMask & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene.GetComponentMask(stoppingForces[i].entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
 	
