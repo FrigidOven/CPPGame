@@ -39,11 +39,12 @@ private:
 	std::vector<StoppingForce> stoppingForces;
 	std::vector<CameraManager> cameraManagers;
 	std::vector<FollowCamera> followCameras;
+	std::vector<Direction> directions;
 
 	// TODO: Consider layers for physics too, for dynamically switching which hitboxes should be checked.
 
 	// table of components for generalized access
-	void* componentLists[17]
+	void* componentLists[18]
 	{
 		&spatials,
 		&sprites,
@@ -61,7 +62,8 @@ private:
 		&spriteManagers,
 		&stoppingForces,
 		&cameraManagers,
-		&followCameras
+		&followCameras,
+		&directions
 	};
 
 public:

@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="Acceleration.h" />
     <ClInclude Include="AccelerationSystem.h" />
+    <ClInclude Include="Direction.h" />
     <ClInclude Include="FollowCameraSystem.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Component.h" />

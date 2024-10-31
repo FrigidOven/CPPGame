@@ -20,7 +20,6 @@ private:
 	};
 
 	void UpdateState(Scene& scene, SpriteManager& spriteManager);
-	void UpdateOrientation(Scene& scene, SpriteManager& spriteManager);
 
 public:
 	void Update(Scene& scene, std::vector<SpriteManager>& spriteManagers);

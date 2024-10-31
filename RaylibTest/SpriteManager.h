@@ -8,12 +8,10 @@ struct SpriteManager : Component
 {
 	static const int ID = 13;
 
-	SpriteOrientation orientation;
 	SpriteState state;
 
-	SpriteManager(int entityId, SpriteOrientation orientation, SpriteState state)
-		: orientation(orientation)
-		, state(state)
+	SpriteManager(int entityId, SpriteState state)
+		: state(state)
 	{
 		entity = entityId;
 	}
