@@ -35,10 +35,10 @@ PlayerSpriteAtlas::PlayerSpriteAtlas()
 	stateOrientationFrameCounts[std::make_pair(SpriteState::Moving, Orientation::Down)] = 8;
 	stateOrientationFrameCounts[std::make_pair(SpriteState::Moving, Orientation::Right)] = 8;
 	// moving fps
-	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Up)] = 14;
-	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Left)] = 14;
-	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Down)] = 14;
-	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Right)] = 14;
+	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Up)] = 12;
+	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Left)] = 12;
+	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Down)] = 12;
+	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Right)] = 12;
 }
 int PlayerSpriteAtlas::GetYPos(SpriteState state, Orientation orientation)
 {
