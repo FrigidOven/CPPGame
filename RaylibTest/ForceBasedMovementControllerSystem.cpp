@@ -8,16 +8,11 @@
 */
 void ForceBasedMovementControllerSystem::Update(Scene& scene, std::vector<ForceBasedMovementController>& forceBasedMovementControllers)
 {
-	int requiredComponentsMask = 1 << Direction::ID;
-
 	for (auto& forceBasedMovementController : forceBasedMovementControllers)
 	{
 		int entity = forceBasedMovementController.entity;
 
-		if ((scene.GetComponentMask(entity) & requiredComponentsMask) != requiredComponentsMask)
-			continue;
-
-		Direction& direction = scene.GetComponent<Direction>(entity);
+		Tag& tag = scene.GetComponent<Tag>(entity);
 
 		Vector2 currentForce(0.0f, 0.0f);
 		Vector2 currentStoppingForce(0.0f, 0.f);
@@ -59,7 +54,8 @@ void ForceBasedMovementControllerSystem::Update(Scene& scene, std::vector<ForceB
 		{
 			if (wantsToMove[i])
 			{
-				direction.direction = static_cast<Orientation>(i);
+				tag.state = State::Moving;
+				tag.direction = static_cast<Direction>(i+1);
 				break;
 			}
 		}
@@ -68,6 +64,7 @@ void ForceBasedMovementControllerSystem::Update(Scene& scene, std::vector<ForceB
 		if (!wantsToMove[0] && !wantsToMove[1] && !wantsToMove[2] && !wantsToMove[3] && 
 			(isMoving[0] || isMoving[1] || isMoving[2] || isMoving[3]))
 		{
+			tag.state = State::Idle;
 			scene.RemoveComponent<ForceBasedMovement>(entity);
 			scene.RemoveComponent<StoppingForce>(entity);
 			scene.AddComponent<StoppingForce>(entity, Vector2Add(currentStoppingForce, Vector2Scale(currentForce, -frictionCoefficient)));

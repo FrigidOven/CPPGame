@@ -39,7 +39,7 @@ private:
 	std::vector<StoppingForce> stoppingForces;
 	std::vector<CameraManager> cameraManagers;
 	std::vector<FollowCamera> followCameras;
-	std::vector<Direction> directions;
+	std::vector<Tag> tags;
 
 	// TODO: Consider layers for physics too, for dynamically switching which hitboxes should be checked.
 
@@ -63,13 +63,13 @@ private:
 		&stoppingForces,
 		&cameraManagers,
 		&followCameras,
-		&directions
+		&tags
 	};
 
 public:
 	Scene(Camera2D* camera);
 
-	int CreateEntity(EntityTag tag);
+	int CreateEntity();
 
 	template< typename T, typename... Args >
 	bool AddComponent(int entityId, Args... args);
@@ -89,8 +89,6 @@ public:
 	bool HasComponent(int entityId);
 
 	int GetComponentMask(int entityId);
-
-	EntityTag GetTag(int entityId);
 };
 
 template<typename T, typename... Args>

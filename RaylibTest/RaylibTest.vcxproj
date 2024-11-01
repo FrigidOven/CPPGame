@@ -150,7 +150,6 @@
   <ItemGroup>
     <ClInclude Include="Acceleration.h" />
     <ClInclude Include="AccelerationSystem.h" />
-    <ClInclude Include="Direction.h" />
     <ClInclude Include="FollowCameraSystem.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Component.h" />
@@ -182,6 +181,8 @@
     <ClInclude Include="StoppingForce.h" />
     <ClInclude Include="StoppingForceSystem.h" />
     <ClInclude Include="Systems.h" />
+    <ClInclude Include="Tag.h" />
+    <ClInclude Include="Tags.h" />
     <ClInclude Include="Velocity.h" />
     <ClInclude Include="VelocityBasedMovement.h" />
     <ClInclude Include="VelocityBasedMovementController.h" />

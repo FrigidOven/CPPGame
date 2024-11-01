@@ -8,25 +8,33 @@
 
 Scene::Scene(Camera2D* camera)
 {
-	int cameraEntity = CreateEntity(EntityTag::Camera);
+	int cameraEntity = CreateEntity();
 	AddComponent<CameraManager>(cameraEntity, camera);
 	AddComponent<Spatial>(cameraEntity, Vector2Zero(), 0.0f);
+	Tag& tag = GetComponent<Tag>(cameraEntity);
+	tag.entityGroup = EntityGroup::Engine;
+	tag.entityType = EntityType::Camera;
 }
 
-int Scene::CreateEntity(EntityTag tag)
+int Scene::CreateEntity()
 {
+	int id = static_cast<int>(entities.size());
+	int componentMask = 0;
+
 	entities.emplace_back
 	(
-		static_cast<int>(entities.size()),	// id
-		tag,
-		0															// component mask
+		id,	
+		componentMask
 	);
 
 	// reserve space for all components even if the entity wont use them all
 	int componentCount = static_cast<int>(Component::COMPONENT_COUNT);
 	components.resize(components.size() + componentCount, -1);
 
-	return static_cast<int>(entities.size()) - 1;
+	// each entity MUST have a tag component
+	AddComponent<Tag>(id);
+
+	return id;
 }
 
 std::vector<int>& Scene::GetSortedSpriteIndices()
@@ -37,9 +45,4 @@ std::vector<int>& Scene::GetSortedSpriteIndices()
 int Scene::GetComponentMask(int entityId)
 {
 	return entities[entityId].componentMask;
-}
-
-EntityTag Scene::GetTag(int entityId)
-{
-	return entities[entityId].tag;
 }

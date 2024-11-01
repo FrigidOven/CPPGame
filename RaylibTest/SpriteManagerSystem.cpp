@@ -10,49 +10,28 @@
 */
 void SpriteManagerSystem::Update(Scene& scene, std::vector<SpriteManager>& spriteManagers)
 {
-	int requiredComponentsMask = (1 << Sprite::ID) | (1 << Direction::ID);
+	int requiredComponentsMask = (1 << Sprite::ID);
 
 	for (auto& spriteManager : spriteManagers)
 	{
 		if ((scene.GetComponentMask(spriteManager.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
-		// update orientation and state of sprite manager
-		UpdateState(scene, spriteManager);
-
-		// procede to update sprite itself
 		Sprite& sprite = scene.GetComponent<Sprite>(spriteManager.entity);
-		Orientation orientation = scene.GetComponent<Direction>(spriteManager.entity).direction;
-		EntityTag tag = scene.GetTag(spriteManager.entity);
+		Tag& tag = scene.GetComponent<Tag>(spriteManager.entity);
 
 		float oldY = sprite.sourceRect.y;
 
-		sprite.sourceRect.y = spriteAtlases[tag]->GetYPos(spriteManager.state, orientation);
-		sprite.frameCount = spriteAtlases[tag]->GetFrameCount(spriteManager.state, orientation);
-		sprite.fps = spriteAtlases[tag]->GetFPS(spriteManager.state, orientation);
+		sprite.sourceRect.y = spriteAtlases[tag.entityType]->GetYPos(tag.state, tag.direction);
+		sprite.frameCount = spriteAtlases[tag.entityType]->GetFrameCount(tag.state, tag.direction);
+		sprite.fps = spriteAtlases[tag.entityType]->GetFPS(tag.state, tag.direction);
 
 		bool spriteChanged = oldY != sprite.sourceRect.y;
 
 		if (spriteChanged)
+		{
 			sprite.currentFrame = 0;
+			sprite.timer = 0.0f;
+		}
 	}
-}
-
-/*
-===================================================================================================
- Private Functions
-===================================================================================================
-*/
-void SpriteManagerSystem::UpdateState(Scene& scene, SpriteManager& spriteManager)
-{
-	int entity = spriteManager.entity;
-
-	SpriteState newState;
-
-	if (scene.HasComponent<ForceBasedMovement>(entity) || scene.HasComponent<VelocityBasedMovement>(entity))
-		newState = SpriteState::Moving;
-	else
-		newState = SpriteState::Idle;
-
-	spriteManager.state = newState;
 }

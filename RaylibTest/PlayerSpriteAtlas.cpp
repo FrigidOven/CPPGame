@@ -7,48 +7,48 @@
 */
 PlayerSpriteAtlas::PlayerSpriteAtlas()
 {
-	// orientation y pos
-	orientationYPos[Orientation::Up] = 0;
-	orientationYPos[Orientation::Left] = HEIGHT;
-	orientationYPos[Orientation::Down] = 2 * HEIGHT;
-	orientationYPos[Orientation::Right] = 3 * HEIGHT;
+	// direction y pos
+	directionYPos[Direction::Up] = 0;
+	directionYPos[Direction::Left] = HEIGHT;
+	directionYPos[Direction::Down] = 2 * HEIGHT;
+	directionYPos[Direction::Right] = 3 * HEIGHT;
 
 	// idle y pos
-	stateYPos[SpriteState::Idle] = 0;
+	stateYPos[State::Idle] = 0;
 	// moving y pos
-	stateYPos[SpriteState::Moving] = 4 * HEIGHT;
+	stateYPos[State::Moving] = 4 * HEIGHT;
 
 	// idle frame counts
-	stateOrientationFrameCounts[std::make_pair(SpriteState::Idle, Orientation::Up)] = 2;
-	stateOrientationFrameCounts[std::make_pair(SpriteState::Idle, Orientation::Left)] = 2;
-	stateOrientationFrameCounts[std::make_pair(SpriteState::Idle, Orientation::Down)] = 2;
-	stateOrientationFrameCounts[std::make_pair(SpriteState::Idle, Orientation::Right)] = 2;
+	stateDirectionFrameCounts[std::make_pair(State::Idle, Direction::Up)] = 2;
+	stateDirectionFrameCounts[std::make_pair(State::Idle, Direction::Left)] = 2;
+	stateDirectionFrameCounts[std::make_pair(State::Idle, Direction::Down)] = 2;
+	stateDirectionFrameCounts[std::make_pair(State::Idle, Direction::Right)] = 2;
 	// idle fps
-	stateOrientationFPS[std::make_pair(SpriteState::Idle, Orientation::Up)] = 2;
-	stateOrientationFPS[std::make_pair(SpriteState::Idle, Orientation::Left)] = 2;
-	stateOrientationFPS[std::make_pair(SpriteState::Idle, Orientation::Down)] = 2;
-	stateOrientationFPS[std::make_pair(SpriteState::Idle, Orientation::Right)] = 2;
+	stateDirectionFPS[std::make_pair(State::Idle, Direction::Up)] = 2;
+	stateDirectionFPS[std::make_pair(State::Idle, Direction::Left)] = 2;
+	stateDirectionFPS[std::make_pair(State::Idle, Direction::Down)] = 2;
+	stateDirectionFPS[std::make_pair(State::Idle, Direction::Right)] = 2;
 
 	// moving frame counts
-	stateOrientationFrameCounts[std::make_pair(SpriteState::Moving, Orientation::Up)] = 8;
-	stateOrientationFrameCounts[std::make_pair(SpriteState::Moving, Orientation::Left)] = 8;
-	stateOrientationFrameCounts[std::make_pair(SpriteState::Moving, Orientation::Down)] = 8;
-	stateOrientationFrameCounts[std::make_pair(SpriteState::Moving, Orientation::Right)] = 8;
+	stateDirectionFrameCounts[std::make_pair(State::Moving, Direction::Up)] = 8;
+	stateDirectionFrameCounts[std::make_pair(State::Moving, Direction::Left)] = 8;
+	stateDirectionFrameCounts[std::make_pair(State::Moving, Direction::Down)] = 8;
+	stateDirectionFrameCounts[std::make_pair(State::Moving, Direction::Right)] = 8;
 	// moving fps
-	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Up)] = 12;
-	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Left)] = 12;
-	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Down)] = 12;
-	stateOrientationFPS[std::make_pair(SpriteState::Moving, Orientation::Right)] = 12;
+	stateDirectionFPS[std::make_pair(State::Moving, Direction::Up)] = 12;
+	stateDirectionFPS[std::make_pair(State::Moving, Direction::Left)] = 12;
+	stateDirectionFPS[std::make_pair(State::Moving, Direction::Down)] = 12;
+	stateDirectionFPS[std::make_pair(State::Moving, Direction::Right)] = 12;
 }
-int PlayerSpriteAtlas::GetYPos(SpriteState state, Orientation orientation)
+int PlayerSpriteAtlas::GetYPos(State state, Direction direction)
 {
-	return stateYPos[state] + orientationYPos[orientation];
+	return stateYPos[state] + directionYPos[direction];
 }
-int PlayerSpriteAtlas::GetFrameCount(SpriteState state, Orientation orientation)
+int PlayerSpriteAtlas::GetFrameCount(State state, Direction direction)
 {
-	return stateOrientationFrameCounts[std::make_pair(state, orientation)];
+	return stateDirectionFrameCounts[std::make_pair(state, direction)];
 }
-float PlayerSpriteAtlas::GetFPS(SpriteState state, Orientation orientation)
+float PlayerSpriteAtlas::GetFPS(State state, Direction direction)
 {
-	return stateOrientationFPS[std::make_pair(state, orientation)];
+	return stateDirectionFPS[std::make_pair(state, direction)];
 }
