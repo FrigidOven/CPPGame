@@ -18,7 +18,7 @@ int main()
     entityTag0.entityType = EntityType::GrassSurface;
 
     scene.AddComponent<Spatial>(testEntity0, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 }, 0.0f);
-    scene.AddComponent<Sprite>(testEntity0, 0, &backgroundSprite, Rectangle{ 0, 0, 256, 224 }, SCREEN_WIDTH, SCREEN_HEIGHT, 1, 0, 1);
+    scene.AddComponent<Sprite>(testEntity0, 0, &backgroundSprite, Rectangle{ 0, 0, 256, 224 }, 256 * IMAGE_SCALE, 224 * IMAGE_SCALE, 1, 0, 1);
 
     int testEntity1 = scene.CreateEntity();
     Tag& entityTag1 = scene.GetComponent<Tag>(testEntity1);

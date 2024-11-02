@@ -13,14 +13,10 @@ struct Tag : Component
 	State state;
 
 	Tag(int entityId)
-	{
-		entity = entityId;
-	}
-	Tag(int entityId, EntityGroup entityGroup, EntityType entityType, Direction direction, State state)
-		: entityGroup(entityGroup)
-		, entityType(entityType)
-		, direction(direction)
-		, state(state)
+		: entityGroup(EntityGroup::None)
+		, entityType(EntityType::None)
+		, direction(Direction::None)
+		, state(State::Idle)
 	{
 		entity = entityId;
 	}
