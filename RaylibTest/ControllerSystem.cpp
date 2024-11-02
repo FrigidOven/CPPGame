@@ -35,6 +35,11 @@ bool ControllerSystem::CheckDown(int playerNumber, Input& input)
 		return IsGamepadAvailable(playerNumber) && IsGamepadButtonDown(playerNumber, input.controlValue);
 	case ControlType::Mouse:
 		return IsMouseButtonDown(input.controlValue);
+	// The axises will not have a distinction between pressed and down, they can only be "down"
+	case ControlType::JoystickPos:
+		return IsGamepadAvailable(playerNumber) && GetGamepadAxisMovement(playerNumber, input.controlValue) >= 0.2f; // DEAD-ZONES
+	case ControlType::JoystickNeg:
+		return IsGamepadAvailable(playerNumber) && GetGamepadAxisMovement(playerNumber, input.controlValue) <= -0.2f; // DEAD-ZONES
 	}
 	return false;
 }

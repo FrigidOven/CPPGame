@@ -33,7 +33,11 @@ int main()
     scene.AddComponent<Mass>(testEntity1, 1.0f);
     scene.AddComponent<Force>(testEntity1, Vector2Zero());
     scene.AddComponent<Friction>(testEntity1, 0.9f);
-    scene.AddComponent<Controller>(testEntity1, Input(ControlType::Keyboard, KEY_W), Input(ControlType::Keyboard, KEY_A), Input(ControlType::Keyboard, KEY_S), Input(ControlType::Keyboard, KEY_D));
+    scene.AddComponent<Controller>(testEntity1, 
+        Input(ControlType::Keyboard, KEY_UP),
+        Input(ControlType::Keyboard, KEY_LEFT),
+        Input(ControlType::Keyboard, KEY_DOWN),
+        Input(ControlType::Keyboard, KEY_RIGHT));
     scene.AddComponent<MovementController>(testEntity1, MovementMode::ForceBased, 1000.0f * IMAGE_SCALE);
     scene.AddComponent<SpeedLimiter>(testEntity1, 100.0f * IMAGE_SCALE);
     scene.AddComponent<SpriteManager>(testEntity1);
@@ -47,7 +51,11 @@ int main()
     scene.AddComponent<Spatial>(testEntity2, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - (32 * IMAGE_SCALE) / 2 }, 0.0f);
     scene.AddComponent<Sprite>(testEntity2, 1, &golemSprite, Rectangle{ 0, 64, 32, 32 }, 32 * IMAGE_SCALE, 32 * IMAGE_SCALE, 1, 0, 1);
     scene.AddComponent<Velocity>(testEntity2, Vector2Zero());
-    scene.AddComponent<Controller>(testEntity2, Input(ControlType::Keyboard, KEY_UP), Input(ControlType::Keyboard, KEY_LEFT), Input(ControlType::Keyboard, KEY_DOWN), Input(ControlType::Keyboard, KEY_RIGHT));
+    scene.AddComponent<Controller>(testEntity2,
+        Input(ControlType::Keyboard, KEY_W),
+        Input(ControlType::Keyboard, KEY_A),
+        Input(ControlType::Keyboard, KEY_S),
+        Input(ControlType::Keyboard, KEY_D));
     scene.AddComponent<MovementController>(testEntity2, MovementMode::VelocityBased, 1000.0f * IMAGE_SCALE);
     scene.AddComponent<SpeedLimiter>(testEntity2, 100.0f * IMAGE_SCALE);
     scene.AddComponent<SpriteManager>(testEntity2);

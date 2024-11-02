@@ -10,6 +10,8 @@ enum class ControlType
 	Keyboard,
 	Mouse,
 	Gamepad,
+	JoystickPos,
+	JoystickNeg
 };
 
 struct Input
