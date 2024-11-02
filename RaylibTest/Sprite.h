@@ -5,7 +5,7 @@
 
 struct Sprite : Component
 {
-	static const int ID = 1;
+	static const int ID = 2;
 
 	int layer;
 

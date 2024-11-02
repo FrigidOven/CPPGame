@@ -20,8 +20,10 @@ private:
 	std::vector<int> components;
 
 	// all component lists
+	std::vector<Tag> tags;
 	std::vector<Spatial> spatials;
 	std::vector<Sprite> sprites;
+	std::vector<Controller> controllers;
 	// for rendering sprites are also sorted by y-value and layer
 	std::vector<int> sortedSpriteIndices;
 	std::vector<Velocity> velocities;
@@ -29,41 +31,35 @@ private:
 	std::vector<Mass> masses;
 	std::vector<Force> forces;
 	std::vector<Friction> frictions;
-	std::vector<ForceBasedSpeedLimiter> forceBasedSpeedLimiters;
-	std::vector<VelocityBasedSpeedLimiter> velocityBasedSpeedLimiters;
-	std::vector<ForceBasedMovement> forceBasedMovements;
-	std::vector<VelocityBasedMovement> velocityBasedMovements;
-	std::vector<ForceBasedMovementController> forceBasedMovementControllers;
-	std::vector<VelocityBasedMovementController> velocityBasedMovementControllers;
-	std::vector<SpriteManager> spriteManagers;
 	std::vector<StoppingForce> stoppingForces;
+	std::vector<MovementController> movementControllers;
+	std::vector<Movement> movements;
+	std::vector<SpeedLimiter> speedLimiters;
+	std::vector<SpriteManager> spriteManagers;
 	std::vector<CameraManager> cameraManagers;
 	std::vector<FollowCamera> followCameras;
-	std::vector<Tag> tags;
 
 	// TODO: Consider layers for physics too, for dynamically switching which hitboxes should be checked.
 
 	// table of components for generalized access
-	void* componentLists[18]
+	void* componentLists[16]
 	{
+		&tags,
 		&spatials,
 		&sprites,
+		&controllers,
 		&velocities,
 		&accelerations,
 		&masses,
 		&forces,
 		&frictions,
-		&forceBasedSpeedLimiters,
-		&velocityBasedSpeedLimiters,
-		&forceBasedMovements,
-		&velocityBasedMovements,
-		&forceBasedMovementControllers,
-		&velocityBasedMovementControllers,
-		&spriteManagers,
 		&stoppingForces,
+		&movementControllers,
+		&movements,
+		&speedLimiters,
+		&spriteManagers,
 		&cameraManagers,
-		&followCameras,
-		&tags
+		&followCameras
 	};
 
 public:

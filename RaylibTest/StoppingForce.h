@@ -5,7 +5,7 @@
 
 struct StoppingForce : Component
 {
-	static const int ID = 14;
+	static const int ID = 9;
 
 	Vector2 force;
 

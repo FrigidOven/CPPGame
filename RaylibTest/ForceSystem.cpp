@@ -21,8 +21,12 @@ void ForceSystem::Update(Scene& scene, std::vector<Force>& forces, float deltaTi
 		Vector2 resistingForces = Vector2Zero();
 
 		// get movement force if it exists
-		if (scene.HasComponent<ForceBasedMovement>(force.entity))
-			pushingForces = Vector2Add(pushingForces, scene.GetComponent<ForceBasedMovement>(force.entity).force);
+		if (scene.HasComponent<Movement>(force.entity))
+		{
+			Movement& movement = scene.GetComponent<Movement>(force.entity);
+			if(movement.mode == MovementMode::ForceBased)
+				pushingForces = Vector2Add(pushingForces, movement.direction);
+		}
 
 		// get friction force if it exists
 		if (scene.HasComponent<Friction>(force.entity))

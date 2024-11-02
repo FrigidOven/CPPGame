@@ -7,15 +7,15 @@ class Game
 {
 private:
 	// Input routine systems
-	InputSystem inputSystem;
-	ForceBasedMovementControllerSystem forceBasedMovementControllerSystem;
-	VelocityBasedMovementControllerSystem velocityBasedMovementControllerSystem;
+	ControllerSystem controllerSystem;
+	PlayerMovementControllerSystem playerMovementControllerSystem;
 	// Physics / Movement routines systems
+	MovementSystem movementSystem;
 	FrictionSystem frictionSystem;
 	StoppingForceSystem stoppingForceSystem;
 	ForceSystem forceSystem;
 	AccelerationSystem accelerationSystem;
-	ForceBasedSpeedLimiterSystem forceBasedSpeedLimiterSystem;
+	SpeedLimiterSystem speedLimiterSystem;
 	VelocitySystem velocitySystem;
 	// Rendering systems
 	FollowCameraSystem followCameraSystem;

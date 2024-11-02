@@ -5,7 +5,7 @@
 
 struct Force : Component
 {
-	static const int ID = 5;
+	static const int ID = 7;
 
 	Vector2 force;
 

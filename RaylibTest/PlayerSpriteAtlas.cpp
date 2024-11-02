@@ -42,13 +42,28 @@ PlayerSpriteAtlas::PlayerSpriteAtlas()
 }
 int PlayerSpriteAtlas::GetYPos(State state, Direction direction)
 {
+	if (direction == Direction::UpLeft || direction == Direction::DownLeft)
+		direction = Direction::Left;
+	if (direction == Direction::UpRight || direction == Direction::DownRight)
+		direction = Direction::Right;
+
 	return stateYPos[state] + directionYPos[direction];
 }
 int PlayerSpriteAtlas::GetFrameCount(State state, Direction direction)
 {
+	if (direction == Direction::UpLeft || direction == Direction::DownLeft)
+		direction = Direction::Left;
+	if (direction == Direction::UpRight || direction == Direction::DownRight)
+		direction = Direction::Right;
+
 	return stateDirectionFrameCounts[std::make_pair(state, direction)];
 }
 float PlayerSpriteAtlas::GetFPS(State state, Direction direction)
 {
+	if (direction == Direction::UpLeft || direction == Direction::DownLeft)
+		direction = Direction::Left;
+	if (direction == Direction::UpRight || direction == Direction::DownRight)
+		direction = Direction::Right;
+
 	return stateDirectionFPS[std::make_pair(state, direction)];
 }

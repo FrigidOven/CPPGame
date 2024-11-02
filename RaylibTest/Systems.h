@@ -1,16 +1,15 @@
 #pragma once
 
-#include "InputSystem.h"
-
-#include "ForceBasedMovementControllerSystem.h"
-#include "VelocityBasedMovementControllerSystem.h"
+#include "ControllerSystem.h"
+#include "PlayerMovementControllerSystem.h"
+#include "MovementSystem.h"
 
 #include "ForceSystem.h"
 #include "FrictionSystem.h"
 #include "AccelerationSystem.h"
 #include "VelocitySystem.h"
 
-#include "ForceBasedSpeedLimiterSystem.h"
+#include "SpeedLimiterSystem.h"
 #include "StoppingForceSystem.h"
 
 #include "FollowCameraSystem.h"

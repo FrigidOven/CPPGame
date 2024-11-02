@@ -21,15 +21,15 @@ void Game::Update()
 	float deltaTime = GetFrameTime();
 
 	// Input Routine:
-	inputSystem.Update(currentScene, currentScene.GetComponents<ForceBasedMovementController>(), currentScene.GetComponents<VelocityBasedMovementController>());
-	forceBasedMovementControllerSystem.Update(currentScene, currentScene.GetComponents<ForceBasedMovementController>());
-	velocityBasedMovementControllerSystem.Update(currentScene, currentScene.GetComponents<VelocityBasedMovementController>());
-	// Physics Routine:
+	controllerSystem.Update(currentScene, currentScene.GetComponents<Controller>());
+	playerMovementControllerSystem.Update(currentScene, currentScene.GetComponents<Controller>());
+	// Physics/Movement Routines:
+	movementSystem.Update(currentScene, currentScene.GetComponents<MovementController>());
 	frictionSystem.Update(currentScene, currentScene.GetComponents<Friction>());
 	stoppingForceSystem.Update(currentScene, currentScene.GetComponents<StoppingForce>());
 	forceSystem.Update(currentScene, currentScene.GetComponents<Force>(), deltaTime);
 	accelerationSystem.Update(currentScene, currentScene.GetComponents<Acceleration>(), deltaTime);
-	forceBasedSpeedLimiterSystem.Update(currentScene, currentScene.GetComponents<ForceBasedSpeedLimiter>());
+	speedLimiterSystem.Update(currentScene, currentScene.GetComponents<SpeedLimiter>());
 	velocitySystem.Update(currentScene, currentScene.GetComponents<Velocity>(), deltaTime);
 	// Rendering Routine:
 	followCameraSystem.Update(currentScene, currentScene.GetComponents<FollowCamera>());

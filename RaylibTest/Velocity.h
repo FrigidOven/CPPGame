@@ -5,7 +5,7 @@
 
 struct Velocity : Component
 {
-	static const int ID = 2;
+	static const int ID = 4;
 
 	Vector2 velocity;
 

@@ -5,7 +5,7 @@
 
 struct Tag : Component
 {
-	static const int ID = 17;
+	static const int ID = 0;
 
 	EntityGroup entityGroup;
 	EntityType entityType;

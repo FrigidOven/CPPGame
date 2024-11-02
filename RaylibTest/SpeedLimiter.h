@@ -3,13 +3,13 @@
 #include "Component.h"
 #include <raylib.h>
 
-struct ForceBasedSpeedLimiter : Component
+struct SpeedLimiter : Component
 {
-	static const int ID = 7;
+	static const int ID = 12;
 
 	float maxVelocity;
 
-	ForceBasedSpeedLimiter(int entityId, float maxVelocity)
+	SpeedLimiter(int entityId, float maxVelocity)
 		: maxVelocity(maxVelocity)
 	{
 		entity = entityId;

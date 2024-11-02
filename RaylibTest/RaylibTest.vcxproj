@@ -129,47 +129,48 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AccelerationSystem.cpp" />
+    <ClCompile Include="ControllerSystem.cpp" />
     <ClCompile Include="FollowCameraSystem.cpp" />
-    <ClCompile Include="ForceBasedMovementControllerSystem.cpp" />
-    <ClCompile Include="ForceBasedSpeedLimiterSystem.cpp" />
     <ClCompile Include="ForceSystem.cpp" />
     <ClCompile Include="FrictionSystem.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="InputListener.cpp" />
-    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="MovementSystem.cpp" />
+    <ClCompile Include="PlayerMovementControllerSystem.cpp" />
     <ClCompile Include="PlayerSpriteAtlas.cpp" />
+    <ClCompile Include="SpeedLimiterSystem.cpp" />
     <ClCompile Include="SpriteManagerSystem.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="RaylibTest.cpp" />
     <ClCompile Include="SpriteRendererSystem.cpp" />
     <ClCompile Include="SpriteSortingSystem.cpp" />
     <ClCompile Include="StoppingForceSystem.cpp" />
-    <ClCompile Include="VelocityBasedMovementControllerSystem.cpp" />
     <ClCompile Include="VelocitySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Acceleration.h" />
     <ClInclude Include="AccelerationSystem.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="ControllerSystem.h" />
     <ClInclude Include="FollowCameraSystem.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Force.h" />
-    <ClInclude Include="ForceBasedMovement.h" />
-    <ClInclude Include="ForceBasedMovementController.h" />
-    <ClInclude Include="ForceBasedMovementControllerSystem.h" />
-    <ClInclude Include="ForceBasedSpeedLimiter.h" />
-    <ClInclude Include="ForceBasedSpeedLimiterSystem.h" />
+    <ClInclude Include="Movement.h" />
+    <ClInclude Include="MovementSystem.h" />
+    <ClInclude Include="PlayerMovementControllerSystem.h" />
+    <ClInclude Include="SpeedLimiter.h" />
     <ClInclude Include="ForceSystem.h" />
     <ClInclude Include="Friction.h" />
     <ClInclude Include="FrictionSystem.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="Mass.h" />
+    <ClInclude Include="MovementController.h" />
+    <ClInclude Include="SpeedLimiterSystem.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="SpriteManagerSystem.h" />
@@ -184,10 +185,6 @@
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Tags.h" />
     <ClInclude Include="Velocity.h" />
-    <ClInclude Include="VelocityBasedMovement.h" />
-    <ClInclude Include="VelocityBasedMovementController.h" />
-    <ClInclude Include="VelocityBasedMovementControllerSystem.h" />
-    <ClInclude Include="VelocityBasedSpeedLimiter.h" />
     <ClInclude Include="VelocitySystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
