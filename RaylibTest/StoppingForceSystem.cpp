@@ -9,7 +9,7 @@
 */
 void StoppingForceSystem::Update(Scene& scene, std::vector<StoppingForce>& stoppingForces)
 {
-	int requiredComponentsMask = 1 << Velocity::ID;
+	int requiredComponentsMask = (1 << Velocity::ID) | (1 << ForceReceiver::ID);
 
 	for (size_t i = 0; i < stoppingForces.size(); i++)
 	{
@@ -29,6 +29,11 @@ void StoppingForceSystem::Update(Scene& scene, std::vector<StoppingForce>& stopp
 		{
 			scene.RemoveComponent<StoppingForce>(stoppingForces[i].entity);
 			i--;
+		}
+		else
+		{
+			Vector2& resistingForce = scene.GetComponent<ForceReceiver>(stoppingForces[i].entity).resistingForce;
+			resistingForce = Vector2Add(resistingForce, stoppingForces[i].force);
 		}
 	}
 }

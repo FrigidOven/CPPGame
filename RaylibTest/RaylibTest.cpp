@@ -30,15 +30,15 @@ int main()
     scene.AddComponent<Sprite>(testEntity1, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 32 * IMAGE_SCALE, 32 * IMAGE_SCALE, 1, 0, 1);
     scene.AddComponent<Velocity>(testEntity1, Vector2Zero());
     scene.AddComponent<Acceleration>(testEntity1, Vector2Zero());
-    scene.AddComponent<Mass>(testEntity1, 1.0f);
-    scene.AddComponent<Force>(testEntity1, Vector2Zero());
+    scene.AddComponent<Mass>(testEntity1, 25.0f);
+    scene.AddComponent<ForceReceiver>(testEntity1);
     scene.AddComponent<Friction>(testEntity1, 0.8f);
     scene.AddComponent<Controller>(testEntity1, 
         Input(ControlType::Keyboard, KEY_UP),
         Input(ControlType::Keyboard, KEY_LEFT),
         Input(ControlType::Keyboard, KEY_DOWN),
         Input(ControlType::Keyboard, KEY_RIGHT));
-    scene.AddComponent<MovementController>(testEntity1, MovementMode::ForceBased, 1000.0f * IMAGE_SCALE);
+    scene.AddComponent<MovementController>(testEntity1, MovementMode::ForceBased, 25000.0f * IMAGE_SCALE);
     scene.AddComponent<SpeedLimiter>(testEntity1, 100.0f * IMAGE_SCALE);
     scene.AddComponent<SpriteManager>(testEntity1);
 
@@ -61,10 +61,17 @@ int main()
     scene.AddComponent<SpriteManager>(testEntity2);
 
     scene.AddComponent<FollowCamera>(static_cast<int>(SpecialEntities::Camera), testEntity1, Vector2Zero());
+    
+    bool impulseAdded = false;
 
     while (!WindowShouldClose())
     {
         game.Update();
+
+        if (!impulseAdded && GetTime() > 3.0f)
+        {
+            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(1000000.0f, 0.0f), 0.05f);
+        }
     }
 
     CloseWindow();

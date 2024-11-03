@@ -33,7 +33,7 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ForceSystem.cpp">
+    <ClCompile Include="ForceApplierSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
     <ClCompile Include="VelocitySystem.cpp">
@@ -69,10 +69,16 @@
     <ClCompile Include="ControllerSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="MovementSystem.cpp">
+    <ClCompile Include="MovementControllerSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
     <ClCompile Include="SpeedLimiterSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="ImpulseSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,7 +110,7 @@
     <ClInclude Include="Mass.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Force.h">
+    <ClInclude Include="ForceReceiver.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Friction.h">
@@ -116,7 +122,7 @@
     <ClInclude Include="Movement.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ForceSystem.h">
+    <ClInclude Include="ForceApplierSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="FrictionSystem.h">
@@ -188,10 +194,19 @@
     <ClInclude Include="ControllerSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="MovementSystem.h">
+    <ClInclude Include="MovementControllerSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="SpeedLimiterSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Impulse.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ImpulseSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,10 +10,12 @@ private:
 	ControllerSystem controllerSystem;
 	PlayerMovementControllerSystem playerMovementControllerSystem;
 	// Physics / Movement routines systems
+	MovementControllerSystem movementControllerSystem;
 	MovementSystem movementSystem;
 	FrictionSystem frictionSystem;
 	StoppingForceSystem stoppingForceSystem;
-	ForceSystem forceSystem;
+	ImpulseSystem impulseSystem;
+	ForceApplierSystem forceApplierSystem;
 	AccelerationSystem accelerationSystem;
 	SpeedLimiterSystem speedLimiterSystem;
 	VelocitySystem velocitySystem;

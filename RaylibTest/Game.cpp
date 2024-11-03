@@ -24,10 +24,12 @@ void Game::Update()
 	controllerSystem.Update(currentScene, currentScene.GetComponents<Controller>());
 	playerMovementControllerSystem.Update(currentScene, currentScene.GetComponents<Controller>());
 	// Physics/Movement Routines:
-	movementSystem.Update(currentScene, currentScene.GetComponents<MovementController>());
+	movementControllerSystem.Update(currentScene, currentScene.GetComponents<MovementController>());
+	movementSystem.Update(currentScene, currentScene.GetComponents<Movement>());
 	frictionSystem.Update(currentScene, currentScene.GetComponents<Friction>());
 	stoppingForceSystem.Update(currentScene, currentScene.GetComponents<StoppingForce>());
-	forceSystem.Update(currentScene, currentScene.GetComponents<Force>(), deltaTime);
+	impulseSystem.Update(currentScene, currentScene.GetComponents<Impulse>(), deltaTime);
+	forceApplierSystem.Update(currentScene, currentScene.GetComponents<ForceReceiver>(), deltaTime);
 	accelerationSystem.Update(currentScene, currentScene.GetComponents<Acceleration>(), deltaTime);
 	speedLimiterSystem.Update(currentScene, currentScene.GetComponents<SpeedLimiter>());
 	velocitySystem.Update(currentScene, currentScene.GetComponents<Velocity>(), deltaTime);

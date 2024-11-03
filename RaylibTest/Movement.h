@@ -6,7 +6,7 @@
 
 struct Movement : Component
 {
-	static const int ID = 11;
+	static const int ID = 12;
 
 	MovementMode mode;
 	Vector2 direction;

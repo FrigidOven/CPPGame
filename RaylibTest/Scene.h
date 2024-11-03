@@ -29,9 +29,10 @@ private:
 	std::vector<Velocity> velocities;
 	std::vector<Acceleration> accelerations;
 	std::vector<Mass> masses;
-	std::vector<Force> forces;
+	std::vector<ForceReceiver> forceReceivers;
 	std::vector<Friction> frictions;
 	std::vector<StoppingForce> stoppingForces;
+	std::vector<Impulse> impulses;
 	std::vector<MovementController> movementControllers;
 	std::vector<Movement> movements;
 	std::vector<SpeedLimiter> speedLimiters;
@@ -42,7 +43,7 @@ private:
 	// TODO: Consider layers for physics too, for dynamically switching which hitboxes should be checked.
 
 	// table of components for generalized access
-	void* componentLists[16]
+	void* componentLists[Component::COMPONENT_COUNT]
 	{
 		&tags,
 		&spatials,
@@ -51,9 +52,10 @@ private:
 		&velocities,
 		&accelerations,
 		&masses,
-		&forces,
+		&forceReceivers,
 		&frictions,
 		&stoppingForces,
+		&impulses,
 		&movementControllers,
 		&movements,
 		&speedLimiters,

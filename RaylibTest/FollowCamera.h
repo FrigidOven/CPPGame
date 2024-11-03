@@ -5,7 +5,7 @@
 
 struct FollowCamera : Component
 {
-	static const int ID = 15;
+	static const int ID = 16;
 
 	int targetEntity;
 	Vector2 offset;
