@@ -32,7 +32,7 @@ int main()
     scene.AddComponent<Acceleration>(testEntity1, Vector2Zero());
     scene.AddComponent<Mass>(testEntity1, 1.0f);
     scene.AddComponent<Force>(testEntity1, Vector2Zero());
-    scene.AddComponent<Friction>(testEntity1, 0.9f);
+    scene.AddComponent<Friction>(testEntity1, 0.8f);
     scene.AddComponent<Controller>(testEntity1, 
         Input(ControlType::Keyboard, KEY_UP),
         Input(ControlType::Keyboard, KEY_LEFT),
