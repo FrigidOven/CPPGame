@@ -43,7 +43,26 @@ int main()
     scene.AddComponent<SpeedLimiter>(testEntity1, 1.0f);
     scene.AddComponent<SpriteManager>(testEntity1);
 
-    scene.AddComponent<FollowCamera>(static_cast<int>(SpecialEntities::Camera), testEntity1, Vector2Zero());
+
+    int testEntity2 = scene.CreateEntity();
+    Tag& entityTag2 = scene.GetComponent<Tag>(testEntity2);
+    entityTag2.entityGroup = EntityGroup::Player;
+    entityTag2.entityType = EntityType::Player;
+    entityTag2.direction = Direction::Down;
+
+    scene.AddComponent<Spatial>(testEntity2, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - (32 * PIXEL_SIZE) / 2 }, 0.0f);
+    scene.AddComponent<Sprite>(testEntity2, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 1, 1, 1, 0, 1);
+    scene.AddComponent<Velocity>(testEntity2, Vector2Zero());
+    scene.AddComponent<Controller>(testEntity2,
+        Input(ControlType::Keyboard, KEY_UP),
+        Input(ControlType::Keyboard, KEY_LEFT),
+        Input(ControlType::Keyboard, KEY_DOWN),
+        Input(ControlType::Keyboard, KEY_RIGHT));
+    scene.AddComponent<MovementController>(testEntity2, MovementMode::VelocityBased, 1.0f);
+    scene.AddComponent<SpeedLimiter>(testEntity2, 1.0f);
+    scene.AddComponent<SpriteManager>(testEntity2);
+
+    scene.AddComponent<FollowCamera>(static_cast<int>(SpecialEntities::Camera), testEntity0, Vector2Zero());
     
     bool impulseAdded = false;
 
@@ -54,7 +73,7 @@ int main()
 
         if (!impulseAdded && GetTime() > 3.0f)
         {
-            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(1000.0f, 0.0f), 0.25f);
+            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(50000.0f, 0.0f), 0.125f);
         }
     }
 
