@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "GameConstants.h"
-#include <iostream>
 
 int main()
 {  
@@ -68,12 +67,11 @@ int main()
 
     while (!WindowShouldClose())
     {
-        std::cout << "Velocity is: " << Vector2Length(scene.GetComponent<Velocity>(testEntity1).velocity) << "\n";
         game.Update();
 
         if (!impulseAdded && GetTime() > 3.0f)
         {
-            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(50000.0f, 0.0f), 0.125f);
+            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(50.0f, 0.0f));
         }
     }
 

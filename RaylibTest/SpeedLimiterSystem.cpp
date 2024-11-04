@@ -22,6 +22,9 @@ void SpeedLimiterSystem::Update(Scene& scene, std::vector<SpeedLimiter>& speedLi
 		// if at max velocity
 		if (Vector2Length(velocity.velocity) >= speedLimiter.maxVelocity)
 		{
+
+
+
 			// cancel out acceleration that is not working to decrease velocity
 			if (velocity.velocity.x * acceleration.acceleration.x > 0.0f)
 				acceleration.acceleration.x = 0.0f;

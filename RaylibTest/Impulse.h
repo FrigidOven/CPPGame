@@ -8,11 +8,9 @@ struct Impulse : Component
 	static const int ID = 9;
 
 	Vector2 force;
-	float durration;
 
-	Impulse(int entityId, Vector2 force, float durration)
+	Impulse(int entityId, Vector2 force)
 		: force(force)
-		, durration(durration)
 	{
 		entity = entityId;
 	}
