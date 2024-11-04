@@ -1,3 +1,4 @@
+#include "GameConstants.h"
 #include "FrictionSystem.h"
 #include "Scene.h"
 

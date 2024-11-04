@@ -33,7 +33,7 @@ void StoppingForceSystem::Update(Scene& scene, std::vector<StoppingForce>& stopp
 		else
 		{
 			Vector2& resistingForce = scene.GetComponent<ForceReceiver>(stoppingForces[i].entity).resistingForce;
-			resistingForce = Vector2Add(resistingForce, stoppingForces[i].force);
+			//resistingForce = Vector2Add(resistingForce, stoppingForces[i].force);
 		}
 	}
 }

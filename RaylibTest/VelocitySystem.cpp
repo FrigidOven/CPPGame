@@ -1,4 +1,5 @@
 #include "VelocitySystem.h"
+#include "GameConstants.h"
 #include "Scene.h"
 
 #include <raymath.h>
@@ -33,6 +34,10 @@ void VelocitySystem::Update(Scene& scene, std::vector<Velocity>& velocities, flo
 			displacement = Vector2ClampValue(displacement, 0.0f, maxVelocity * deltaTime);
 			velocity.velocity = Vector2ClampValue(velocity.velocity, 0.0f, maxVelocity);
 		}
+
+		// scale to pixel size * 100, a pixel is 1 cm, and all units are given in meters.
+		displacement = Vector2Scale(displacement, PIXEL_SIZE * 100);
+
 		// add to position
 		Spatial& spatial = scene.GetComponent<Spatial>(velocity.entity);
 		spatial.position = Vector2Add(spatial.position, displacement);
