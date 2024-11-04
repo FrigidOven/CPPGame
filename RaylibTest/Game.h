@@ -13,7 +13,6 @@ private:
 	MovementControllerSystem movementControllerSystem;
 	MovementSystem movementSystem;
 	FrictionSystem frictionSystem;
-	StoppingForceSystem stoppingForceSystem;
 	ImpulseSystem impulseSystem;
 	ForceApplierSystem forceApplierSystem;
 	AccelerationSystem accelerationSystem;

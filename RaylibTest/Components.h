@@ -13,13 +13,12 @@
 #include "Mass.h" // 6
 #include "ForceReceiver.h" // 7
 #include "Friction.h" // 8
-#include "StoppingForce.h" // 9
-#include "Impulse.h" // 10
+#include "Impulse.h" // 9
 
-#include "MovementController.h" // 11
-#include "Movement.h" // 12
-#include "SpeedLimiter.h" // 13
+#include "MovementController.h" // 10
+#include "Movement.h" // 11
+#include "SpeedLimiter.h" // 12
 
-#include "SpriteManager.h" // 14
-#include "CameraManager.h" // 15
-#include "FollowCamera.h" // 16
+#include "SpriteManager.h" // 13
+#include "CameraManager.h" // 14
+#include "FollowCamera.h" // 15

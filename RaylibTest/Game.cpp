@@ -27,7 +27,6 @@ void Game::Update()
 	movementControllerSystem.Update(currentScene, currentScene.GetComponents<MovementController>());
 	movementSystem.Update(currentScene, currentScene.GetComponents<Movement>());
 	frictionSystem.Update(currentScene, currentScene.GetComponents<Friction>());
-	stoppingForceSystem.Update(currentScene, currentScene.GetComponents<StoppingForce>());
 	impulseSystem.Update(currentScene, currentScene.GetComponents<Impulse>(), deltaTime);
 	forceApplierSystem.Update(currentScene, currentScene.GetComponents<ForceReceiver>(), deltaTime);
 	accelerationSystem.Update(currentScene, currentScene.GetComponents<Acceleration>(), deltaTime);

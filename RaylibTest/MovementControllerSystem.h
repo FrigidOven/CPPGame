@@ -7,10 +7,6 @@
 
 class MovementControllerSystem
 {
-private:
-	void HandleForceBasedMovement(Scene& scene, MovementController& movementController);
-	void HandleVelocityBasedMovement(Scene& scene, MovementController& movementController);
-
 public:
 	void Update(Scene& scene, std::vector<MovementController>& controllers);
 };

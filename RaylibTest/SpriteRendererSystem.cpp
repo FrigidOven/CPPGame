@@ -1,3 +1,4 @@
+#include "GameConstants.h"
 #include "SpriteRendererSystem.h"
 #include "Scene.h"
 
@@ -13,8 +14,8 @@ void SpriteRendererSystem::Update(Scene& scene, Camera2D& camera, std::vector<Sp
 
 	BeginMode2D(camera);
 
-	Rectangle dest{ 0, 0, 0, 0 };
 	Rectangle source{ 0, 0, 0, 0 };
+	Rectangle dest{ 0, 0, 0, 0 };
 
 	int requiredComponentsMask = 1 << Spatial::ID;
 
@@ -28,16 +29,16 @@ void SpriteRendererSystem::Update(Scene& scene, Camera2D& camera, std::vector<Sp
 		Vector2 position = scene.GetComponent<Spatial>(sprite.entity).position;
 		float rotation = scene.GetComponent<Spatial>(sprite.entity).rotation;
 
-		dest.x = position.x;
-		dest.y = position.y;
-		dest.width = sprite.destWidth;
-		dest.height = sprite.destHeight;
-
 		// assume frames are layed out horizontally
 		source.x = sprite.sourceRect.x + sprite.currentFrame * sprite.sourceRect.width;
 		source.y = sprite.sourceRect.y;
 		source.width = sprite.sourceRect.width;
 		source.height = sprite.sourceRect.height;
+
+		dest.x = position.x;
+		dest.y = position.y;
+		dest.width = source.width * sprite.xScale * PIXEL_SIZE;
+		dest.height = source.height * sprite.yScale * PIXEL_SIZE;
 
 		// draw sprites centered at destination
 		Vector2 origin = { dest.width / 2, dest.height / 2 };

@@ -11,7 +11,6 @@
 #include "VelocitySystem.h"
 
 #include "SpeedLimiterSystem.h"
-#include "StoppingForceSystem.h"
 #include "ImpulseSystem.h"
 
 #include "FollowCameraSystem.h"

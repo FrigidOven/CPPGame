@@ -5,7 +5,7 @@
 
 struct Impulse : Component
 {
-	static const int ID = 10;
+	static const int ID = 9;
 
 	Vector2 force;
 	float durration;

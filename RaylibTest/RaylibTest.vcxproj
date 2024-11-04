@@ -145,7 +145,6 @@
     <ClCompile Include="RaylibTest.cpp" />
     <ClCompile Include="SpriteRendererSystem.cpp" />
     <ClCompile Include="SpriteSortingSystem.cpp" />
-    <ClCompile Include="StoppingForceSystem.cpp" />
     <ClCompile Include="VelocitySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,8 +183,6 @@
     <ClInclude Include="SpriteAtlas.h" />
     <ClInclude Include="SpriteRendererSystem.h" />
     <ClInclude Include="SpriteSortingSystem.h" />
-    <ClInclude Include="StoppingForce.h" />
-    <ClInclude Include="StoppingForceSystem.h" />
     <ClInclude Include="Systems.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Tags.h" />

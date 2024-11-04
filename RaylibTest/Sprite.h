@@ -12,20 +12,20 @@ struct Sprite : Component
 	Texture2D* source;
 	Rectangle sourceRect;
 
-	float destWidth;
-	float destHeight;
+	float xScale;
+	float yScale;
 
 	int frameCount;
 	int currentFrame;
 	float timer;
 	float fps;
 
-	Sprite(int entityId, int layer, Texture2D* source, Rectangle sourceRect, float destWidth, float destHeight, int frameCount, int currentFrame, float fps)
+	Sprite(int entityId, int layer, Texture2D* source, Rectangle sourceRect, float xScale, float yScale, int frameCount, int currentFrame, float fps)
 		: layer(layer)
 		, source(source)
 		, sourceRect(sourceRect)
-		, destWidth(destWidth)
-		, destHeight(destHeight)
+		, xScale(xScale)
+		, yScale(yScale)
 		, frameCount(frameCount)
 		, currentFrame(currentFrame)
 		, timer(0.0f)

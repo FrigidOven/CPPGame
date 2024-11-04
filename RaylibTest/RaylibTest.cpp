@@ -19,7 +19,7 @@ int main()
     entityTag0.entityType = EntityType::GrassSurface;
 
     scene.AddComponent<Spatial>(testEntity0, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 }, 0.0f);
-    scene.AddComponent<Sprite>(testEntity0, 0, &backgroundSprite, Rectangle{ 0, 0, 256, 224 }, 256 * PIXEL_SIZE, 224 * PIXEL_SIZE, 1, 0, 1);
+    scene.AddComponent<Sprite>(testEntity0, 0, &backgroundSprite, Rectangle{ 0, 0, 256, 224 }, 1, 1, 1, 0, 1);
 
     int testEntity1 = scene.CreateEntity();
     Tag& entityTag1 = scene.GetComponent<Tag>(testEntity1);
@@ -28,7 +28,7 @@ int main()
     entityTag1.direction = Direction::Down;
 
     scene.AddComponent<Spatial>(testEntity1, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + (32 * PIXEL_SIZE) / 2 }, 0.0f);
-    scene.AddComponent<Sprite>(testEntity1, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 32 * PIXEL_SIZE, 32 * PIXEL_SIZE, 1, 0, 1);
+    scene.AddComponent<Sprite>(testEntity1, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 1, 1, 1, 0, 1);
     scene.AddComponent<Velocity>(testEntity1, Vector2Zero());
     scene.AddComponent<Acceleration>(testEntity1, Vector2Zero());
     scene.AddComponent<Mass>(testEntity1, 25.0f);

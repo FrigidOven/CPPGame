@@ -31,7 +31,6 @@ private:
 	std::vector<Mass> masses;
 	std::vector<ForceReceiver> forceReceivers;
 	std::vector<Friction> frictions;
-	std::vector<StoppingForce> stoppingForces;
 	std::vector<Impulse> impulses;
 	std::vector<MovementController> movementControllers;
 	std::vector<Movement> movements;
@@ -54,7 +53,6 @@ private:
 		&masses,
 		&forceReceivers,
 		&frictions,
-		&stoppingForces,
 		&impulses,
 		&movementControllers,
 		&movements,
