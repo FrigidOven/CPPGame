@@ -5,7 +5,7 @@
 
 struct Spatial : Component
 {
-	static const int ID = 1;
+	static const ComponentID ID = ComponentID::Spatial;
 
 	Vector2 position;
 	float rotation;

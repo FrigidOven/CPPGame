@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Scene.h"
-#include "Movement.h"
-
-#include <vector>
 
 class MovementSystem
 {

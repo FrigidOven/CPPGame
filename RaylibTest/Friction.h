@@ -7,7 +7,7 @@
 
 struct Friction : Component
 {
-	static const int ID = 8;
+	static const ComponentID ID = ComponentID::Friction;
 
 	float coefficient;
 	Vector2 force;

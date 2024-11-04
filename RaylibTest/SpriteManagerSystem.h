@@ -1,12 +1,8 @@
 #pragma once
 
 #include "Scene.h"
-#include "SpriteManager.h"
-#include "Sprite.h"
 #include "SpriteAtlas.h"
-#include "Tags.h"
 
-#include <vector>
 #include <unordered_map>
 
 

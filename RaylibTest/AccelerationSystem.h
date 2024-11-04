@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Scene.h"
-#include "Acceleration.h"
-
-#include <vector>
 
 class AccelerationSystem
 {

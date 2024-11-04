@@ -5,7 +5,7 @@
 
 struct Impulse : Component
 {
-	static const int ID = 9;
+	static const ComponentID ID = ComponentID::Impulse;
 
 	Vector2 force;
 

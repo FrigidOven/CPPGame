@@ -1,9 +1,27 @@
 #pragma once
 
-#include <array>
+#include "GameConstants.h"
 
 #include "Entity.h"
-#include "Components.h"
+
+// components
+#include "Tag.h"
+#include "Spatial.h"
+#include "Sprite.h"
+#include "Controller.h"
+#include "Velocity.h"
+#include "Acceleration.h"
+#include "Rigidbody.h"
+#include "Friction.h"
+#include "Impulse.h"
+#include "MovementController.h"
+#include "Movement.h"
+#include "SpeedLimiter.h"
+#include "SpriteManager.h"
+#include "CameraManager.h"
+#include "FollowCamera.h"
+
+#include <array>
 
 enum class SpecialEntities
 {
@@ -28,8 +46,7 @@ private:
 	std::vector<int> sortedSpriteIndices;
 	std::vector<Velocity> velocities;
 	std::vector<Acceleration> accelerations;
-	std::vector<Mass> masses;
-	std::vector<ForceReceiver> forceReceivers;
+	std::vector<Rigidbody> rigidbodies;
 	std::vector<Friction> frictions;
 	std::vector<Impulse> impulses;
 	std::vector<MovementController> movementControllers;
@@ -42,25 +59,7 @@ private:
 	// TODO: Consider layers for physics too, for dynamically switching which hitboxes should be checked.
 
 	// table of components for generalized access
-	void* componentLists[Component::COMPONENT_COUNT]
-	{
-		&tags,
-		&spatials,
-		&sprites,
-		&controllers,
-		&velocities,
-		&accelerations,
-		&masses,
-		&forceReceivers,
-		&frictions,
-		&impulses,
-		&movementControllers,
-		&movements,
-		&speedLimiters,
-		&spriteManagers,
-		&cameraManagers,
-		&followCameras
-	};
+	void* componentLists[static_cast<int>(ComponentID::COMPONENT_COUNT)];
 
 public:
 	Scene(Camera2D* camera);
@@ -94,10 +93,10 @@ bool Scene::AddComponent(int entityId, Args... args)
 
 	if (successful)
 	{
-		entities[entityId].componentMask |= 1 << T::ID;
-		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentLists[T::ID]);
+		entities[entityId].componentMask |= 1 << static_cast<int>(T::ID);
+		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentLists[static_cast<int>(T::ID)]);
 		componentList->emplace_back(entityId, args...);
-		components[entityId * Component::COMPONENT_COUNT + T::ID] = static_cast<int>(componentList->size()) - 1;
+		components[entityId * static_cast<int>(ComponentID::COMPONENT_COUNT) + static_cast<int>(T::ID)] = static_cast<int>(componentList->size()) - 1;
 	}
 
 	return successful;
@@ -110,8 +109,8 @@ bool Scene::RemoveComponent(int entityId)
 
 	if (successful)
 	{
-		int index = components[entityId * Component::COMPONENT_COUNT + T::ID];
-		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentLists[T::ID]);
+		int index = components[entityId * static_cast<int>(ComponentID::COMPONENT_COUNT) + static_cast<int>(T::ID)];
+		std::vector<T>* componentList = static_cast<std::vector<T>*>(componentLists[static_cast<int>(T::ID)]);
 
 		// swap and pop approach to keep vectors tightly packed
 		if (index < componentList->size())
@@ -122,13 +121,13 @@ bool Scene::RemoveComponent(int entityId)
 			(*componentList)[componentList->size() - 1] = toRemove;
 			(*componentList)[index] = back;
 
-			components[back.entity * Component::COMPONENT_COUNT + T::ID] = index;
+			components[back.entity * static_cast<int>(ComponentID::COMPONENT_COUNT) + static_cast<int>(T::ID)] = index;
 		}
 
-		components[entityId * Component::COMPONENT_COUNT + T::ID] = -1;
+		components[entityId * static_cast<int>(ComponentID::COMPONENT_COUNT) + static_cast<int>(T::ID)] = -1;
 		componentList->pop_back();
 
-		entities[entityId].componentMask &= ~(1 << T::ID);
+		entities[entityId].componentMask &= ~(1 << static_cast<int>(T::ID));
 	}
 
 	return successful;
@@ -137,18 +136,18 @@ bool Scene::RemoveComponent(int entityId)
 template<typename T>
 T& Scene::GetComponent(int entityId)
 {
-	int index = components[entityId * Component::COMPONENT_COUNT + T::ID];
-	return (*static_cast<std::vector<T>*>(componentLists[T::ID]))[index];
+	int index = components[entityId * static_cast<int>(ComponentID::COMPONENT_COUNT) + static_cast<int>(T::ID)];
+	return (*static_cast<std::vector<T>*>(componentLists[static_cast<int>(T::ID)]))[index];
 }
 
 template<typename T>
 std::vector<T>&  Scene::GetComponents()
 {
-	return *(static_cast<std::vector<T>*>(componentLists[T::ID]));
+	return *(static_cast<std::vector<T>*>(componentLists[static_cast<int>(T::ID)]));
 }
 
 template<typename T>
 bool Scene::HasComponent(int entityId)
 {
-	return  (entities[entityId].componentMask & (1 << T::ID)) != 0;
+	return  (entities[entityId].componentMask & (1 << static_cast<int>(T::ID))) != 0;
 }

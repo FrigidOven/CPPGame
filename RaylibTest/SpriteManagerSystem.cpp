@@ -1,8 +1,5 @@
 #include "SpriteManagerSystem.h"
-#include "Sprite.h"
-#include "Scene.h"
 
-#include <raymath.h>
 /*
 ===================================================================================================
  Public Functions
@@ -10,7 +7,7 @@
 */
 void SpriteManagerSystem::Update(Scene& scene, std::vector<SpriteManager>& spriteManagers)
 {
-	int requiredComponentsMask = (1 << Sprite::ID);
+	int requiredComponentsMask = (1 << static_cast<int>(Sprite::ID));
 
 	for (auto& spriteManager : spriteManagers)
 	{

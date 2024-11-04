@@ -5,7 +5,7 @@
 
 struct Tag : Component
 {
-	static const int ID = 0;
+	static const ComponentID ID = ComponentID::Tag;
 
 	EntityGroup entityGroup;
 	EntityType entityType;

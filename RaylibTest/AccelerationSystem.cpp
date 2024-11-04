@@ -1,7 +1,5 @@
 #include "AccelerationSystem.h"
-#include "Scene.h"
 
-#include <raymath.h>
 /*
 ===================================================================================================
  Public Functions
@@ -9,7 +7,7 @@
 */
 void AccelerationSystem::Update(Scene& scene, std::vector<Acceleration>& accelerations, float deltaTime)
 {
-	int requiredComponentsMask = 1 << Velocity::ID;
+	int requiredComponentsMask = 1 << static_cast<int>(Velocity::ID);
 
 	for (auto& acceleration : accelerations)
 	{

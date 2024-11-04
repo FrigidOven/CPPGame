@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Scene.h"
-#include "Impulse.h"
-
-#include <vector>
 
 class ImpulseSystem
 {

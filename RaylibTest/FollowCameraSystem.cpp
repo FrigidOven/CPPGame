@@ -1,8 +1,5 @@
 #include "FollowCameraSystem.h"
-#include "Scene.h"
-#include "GameConstants.h"
 
-#include <raymath.h>
 /*
 ===================================================================================================
  Public Functions
@@ -10,7 +7,7 @@
 */
 void FollowCameraSystem::Update(Scene& scene, std::vector<FollowCamera>& followCameras)
 {
-	int requiredComponentsMask = (1 << CameraManager::ID);
+	int requiredComponentsMask = (1 << static_cast<int>(CameraManager::ID));
 
 	for (auto& followCamera : followCameras)
 	{

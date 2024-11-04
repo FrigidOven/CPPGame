@@ -1,27 +1,23 @@
 #include "ForceApplierSystem.h"
-#include "Scene.h"
-
-#include <raymath.h>
 
 /*
 ===================================================================================================
  Public Functions
 ===================================================================================================
 */
-void ForceApplierSystem::Update(Scene& scene, std::vector<ForceReceiver>& forceReceivers, float deltaTime)
+void ForceApplierSystem::Update(Scene& scene, std::vector<Rigidbody>& rigidbodies, float deltaTime)
 {
-	int requiredComponentsMask = (1 << Acceleration::ID) | (1<<Velocity::ID) | (1<<Mass::ID);
+	int requiredComponentsMask = (1 << static_cast<int>(Acceleration::ID)) | (1 << static_cast<int>(Velocity::ID));
 
-	for (auto& forceReceiver : forceReceivers)
+	for (auto& rigidbody : rigidbodies)
 	{	
-		if ((scene.GetComponentMask(forceReceiver.entity) & requiredComponentsMask) != requiredComponentsMask)
+		if ((scene.GetComponentMask(rigidbody.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
-		Vector2 velocity = scene.GetComponent<Velocity>(forceReceiver.entity).velocity;
-		float mass = scene.GetComponent<Mass>(forceReceiver.entity).mass;
+		Vector2 velocity = scene.GetComponent<Velocity>(rigidbody.entity).velocity;
 
-		Vector2 acceleration = Vector2Scale(forceReceiver.pushingForce, 1.0f / mass);
-		Vector2 deceleration = Vector2Scale(forceReceiver.resistingForce, 1.0f / mass);
+		Vector2 acceleration = Vector2Scale(rigidbody.pushingForce, 1.0f / rigidbody.mass);
+		Vector2 deceleration = Vector2Scale(rigidbody.resistingForce, 1.0f / rigidbody.mass);
 
 		Vector2 deltaVelocity = Vector2Scale(Vector2Add(acceleration, deceleration), deltaTime);
 
@@ -30,18 +26,18 @@ void ForceApplierSystem::Update(Scene& scene, std::vector<ForceReceiver>& forceR
 
 		// solve deltaVelocity = acceleration * time + deceleration * time
 		// where deltaVelocity = -velocity
-
-		if (velocity.x * (velocity.x + deltaVelocity.x) < 0.0f && abs(acceleration.x) < abs(deceleration.x))
+		
+		if (abs(acceleration.x) < abs(deceleration.x) && velocity.x * (velocity.x + deltaVelocity.x) < 0.0f)
 			deceleration.x = acceleration.x - velocity.x/deltaTime;
 
-		if (velocity.y * (velocity.y + deltaVelocity.y) < 0.0f && abs(acceleration.y) < abs(deceleration.y))
+		if (abs(acceleration.y) < abs(deceleration.y) && velocity.y * (velocity.y + deltaVelocity.y) < 0.0f)
 			deceleration.y = acceleration.y - velocity.y/deltaTime;
 
 		// f = ma so a = f/m
-		scene.GetComponent<Acceleration>(forceReceiver.entity).acceleration = Vector2Add(acceleration, deceleration);
+		scene.GetComponent<Acceleration>(rigidbody.entity).acceleration = Vector2Add(acceleration, deceleration);
 
 		// clear forces
-		forceReceiver.pushingForce = Vector2Zero();
-		forceReceiver.resistingForce = Vector2Zero();
+		rigidbody.pushingForce = Vector2Zero();
+		rigidbody.resistingForce = Vector2Zero();
 	}
 }

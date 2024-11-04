@@ -9,7 +9,7 @@ private:
 	static inline int PLAYER_COUNT = 0; // used for reading correct gamepad, player1, player2, etc.
 
 public:
-	static const int ID = 3;
+	static const ComponentID ID = ComponentID::Controller;
 
 	const int playerNumber;
 	Input up;

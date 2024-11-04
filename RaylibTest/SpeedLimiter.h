@@ -5,7 +5,7 @@
 
 struct SpeedLimiter : Component
 {
-	static const int ID = 12;
+	static const ComponentID ID = ComponentID::SpeedLimiter;
 
 	float maxVelocity;
 

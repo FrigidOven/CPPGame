@@ -1,5 +1,4 @@
 #include "SpriteSortingSystem.h"
-#include "Scene.h"
 
 #include <algorithm>
 

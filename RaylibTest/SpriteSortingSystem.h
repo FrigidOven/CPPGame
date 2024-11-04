@@ -1,10 +1,6 @@
 #pragma once
 
 #include "Scene.h"
-#include "Sprite.h"
-
-#include <vector>
-#include <array>
 
 class SpriteSortingSystem
 {

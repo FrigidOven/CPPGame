@@ -54,9 +54,6 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StoppingForceSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="SpriteSortingSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
@@ -107,10 +104,7 @@
     <ClInclude Include="Acceleration.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Mass.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ForceReceiver.h">
+    <ClInclude Include="Rigidbody.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Friction.h">
@@ -137,12 +131,6 @@
     <ClInclude Include="SpriteRendererSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Components.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="SpriteManager.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -154,12 +142,6 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StoppingForce.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="StoppingForceSystem.h">
-      <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="SpriteSortingSystem.h">
       <Filter>Header Files\Systems</Filter>

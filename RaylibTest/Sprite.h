@@ -5,7 +5,7 @@
 
 struct Sprite : Component
 {
-	static const int ID = 2;
+	static const ComponentID ID = ComponentID::Sprite;
 
 	int layer;
 

@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Scene.h"
-#include "FollowCamera.h"
-
-#include <vector>
 
 class FollowCameraSystem
 {

@@ -155,9 +155,8 @@
     <ClInclude Include="FollowCameraSystem.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Component.h" />
-    <ClInclude Include="Components.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="ForceReceiver.h" />
+    <ClInclude Include="Rigidbody.h" />
     <ClInclude Include="Impulse.h" />
     <ClInclude Include="ImpulseSystem.h" />
     <ClInclude Include="Movement.h" />
@@ -172,7 +171,6 @@
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="FollowCamera.h" />
-    <ClInclude Include="Mass.h" />
     <ClInclude Include="MovementController.h" />
     <ClInclude Include="SpeedLimiterSystem.h" />
     <ClInclude Include="Sprite.h" />
@@ -183,7 +181,6 @@
     <ClInclude Include="SpriteAtlas.h" />
     <ClInclude Include="SpriteRendererSystem.h" />
     <ClInclude Include="SpriteSortingSystem.h" />
-    <ClInclude Include="Systems.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Tags.h" />
     <ClInclude Include="Velocity.h" />

@@ -1,8 +1,4 @@
 #include "VelocitySystem.h"
-#include "GameConstants.h"
-#include "Scene.h"
-
-#include <raymath.h>
 
 /*
 ===================================================================================================
@@ -11,7 +7,7 @@
 */
 void VelocitySystem::Update(Scene& scene, std::vector<Velocity>& velocities, float deltaTime)
 {
-	int requiredComponentsMask = 1 << Spatial::ID;
+	int requiredComponentsMask = 1 << static_cast<int>(Spatial::ID);
 
 	for (auto& velocity  : velocities)
 	{

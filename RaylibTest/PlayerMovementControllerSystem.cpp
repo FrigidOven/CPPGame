@@ -1,6 +1,5 @@
 #include "PlayerMovementControllerSystem.h"
 
-#include <raymath.h>
 /*
 ===================================================================================================
  Public Functions
@@ -8,7 +7,7 @@
 */
 void PlayerMovementControllerSystem::Update(Scene& scene, std::vector<Controller>& controllers)
 {
-	int requiredComponentsMask = (1 << MovementController::ID);
+	int requiredComponentsMask = (1 << static_cast<int>(MovementController::ID));
 
 	for (auto& controller : controllers)
 	{

@@ -5,7 +5,7 @@
 
 struct CameraManager : Component
 {
-	static const int ID = 14;
+	static const ComponentID ID = ComponentID::CameraManager;
 
 	Camera2D* camera;
 

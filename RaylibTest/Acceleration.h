@@ -5,7 +5,7 @@
 
 struct Acceleration : Component
 {
-	static const int ID = 5;
+	static const ComponentID ID = ComponentID::Acceleration;
 
 	Vector2 acceleration;
 

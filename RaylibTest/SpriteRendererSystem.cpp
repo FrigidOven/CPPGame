@@ -1,6 +1,4 @@
-#include "GameConstants.h"
 #include "SpriteRendererSystem.h"
-#include "Scene.h"
 
 /*
 ===================================================================================================
@@ -17,7 +15,7 @@ void SpriteRendererSystem::Update(Scene& scene, Camera2D& camera, std::vector<Sp
 	Rectangle source{ 0, 0, 0, 0 };
 	Rectangle dest{ 0, 0, 0, 0 };
 
-	int requiredComponentsMask = 1 << Spatial::ID;
+	int requiredComponentsMask = 1 << static_cast<int>(Spatial::ID);
 
 	for (auto& index : sortedSpriteIndices)
 	{

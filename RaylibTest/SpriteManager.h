@@ -5,7 +5,7 @@
 
 struct SpriteManager : Component
 {
-	static const int ID = 13;
+	static const ComponentID ID = ComponentID::SpriteManager;
 
 	SpriteManager(int entityId)
 	{

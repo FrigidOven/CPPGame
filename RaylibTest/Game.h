@@ -1,7 +1,20 @@
 #pragma once
 
-#include "Systems.h"
-#include "Scene.h"
+// Systems
+#include "ControllerSystem.h"
+#include "PlayerMovementControllerSystem.h"
+#include "MovementControllerSystem.h"
+#include "MovementSystem.h"
+#include "FrictionSystem.h"
+#include "ImpulseSystem.h"
+#include "ForceApplierSystem.h"
+#include "AccelerationSystem.h"
+#include "SpeedLimiterSystem.h"
+#include "VelocitySystem.h"
+#include "FollowCameraSystem.h"
+#include "SpriteManagerSystem.h"
+#include "SpriteSortingSystem.h"
+#include "SpriteRendererSystem.h"
 
 class Game
 {
@@ -9,8 +22,8 @@ private:
 	// Input routine systems
 	ControllerSystem controllerSystem;
 	PlayerMovementControllerSystem playerMovementControllerSystem;
-	// Physics / Movement routines systems
 	MovementControllerSystem movementControllerSystem;
+	// Physics routine systems
 	MovementSystem movementSystem;
 	FrictionSystem frictionSystem;
 	ImpulseSystem impulseSystem;

@@ -12,7 +12,7 @@ enum class MovementMode
 
 struct MovementController : Component
 {
-	static const int ID = 10;
+	static const ComponentID ID = ComponentID::MovementController;
 
 	MovementMode mode;
 	float magnitude;
