@@ -29,7 +29,6 @@ void Game::Update()
 	impulseSystem.Update(currentScene, currentScene.GetComponents<Impulse>(), deltaTime);
 	forceApplierSystem.Update(currentScene, currentScene.GetComponents<Rigidbody>(), deltaTime);
 	accelerationSystem.Update(currentScene, currentScene.GetComponents<Acceleration>(), deltaTime);
-	speedLimiterSystem.Update(currentScene, currentScene.GetComponents<SpeedLimiter>());
 	velocitySystem.Update(currentScene, currentScene.GetComponents<Velocity>(), deltaTime);
 	// Rendering Routine:
 	followCameraSystem.Update(currentScene, currentScene.GetComponents<FollowCamera>());

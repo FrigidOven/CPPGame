@@ -139,7 +139,6 @@
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="PlayerMovementControllerSystem.cpp" />
     <ClCompile Include="PlayerSpriteAtlas.cpp" />
-    <ClCompile Include="SpeedLimiterSystem.cpp" />
     <ClCompile Include="SpriteManagerSystem.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="RaylibTest.cpp" />
@@ -163,7 +162,6 @@
     <ClInclude Include="MovementControllerSystem.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="PlayerMovementControllerSystem.h" />
-    <ClInclude Include="SpeedLimiter.h" />
     <ClInclude Include="ForceApplierSystem.h" />
     <ClInclude Include="Friction.h" />
     <ClInclude Include="FrictionSystem.h" />
@@ -172,7 +170,6 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="MovementController.h" />
-    <ClInclude Include="SpeedLimiterSystem.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="SpriteManagerSystem.h" />

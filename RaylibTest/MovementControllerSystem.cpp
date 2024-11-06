@@ -74,9 +74,10 @@ void  MovementControllerSystem::ManageMovement(Scene& scene, MovementController&
 
 			if (Vector2Length(expectedVelocity) > movementController.topSpeed)
 			{
-				acceleration = Vector2ClampValue(acceleration, 0.0f, (movementController.topSpeed - Vector2Length(velocity)) / deltaTime);
+				Vector2 maxVelocity = Vector2Scale(DirectionToVector2(movementController.requestedDirection), movementController.topSpeed);
+				acceleration = Vector2Subtract(Vector2Scale(Vector2Subtract(maxVelocity, velocity), 1.0f / deltaTime), deceleration);
+
 				movement.direction = Vector2Scale(acceleration, rigidbody.mass);
-				expectedVelocity = Vector2Add(velocity, Vector2Scale(acceleration, deltaTime));
 			}
 		}
 		break;

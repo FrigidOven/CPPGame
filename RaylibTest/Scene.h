@@ -16,7 +16,6 @@
 #include "Impulse.h"
 #include "MovementController.h"
 #include "Movement.h"
-#include "SpeedLimiter.h"
 #include "SpriteManager.h"
 #include "CameraManager.h"
 #include "FollowCamera.h"
@@ -51,7 +50,6 @@ private:
 	std::vector<Impulse> impulses;
 	std::vector<MovementController> movementControllers;
 	std::vector<Movement> movements;
-	std::vector<SpeedLimiter> speedLimiters;
 	std::vector<SpriteManager> spriteManagers;
 	std::vector<CameraManager> cameraManagers;
 	std::vector<FollowCamera> followCameras;

@@ -9,7 +9,6 @@
 #include "ImpulseSystem.h"
 #include "ForceApplierSystem.h"
 #include "AccelerationSystem.h"
-#include "SpeedLimiterSystem.h"
 #include "VelocitySystem.h"
 #include "FollowCameraSystem.h"
 #include "SpriteManagerSystem.h"
@@ -29,7 +28,6 @@ private:
 	ImpulseSystem impulseSystem;
 	ForceApplierSystem forceApplierSystem;
 	AccelerationSystem accelerationSystem;
-	SpeedLimiterSystem speedLimiterSystem;
 	VelocitySystem velocitySystem;
 	// Rendering systems
 	FollowCameraSystem followCameraSystem;

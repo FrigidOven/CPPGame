@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <iostream>
 
 int main()
 {  
@@ -60,18 +59,14 @@ int main()
 
     scene.AddComponent<FollowCamera>(static_cast<int>(SpecialEntities::Camera), testEntity0, Vector2Zero());
     
-    bool impulseAdded = !false;
+    bool impulseAdded = false;
 
     while (!WindowShouldClose())
     {
         game.Update();
 
-        std::cout << "Entity 1 velocity: < " << scene.GetComponent<Velocity>(testEntity1).velocity.x << ", " << scene.GetComponent<Velocity>(testEntity1).velocity.y << " >\n";
-
-        if (!impulseAdded && GetTime() > 3.0f)
-        {
-            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(50.0f, 0.0f));
-        }
+        if (!impulseAdded && GetTime() > 2.0f)
+            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(100.0f, 0.0f));
     }
 
     CloseWindow();
