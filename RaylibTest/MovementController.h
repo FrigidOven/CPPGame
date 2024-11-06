@@ -16,11 +16,13 @@ struct MovementController : Component
 
 	MovementMode mode;
 	float magnitude;
+	float topSpeed;
 	Direction requestedDirection;
 
-	MovementController(int entityId, MovementMode mode, float magnitude)
+	MovementController(int entityId, MovementMode mode, float magnitude, float topSpeed)
 		: mode(mode)
 		, magnitude(magnitude)
+		, topSpeed(topSpeed)
 		, requestedDirection(Direction::None)
 	{
 		entity = entityId;

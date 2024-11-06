@@ -22,10 +22,10 @@ void Game::Update()
 	// Input Routine:
 	controllerSystem.Update(currentScene, currentScene.GetComponents<Controller>());
 	playerMovementControllerSystem.Update(currentScene, currentScene.GetComponents<Controller>());
-	movementControllerSystem.Update(currentScene, currentScene.GetComponents<MovementController>());
 	// Physics Routine:
-	movementSystem.Update(currentScene, currentScene.GetComponents<Movement>());
 	frictionSystem.Update(currentScene, currentScene.GetComponents<Friction>());
+	movementControllerSystem.Update(currentScene, currentScene.GetComponents<MovementController>(), deltaTime);
+	movementSystem.Update(currentScene, currentScene.GetComponents<Movement>());
 	impulseSystem.Update(currentScene, currentScene.GetComponents<Impulse>(), deltaTime);
 	forceApplierSystem.Update(currentScene, currentScene.GetComponents<Rigidbody>(), deltaTime);
 	accelerationSystem.Update(currentScene, currentScene.GetComponents<Acceleration>(), deltaTime);

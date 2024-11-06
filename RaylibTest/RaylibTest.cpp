@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 int main()
 {  
@@ -36,8 +37,7 @@ int main()
         Input(ControlType::Keyboard, KEY_LEFT),
         Input(ControlType::Keyboard, KEY_DOWN),
         Input(ControlType::Keyboard, KEY_RIGHT));
-    scene.AddComponent<MovementController>(testEntity1, MovementMode::ForceBased, 800.0f);
-    scene.AddComponent<SpeedLimiter>(testEntity1, 1.0f);
+    scene.AddComponent<MovementController>(testEntity1, MovementMode::ForceBased, 800.0f , 1.0f);
     scene.AddComponent<SpriteManager>(testEntity1);
 
 
@@ -55,17 +55,18 @@ int main()
         Input(ControlType::Keyboard, KEY_LEFT),
         Input(ControlType::Keyboard, KEY_DOWN),
         Input(ControlType::Keyboard, KEY_RIGHT));
-    scene.AddComponent<MovementController>(testEntity2, MovementMode::VelocityBased, 1.0f);
-    scene.AddComponent<SpeedLimiter>(testEntity2, 1.0f);
+    scene.AddComponent<MovementController>(testEntity2, MovementMode::VelocityBased, 1.0f, 1.0f);
     scene.AddComponent<SpriteManager>(testEntity2);
 
     scene.AddComponent<FollowCamera>(static_cast<int>(SpecialEntities::Camera), testEntity0, Vector2Zero());
     
-    bool impulseAdded = false;
+    bool impulseAdded = !false;
 
     while (!WindowShouldClose())
     {
         game.Update();
+
+        std::cout << "Entity 1 velocity: < " << scene.GetComponent<Velocity>(testEntity1).velocity.x << ", " << scene.GetComponent<Velocity>(testEntity1).velocity.y << " >\n";
 
         if (!impulseAdded && GetTime() > 3.0f)
         {
