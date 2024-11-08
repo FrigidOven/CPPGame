@@ -2,7 +2,8 @@
 
 int main()
 {  
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "RaylibTest");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(1280, 720, "RaylibTest");
     SetTargetFPS(144);
 
     Game game;
@@ -16,7 +17,7 @@ int main()
     entityTag0.entityGroup = EntityGroup::Surface;
     entityTag0.entityType = EntityType::GrassSurface;
 
-    scene.AddComponent<Spatial>(testEntity0, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 }, 0.0f);
+    scene.AddComponent<Spatial>(testEntity0, Vector2{ static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2 }, 0.0f);
     scene.AddComponent<Sprite>(testEntity0, 0, &backgroundSprite, Rectangle{ 0, 0, 256, 224 }, 1, 1, 1, 0, 1);
 
     int testEntity1 = scene.CreateEntity();
@@ -25,7 +26,7 @@ int main()
     entityTag1.entityType = EntityType::Player;
     entityTag1.direction = Direction::Down;
 
-    scene.AddComponent<Spatial>(testEntity1, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + (32 * PIXEL_SIZE) / 2 }, 0.0f);
+    scene.AddComponent<Spatial>(testEntity1, Vector2{ static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2 + 16}, 0.0f);
     scene.AddComponent<Sprite>(testEntity1, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 1, 1, 1, 0, 1);
     scene.AddComponent<Velocity>(testEntity1, Vector2Zero());
     scene.AddComponent<Acceleration>(testEntity1, Vector2Zero());
@@ -46,7 +47,7 @@ int main()
     entityTag2.entityType = EntityType::Player;
     entityTag2.direction = Direction::Down;
 
-    scene.AddComponent<Spatial>(testEntity2, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - (32 * PIXEL_SIZE) / 2 }, 0.0f);
+    scene.AddComponent<Spatial>(testEntity2, Vector2{ static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2 - 16 }, 0.0f);
     scene.AddComponent<Sprite>(testEntity2, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 1, 1, 1, 0, 1);
     scene.AddComponent<Velocity>(testEntity2, Vector2Zero());
     scene.AddComponent<Controller>(testEntity2,
@@ -66,7 +67,7 @@ int main()
         game.Update();
 
         if (!impulseAdded && GetTime() > 2.0f)
-            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(100.0f, 0.0f));
+            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(500.0f, 0.0f), 0.15f);
     }
 
     CloseWindow();

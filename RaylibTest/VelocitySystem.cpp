@@ -24,8 +24,8 @@ void VelocitySystem::Update(Scene& scene, std::vector<Velocity>& velocities, flo
 				displacement = Vector2Add(displacement, Vector2Scale(movement.direction, deltaTime));
 		}
 
-		// scale to pixel size * 100, a pixel is 1 cm, and all units are given in meters.
-		displacement = Vector2Scale(displacement, PIXEL_SIZE * 100);
+		// scale by 100, a pixel is 1 cm, and all units are given in meters.
+		displacement = Vector2Scale(displacement, 100);
 
 		// add to position
 		Spatial& spatial = scene.GetComponent<Spatial>(velocity.entity);

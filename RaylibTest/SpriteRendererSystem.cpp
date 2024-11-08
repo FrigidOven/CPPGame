@@ -35,8 +35,8 @@ void SpriteRendererSystem::Update(Scene& scene, Camera2D& camera, std::vector<Sp
 
 		dest.x = position.x;
 		dest.y = position.y;
-		dest.width = source.width * sprite.xScale * PIXEL_SIZE;
-		dest.height = source.height * sprite.yScale * PIXEL_SIZE;
+		dest.width = source.width * sprite.xScale;
+		dest.height = source.height * sprite.yScale;
 
 		// draw sprites centered at destination
 		Vector2 origin = { dest.width / 2, dest.height / 2 };

@@ -22,6 +22,6 @@ void FollowCameraSystem::Update(Scene& scene, std::vector<FollowCamera>& followC
 		if (scene.HasComponent<Spatial>(followCamera.entity))
 			camera->target = scene.GetComponent<Spatial>(followCamera.targetEntity).position;
 
-		camera->offset = Vector2Add(followCamera.offset, Vector2((float)SCREEN_WIDTH / 2.0f, (float)SCREEN_HEIGHT / 2.0f));
+		camera->offset = Vector2Add(followCamera.offset, Vector2(static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2));
 	}
 }

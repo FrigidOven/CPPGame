@@ -41,6 +41,8 @@ private:
 	// Scenes
 	Scene currentScene{ &camera };
 
+	void UpdateCameraZoom();
+
 public:
 	Game();
 	Scene& GetCurrentScene();
