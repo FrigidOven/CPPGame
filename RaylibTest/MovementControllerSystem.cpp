@@ -57,7 +57,7 @@ void MovementControllerSystem::Update(Scene& scene, std::vector<MovementControll
 */
 void  MovementControllerSystem::ManageMovement(Scene& scene, MovementController& movementController, Movement& movement, float deltaTime)
 {
-	Vector2& velocity = scene.GetComponent<Velocity>(movement.entity).velocity;
+	Vector2& velocity = scene.GetComponent<Velocity>(movement.entity).internalVelocity;
 	movement.direction = Vector2Scale(DirectionToVector2(movementController.requestedDirection), movementController.magnitude);
 
 	switch (movement.mode)
@@ -68,7 +68,7 @@ void  MovementControllerSystem::ManageMovement(Scene& scene, MovementController&
 			Rigidbody& rigidbody = scene.GetComponent<Rigidbody>(movement.entity);
 
 			Vector2 acceleration = Vector2Scale(movement.direction, 1.0f / rigidbody.mass);
-			Vector2 deceleration = Vector2Scale(rigidbody.resistingForce, 1.0f / rigidbody.mass);
+			Vector2 deceleration = Vector2Scale(rigidbody.internalResistingForce, 1.0f / rigidbody.mass);
 
 			Vector2 expectedVelocity = Vector2Add(velocity, Vector2Scale(Vector2Add(acceleration, deceleration), deltaTime));
 

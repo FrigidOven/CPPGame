@@ -15,20 +15,12 @@ void VelocitySystem::Update(Scene& scene, std::vector<Velocity>& velocities, flo
 			continue;
 
 		// find displacement
-		Vector2 displacement = Vector2Scale(velocity.velocity, deltaTime);
-		// add velocity based movement
-		if (scene.HasComponent<Movement>(velocity.entity))
-		{
-			Movement& movement = scene.GetComponent<Movement>(velocity.entity);
-			if (movement.mode == MovementMode::VelocityBased)
-				displacement = Vector2Add(displacement, Vector2Scale(movement.direction, deltaTime));
-		}
-
 		// scale by 100, a pixel is 1 cm, and all units are given in meters.
-		displacement = Vector2Scale(displacement, 100);
+		Vector2 internalDisplacement = Vector2Scale(velocity.internalVelocity, 100 * deltaTime);
+		Vector2 externalDisplacement = Vector2Scale(velocity.externalVelocity, 100 * deltaTime);
 
 		// add to position
 		Spatial& spatial = scene.GetComponent<Spatial>(velocity.entity);
-		spatial.position = Vector2Add(spatial.position, displacement);
+		spatial.position = Vector2Add(spatial.position, Vector2Add(internalDisplacement, externalDisplacement));
 	}
 }

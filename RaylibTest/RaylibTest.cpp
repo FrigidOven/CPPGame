@@ -28,8 +28,8 @@ int main()
 
     scene.AddComponent<Spatial>(testEntity1, Vector2{ static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2 + 16}, 0.0f);
     scene.AddComponent<Sprite>(testEntity1, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 1, 1, 1, 0, 1);
-    scene.AddComponent<Velocity>(testEntity1, Vector2Zero());
-    scene.AddComponent<Acceleration>(testEntity1, Vector2Zero());
+    scene.AddComponent<Velocity>(testEntity1);
+    scene.AddComponent<Acceleration>(testEntity1);
     scene.AddComponent<Rigidbody>(testEntity1, 25.0f);
     scene.AddComponent<Friction>(testEntity1, 0.8f);
     scene.AddComponent<Controller>(testEntity1, 
@@ -49,7 +49,7 @@ int main()
 
     scene.AddComponent<Spatial>(testEntity2, Vector2{ static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2 - 16 }, 0.0f);
     scene.AddComponent<Sprite>(testEntity2, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 1, 1, 1, 0, 1);
-    scene.AddComponent<Velocity>(testEntity2, Vector2Zero());
+    scene.AddComponent<Velocity>(testEntity2);
     scene.AddComponent<Controller>(testEntity2,
         Input(ControlType::Keyboard, KEY_UP),
         Input(ControlType::Keyboard, KEY_LEFT),

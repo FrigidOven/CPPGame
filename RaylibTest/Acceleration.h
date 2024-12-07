@@ -7,10 +7,12 @@ struct Acceleration : Component
 {
 	static const ComponentID ID = ComponentID::Acceleration;
 
-	Vector2 acceleration;
+	Vector2 internalAcceleration;
+	Vector2 externalAcceleration;
 
-	Acceleration(int entityId, Vector2 acceleration)
-		: acceleration(acceleration)
+	Acceleration(int entityId)
+		: internalAcceleration(Vector2Zero())
+		, externalAcceleration(Vector2Zero())
 	{
 		entity = entityId;
 	}

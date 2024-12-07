@@ -16,7 +16,7 @@ void ImpulseSystem::Update(Scene& scene, std::vector<Impulse>& impulses, float d
 
 		// add accumulated force back since it is wiped away each frame.
 		Vector2 impulseForce = Vector2Add(Vector2Scale(impulses[i].forcePerSecond, impulses[i].duration - impulses[i].timer), Vector2Scale(impulses[i].forcePerSecond, deltaTime));
-		Vector2& pushingForce = scene.GetComponent<Rigidbody>(impulses[i].entity).pushingForce;
+		Vector2& pushingForce = scene.GetComponent<Rigidbody>(impulses[i].entity).externalPushingForce;
 		pushingForce = Vector2Add(pushingForce, impulses[i].forcePerSecond);
 		
 		impulses[i].timer -= deltaTime;

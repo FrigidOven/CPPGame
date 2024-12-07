@@ -16,10 +16,13 @@ void FrictionSystem::Update(Scene& scene, std::vector<Friction>& frictions)
 		if ((scene.GetComponentMask(friction.entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
+		Velocity& velocity = scene.GetComponent<Velocity>(friction.entity);
 		Rigidbody& rigidbody = scene.GetComponent<Rigidbody>(friction.entity);
-		Vector2& velocity = scene.GetComponent<Velocity>(friction.entity).velocity;
 
-		friction.force = Vector2Scale(Vector2Normalize(velocity), friction.coefficient * GRAVITY * rigidbody.mass);
-		rigidbody.resistingForce = Vector2Add(rigidbody.resistingForce, friction.force);
+		Vector2 internalFriction = Vector2Scale(Vector2Normalize(velocity.internalVelocity), friction.coefficient * GRAVITY * rigidbody.mass);
+		Vector2 externalFriction = Vector2Scale(Vector2Normalize(velocity.externalVelocity), friction.coefficient * GRAVITY * rigidbody.mass);
+
+		rigidbody.internalResistingForce = Vector2Add(rigidbody.internalResistingForce, internalFriction);
+		rigidbody.externalResistingForce = Vector2Add(rigidbody.externalResistingForce, externalFriction);
 	}
 }
