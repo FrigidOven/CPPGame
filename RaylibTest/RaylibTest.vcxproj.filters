@@ -69,9 +69,6 @@
     <ClCompile Include="MovementControllerSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="SpeedLimiterSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="MovementSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
@@ -108,9 +105,6 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Friction.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="SpeedLimiter.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Movement.h">
@@ -177,9 +171,6 @@
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="MovementControllerSystem.h">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="SpeedLimiterSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="MovementSystem.h">

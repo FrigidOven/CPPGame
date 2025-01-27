@@ -20,7 +20,6 @@ Scene::Scene(Camera2D* camera)
 	componentLists[static_cast<int>(ComponentID::Impulse)] = &impulses;
 	componentLists[static_cast<int>(ComponentID::MovementController)] = &movementControllers;
 	componentLists[static_cast<int>(ComponentID::Movement)] = &movements;
-	componentLists[static_cast<int>(ComponentID::SpeedLimiter)] = &speedLimiters;
 	componentLists[static_cast<int>(ComponentID::SpriteManager)] = &spriteManagers;
 	componentLists[static_cast<int>(ComponentID::CameraManager)] = &cameraManagers;
 	componentLists[static_cast<int>(ComponentID::FollowCamera)] = &followCameras;

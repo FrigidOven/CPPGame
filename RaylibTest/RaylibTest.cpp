@@ -2,7 +2,8 @@
 
 int main()
 {  
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "RaylibTest");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(1280, 720, "RaylibTest");
     SetTargetFPS(144);
 
     Game game;
@@ -16,7 +17,7 @@ int main()
     entityTag0.entityGroup = EntityGroup::Surface;
     entityTag0.entityType = EntityType::GrassSurface;
 
-    scene.AddComponent<Spatial>(testEntity0, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 }, 0.0f);
+    scene.AddComponent<Spatial>(testEntity0, Vector2{ static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2 }, 0.0f);
     scene.AddComponent<Sprite>(testEntity0, 0, &backgroundSprite, Rectangle{ 0, 0, 256, 224 }, 1, 1, 1, 0, 1);
 
     int testEntity1 = scene.CreateEntity();
@@ -25,10 +26,10 @@ int main()
     entityTag1.entityType = EntityType::Player;
     entityTag1.direction = Direction::Down;
 
-    scene.AddComponent<Spatial>(testEntity1, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + (32 * PIXEL_SIZE) / 2 }, 0.0f);
+    scene.AddComponent<Spatial>(testEntity1, Vector2{ static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2 + 16}, 0.0f);
     scene.AddComponent<Sprite>(testEntity1, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 1, 1, 1, 0, 1);
-    scene.AddComponent<Velocity>(testEntity1, Vector2Zero());
-    scene.AddComponent<Acceleration>(testEntity1, Vector2Zero());
+    scene.AddComponent<Velocity>(testEntity1);
+    scene.AddComponent<Acceleration>(testEntity1);
     scene.AddComponent<Rigidbody>(testEntity1, 25.0f);
     scene.AddComponent<Friction>(testEntity1, 0.8f);
     scene.AddComponent<Controller>(testEntity1, 
@@ -36,8 +37,7 @@ int main()
         Input(ControlType::Keyboard, KEY_LEFT),
         Input(ControlType::Keyboard, KEY_DOWN),
         Input(ControlType::Keyboard, KEY_RIGHT));
-    scene.AddComponent<MovementController>(testEntity1, MovementMode::ForceBased, 800.0f);
-    scene.AddComponent<SpeedLimiter>(testEntity1, 1.0f);
+    scene.AddComponent<MovementController>(testEntity1, MovementMode::ForceBased, 800.0f , 1.0f);
     scene.AddComponent<SpriteManager>(testEntity1);
 
 
@@ -47,16 +47,15 @@ int main()
     entityTag2.entityType = EntityType::Player;
     entityTag2.direction = Direction::Down;
 
-    scene.AddComponent<Spatial>(testEntity2, Vector2{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - (32 * PIXEL_SIZE) / 2 }, 0.0f);
+    scene.AddComponent<Spatial>(testEntity2, Vector2{ static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) / 2 - 16 }, 0.0f);
     scene.AddComponent<Sprite>(testEntity2, 1, &golemSprite, Rectangle{ 0, 0, 32, 32 }, 1, 1, 1, 0, 1);
-    scene.AddComponent<Velocity>(testEntity2, Vector2Zero());
+    scene.AddComponent<Velocity>(testEntity2);
     scene.AddComponent<Controller>(testEntity2,
         Input(ControlType::Keyboard, KEY_UP),
         Input(ControlType::Keyboard, KEY_LEFT),
         Input(ControlType::Keyboard, KEY_DOWN),
         Input(ControlType::Keyboard, KEY_RIGHT));
-    scene.AddComponent<MovementController>(testEntity2, MovementMode::VelocityBased, 1.0f);
-    scene.AddComponent<SpeedLimiter>(testEntity2, 1.0f);
+    scene.AddComponent<MovementController>(testEntity2, MovementMode::VelocityBased, 1.0f, 1.0f);
     scene.AddComponent<SpriteManager>(testEntity2);
 
     scene.AddComponent<FollowCamera>(static_cast<int>(SpecialEntities::Camera), testEntity0, Vector2Zero());
@@ -67,10 +66,8 @@ int main()
     {
         game.Update();
 
-        if (!impulseAdded && GetTime() > 3.0f)
-        {
-            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(50.0f, 0.0f));
-        }
+        if (!impulseAdded && GetTime() > 2.0f)
+            impulseAdded = scene.AddComponent<Impulse>(testEntity1, Vector2(500.0f, 0.0f), 0.15f);
     }
 
     CloseWindow();

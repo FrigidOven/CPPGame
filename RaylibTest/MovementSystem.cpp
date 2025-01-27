@@ -7,19 +7,17 @@
 */
 void MovementSystem::Update(Scene& scene, std::vector<Movement>& movements)
 {
-	// only movements with MovementMode::ForceBased will be handeled here.
-	// VelocityBased movements must be handleded further down the chain in the velocity system.
-	int requiredComponentsMask = (1 << static_cast<int>(Movement::ID)) | (1 << static_cast<int>(Rigidbody::ID));
-
 	for (auto& movement : movements)
 	{
-		if ((scene.GetComponentMask(movement.entity) & requiredComponentsMask) != requiredComponentsMask)
-			continue;
-
-		if((movement.mode == MovementMode::ForceBased))
+		if((movement.mode == MovementMode::ForceBased) && scene.HasComponent<Rigidbody>(movement.entity))
 		{
-			Vector2& pushingForce = scene.GetComponent<Rigidbody>(movement.entity).pushingForce;
+			Vector2& pushingForce = scene.GetComponent<Rigidbody>(movement.entity).internalPushingForce;
 			pushingForce = Vector2Add(pushingForce, movement.direction);
+		}
+		else if((movement.mode == MovementMode::VelocityBased) && scene.HasComponent<Velocity>(movement.entity))
+		{
+			Vector2& velocity = scene.GetComponent<Velocity>(movement.entity).internalVelocity;
+			velocity = movement.direction;
 		}
 	}
 }

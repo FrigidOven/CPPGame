@@ -14,9 +14,16 @@ void ImpulseSystem::Update(Scene& scene, std::vector<Impulse>& impulses, float d
 		if ((scene.GetComponentMask(impulses[i].entity) & requiredComponentsMask) != requiredComponentsMask)
 			continue;
 
-		Vector2& pushingForce = scene.GetComponent<Rigidbody>(impulses[i].entity).pushingForce;
-		pushingForce = Vector2Add(pushingForce, Vector2Scale(impulses[i].force, 1.0f / deltaTime));
-		scene.RemoveComponent<Impulse>(impulses[i].entity);
-		i--;
+		// add accumulated force back since it is wiped away each frame.
+		Vector2 impulseForce = Vector2Add(Vector2Scale(impulses[i].forcePerSecond, impulses[i].duration - impulses[i].timer), Vector2Scale(impulses[i].forcePerSecond, deltaTime));
+		Vector2& pushingForce = scene.GetComponent<Rigidbody>(impulses[i].entity).externalPushingForce;
+		pushingForce = Vector2Add(pushingForce, impulses[i].forcePerSecond);
+		
+		impulses[i].timer -= deltaTime;
+		if (impulses[i].timer <= 0.0f)
+		{
+			scene.RemoveComponent<Impulse>(impulses[i].entity);
+			i--;
+		}
 	}
 }

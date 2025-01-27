@@ -15,10 +15,12 @@ void AccelerationSystem::Update(Scene& scene, std::vector<Acceleration>& acceler
 			continue;
 
 		// find delta velocity
-		Vector2 deltaVelocity = Vector2Scale(acceleration.acceleration, deltaTime);
+		Vector2 deltaInternalVelocity = Vector2Scale(acceleration.internalAcceleration, deltaTime);
+		Vector2 deltaExternalVelocity = Vector2Scale(acceleration.externalAcceleration, deltaTime);
 
 		// add to velocity
 		Velocity& velocity = scene.GetComponent<Velocity>(acceleration.entity);
-		velocity.velocity = Vector2Add(velocity.velocity, deltaVelocity);
+		velocity.internalVelocity = Vector2Add(velocity.internalVelocity, deltaInternalVelocity);
+		velocity.externalVelocity = Vector2Add(velocity.externalVelocity, deltaExternalVelocity);
 	}
 }

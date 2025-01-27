@@ -13,7 +13,6 @@ enum class ComponentID
 	Impulse,
 	MovementController,
 	Movement,
-	SpeedLimiter,
 	SpriteManager,
 	CameraManager,
 	FollowCamera,
